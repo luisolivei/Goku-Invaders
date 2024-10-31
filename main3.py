@@ -4,6 +4,7 @@ import pygame
 largura_ecra = 800
 altura_ecra = 600
 velocidade_animacao = 0.1
+velocidade_fundo = 0.2  # Define a velocidade de movimento do fundo
 caminho_sprite_sheet = "images/14491.gif"
 
 pygame.init()
@@ -135,6 +136,7 @@ def play():
     
     a_funcionar = True
     relogio = pygame.time.Clock()
+    posicao_fundo_x = 0  # Posição inicial do fundo
 
     while a_funcionar:
         delta_tempo = relogio.tick(60) / 1000  # Tempo entre frames
@@ -153,8 +155,16 @@ def play():
         if tecla[pygame.K_DOWN] and jogador.pos_y < altura_ecra - 64:
             jogador.pos_y += 5
 
-        # Atualizar e desenhar
-        ecra.blit(fundo, (0, 0))
+        # Atualizar posição do fundo para movimento contínuo
+        posicao_fundo_x -= velocidade_fundo
+        if posicao_fundo_x <= -largura_ecra:
+            posicao_fundo_x = 0
+
+        # Desenhar fundo com rolagem
+        ecra.blit(fundo, (posicao_fundo_x, 0))
+        ecra.blit(fundo, (posicao_fundo_x + largura_ecra, 0))
+
+        # Atualizar e desenhar o jogador
         jogador.atualizar(delta_tempo)
         jogador.desenhar(ecra)
 
