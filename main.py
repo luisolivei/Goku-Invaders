@@ -1,5 +1,6 @@
 import pygame
 
+# tamanho tela
 x = 800
 y = 600
 
@@ -9,7 +10,7 @@ pygame.init()
 screen = pygame.display.set_mode((x, y))
 pygame.display.set_caption("Goku-Invaders")
 
-bg = pygame.image.load("images/bg.png").convert_alpha()
+bg = pygame.image.load("images/bg.png").convert_alpha() #imagem de fundo tela
 bg = pygame.transform.scale(bg, (x, y))
 
 playerImage = pygame.image.load("images/gk-fly.png").convert_alpha()
@@ -34,6 +35,7 @@ while running:
     if rel_x < 800:
         screen.blit(bg, (rel_x, 0))
 
+#Velocidade movimento tela
     x -= 0.2
 
     screen.blit(playerImage, (pos_player_x, pos_player_y))
