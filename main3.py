@@ -8,7 +8,7 @@ caminho_sprite_sheet = "images/14491.gif"
 
 pygame.init()
 ecra = pygame.display.set_mode((largura_ecra, altura_ecra))
-pygame.display.set_caption("Goku-Invaders")
+pygame.display.set_caption("Menu")
 
 # Classe do jogador
 class Jogador:
@@ -128,6 +128,7 @@ def menu():
 
 # Função principal do jogo
 def play():
+    pygame.display.set_caption("Goku Invaders")
     jogador = Jogador(100, altura_ecra / 2 - 64 / 2, sprite_sheet)
     jogador.adicionar_animacao("disparo", AnimacaoDisparo(sprite_sheet))
     jogador.definir_animacao("disparo")  # Animação inicial
