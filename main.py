@@ -76,7 +76,14 @@ while running:
     if rel_x < 800:
         screen.blit(bg, (rel_x, 0))
 
-    # Velocidade do movimento do fundo
+    # definição de teclas para movimentar o player
+    tecla = pygame.key.get_pressed()
+    if tecla[pygame.K_UP] and pos_player_y > 1:
+        pos_player_y -= 1
+    if tecla[pygame.K_DOWN] and pos_player_y < y - 50:
+        pos_player_y += 1
+
+#Velocidade movimento tela
     x -= 0.2
 
     # Desenhar personagem animado
