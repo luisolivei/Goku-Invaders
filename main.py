@@ -12,6 +12,13 @@ pygame.display.set_caption("Goku-Invaders")
 bg = pygame.image.load("images/bg.png").convert_alpha()
 bg = pygame.transform.scale(bg, (x, y))
 
+playerImage = pygame.image.load("images/gk-fly.png").convert_alpha()
+playerImage = pygame.transform.scale(playerImage, (50, 50))
+playerImage = pygame.transform.rotate(playerImage, 0)
+
+pos_player_x = 100
+pos_player_y = y/2-25
+
 running = True
 
 while running:
@@ -29,6 +36,7 @@ while running:
 
     x -= 0.2
 
+    screen.blit(playerImage, (pos_player_x, pos_player_y))
 
     pygame.display.update()
 
