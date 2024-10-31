@@ -27,7 +27,7 @@ while running:
     if rel_x < 800:
         screen.blit(bg, (rel_x, 0))
 
-    x -= 1
+    x -= 0.2
 
 
     pygame.display.update()
