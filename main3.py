@@ -4,7 +4,7 @@ import pygame
 largura_ecra = 800
 altura_ecra = 600
 velocidade_animacao = 0.1
-velocidade_fundo = 0.2  # Define a velocidade de movimento do fundo
+velocidade_fundo = 0.8  # Define a velocidade de movimento do fundo
 caminho_sprite_sheet = "images/14491.gif"
 
 pygame.init()
