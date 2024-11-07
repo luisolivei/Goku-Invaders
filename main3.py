@@ -5,7 +5,7 @@ largura_ecra = 800
 altura_ecra = 600
 velocidade_animacao = 0.1
 velocidade_fundo = 0.8  # Define a velocidade de movimento do fundo
-caminho_sprite_sheet = "images/14491.gif"
+caminho_sprite_sheet = "images/imagens_disparo/1.png"
 
 pygame.init()
 ecra = pygame.display.set_mode((largura_ecra, altura_ecra))
@@ -45,12 +45,12 @@ class Jogador:
             projetil.desenhar(superficie)
 
     def disparar(self):
-        novo_projetil = Projetil(self.pos_x + 64, self.pos_y + 32)
+        novo_projetil = Projetil(self.pos_x + 64, self.pos_y +20) #posiçao saida porjectil
         self.projeteis.append(novo_projetil)
 
 # Classe de animação
 class Animacao:
-    def __init__(self, sprite_sheet, dados_sprite, cor_chave=(144, 176, 216)):
+    def __init__(self, sprite_sheet, dados_sprite, cor_chave=(160, 192, 192)): #cor rgb a filtrar as imagens
         self.sprite_sheet = sprite_sheet
         self.dados_sprite = dados_sprite
         self.sprites = []
@@ -83,8 +83,7 @@ class Animacao:
 class AnimacaoDisparo(Animacao):
     def __init__(self, sprite_sheet):
         dados_sprite = [
-            (0, 2304, 64, 64), (64, 2304, 70, 64), (136, 2304, 70, 64),
-            (136+64, 2304, 70, 64), (136+128, 2304, 70, 64)
+            (0, 0, 64, 80), (64, 0, 40, 80), (100, 0, 64, 80),(110+64, 0, 64, 80),(220, 0, 63, 80),
         ]
         super().__init__(sprite_sheet, dados_sprite)
 

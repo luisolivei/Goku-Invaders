@@ -19,6 +19,7 @@ class Jogador:
         self.animacoes = {}
         self.animacao_atual = None
         self.projeteis = []
+        self.velocidade_movimento = 5  # Velocidade de movimento vertical
 
     def adicionar_animacao(self, nome, animacao):
         self.animacoes[nome] = animacao
@@ -46,6 +47,14 @@ class Jogador:
     def disparar(self):
         novo_projetil = Projetil(self.pos_x + 64, self.pos_y + 32)  # Posição inicial do projétil
         self.projeteis.append(novo_projetil)
+
+    def mover_para_cima(self):
+        if self.pos_y > 0:  # Limita o movimento ao topo da tela
+            self.pos_y -= self.velocidade_movimento
+
+    def mover_para_baixo(self):
+        if self.pos_y + 64 < altura_ecra:  # Limita o movimento à base da tela
+            self.pos_y += self.velocidade_movimento
 
 # Classe base de animação
 class Animacao:
@@ -126,12 +135,20 @@ relogio = pygame.time.Clock()
 while a_funcionar:
     delta_tempo = relogio.tick(60) / 1000  # Tempo entre frames
 
+    # Processar eventos
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
             a_funcionar = False
         elif evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_SPACE:
                 jogador.disparar()
+
+    # Verificar teclas pressionadas para movimento contínuo
+    teclas_pressionadas = pygame.key.get_pressed()
+    if teclas_pressionadas[pygame.K_UP]:
+        jogador.mover_para_cima()
+    if teclas_pressionadas[pygame.K_DOWN]:
+        jogador.mover_para_baixo()
 
     # Atualizar e desenhar
     ecra.blit(fundo, (0, 0))
