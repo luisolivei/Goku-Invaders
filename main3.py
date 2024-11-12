@@ -6,7 +6,7 @@ largura_ecra = 800
 altura_ecra = 600
 velocidade_animacao = 0.1
 velocidade_fundo = 0.8  
-caminho_sprite_sheet = "images/goku/1.png"
+caminho_sprite_sheet = "images/goku/parado/parado_1.gif"
 
 pygame.init()
 ecra = pygame.display.set_mode((largura_ecra, altura_ecra))
