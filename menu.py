@@ -1,6 +1,5 @@
 import pygame
 
-import pygame
 
 def menu(ecra, largura_ecra, altura_ecra, fundo):
     pygame.font.init()

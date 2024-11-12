@@ -6,7 +6,7 @@ largura_ecra = 800
 altura_ecra = 600
 velocidade_animacao = 0.1
 velocidade_fundo = 0.8  
-caminho_sprite_sheet = "images/imagens_disparo/1.png"
+caminho_sprite_sheet = "images/goku/1.png"
 
 pygame.init()
 ecra = pygame.display.set_mode((largura_ecra, altura_ecra))
@@ -111,7 +111,7 @@ class Projetil:
 def play():
     pygame.display.set_caption("Goku Invaders")
     jogador = Jogador(100, altura_ecra / 2 - 64 / 2, sprite_sheet)
-    jogador.adicionar_animacao("disparo", AnimacaoPersonagem(sprite_sheet))
+    jogador.adicionar_animacao("disparo",Jogador(sprite_sheet))
     jogador.definir_animacao("disparo")  # Animação inicial
     
     a_funcionar = True
