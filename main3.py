@@ -5,7 +5,7 @@ from menu import menu  # Importa o menu do arquivo menu.py
 largura_ecra = 800
 altura_ecra = 600
 velocidade_animacao = 0.1
-velocidade_fundo = 0.8  # Define a velocidade de movimento do fundo
+velocidade_fundo = 0.8  
 caminho_sprite_sheet = "images/imagens_disparo/1.png"
 
 pygame.init()
@@ -51,7 +51,7 @@ class Jogador:
 
 # Classe de animação
 class Animacao:
-    def __init__(self, sprite_sheet, dados_sprite, cor_chave=(160, 192, 192)):  # cor RGB a filtrar as imagens
+    def __init__(self, sprite_sheet, dados_sprite, cor_chave=(160, 192, 192)): #cor rgb a filtrar as imagens
         self.sprite_sheet = sprite_sheet
         self.dados_sprite = dados_sprite
         self.sprites = []
@@ -81,7 +81,7 @@ class Animacao:
         return self.sprites[self.indice_sprite]
 
 # Subclasse para animação de disparo
-class AnimacaoDisparo(Animacao):
+class AnimacaoPersonagem(Personagem):
     def __init__(self, sprite_sheet):
         dados_sprite = [
             (0, 0, 64, 80), (64, 0, 40, 80), (100, 0, 64, 80), (110+64, 0, 64, 80), (220, 0, 63, 80),
@@ -111,7 +111,7 @@ class Projetil:
 def play():
     pygame.display.set_caption("Goku Invaders")
     jogador = Jogador(100, altura_ecra / 2 - 64 / 2, sprite_sheet)
-    jogador.adicionar_animacao("disparo", AnimacaoDisparo(sprite_sheet))
+    jogador.adicionar_animacao("disparo", AnimacaoPersonagem(sprite_sheet))
     jogador.definir_animacao("disparo")  # Animação inicial
     
     a_funcionar = True
@@ -152,7 +152,7 @@ def play():
 
 # Carregar imagens e configurar fundo e jogador
 sprite_sheet = pygame.image.load(caminho_sprite_sheet).convert()
-sprite_sheet.set_colorkey((144, 176, 216))  # Define o azul como transparente
+sprite_sheet.set_colorkey((144, 176, 216))  # Define filtro para tornar fundo transparente
 fundo = pygame.image.load("images/bg.png").convert_alpha()
 fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))
 
