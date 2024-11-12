@@ -150,14 +150,24 @@ def play():
 
         pygame.display.update()
 
+def mostrar_score():
+    print("Exibindo pontuação...")
+    pygame.time.wait(2000) 
+
 # Carregar imagens e configurar fundo e jogador
 sprite_sheet = pygame.image.load(caminho_sprite_sheet).convert()
 sprite_sheet.set_colorkey((144, 176, 216))  # Define o azul como transparente
 fundo = pygame.image.load("images/bg.png").convert_alpha()
 fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))
 
-# Executa o menu; se o jogador escolher "Play", inicia o jogo
-if menu(ecra, largura_ecra, altura_ecra, fundo):
-    play()
+# Loop principal para exibir o menu e reagir à seleção do jogador
+while True:
+    escolha = menu(ecra, largura_ecra, altura_ecra, fundo)
+    if escolha == "play":
+        play()
+    elif escolha == "score":
+        mostrar_score()
+    elif escolha == "quit":
+        break
 
 pygame.quit()
