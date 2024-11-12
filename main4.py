@@ -1,6 +1,6 @@
 import pygame
 import os
-#from menu import menu  # Importa o menu do arquivo menu.py
+from menu import menu  # Importa o menu do arquivo menu.py
 
 # Configuração inicial da janela e velocidade
 largura_ecra = 800
@@ -143,27 +143,7 @@ class Projetil:
         # Verifica se o projetil saiu da tela
         return self.x > largura_ecra
 
-# Função para o menu inicial
-def menu():
-    # Define o texto e a posição para o botão "Play"
-    font = pygame.font.Font(None, 74)
-    play_text = font.render("Play", True, (255, 255, 255))
-    play_rect = play_text.get_rect(center=(largura_ecra // 2, altura_ecra // 2))
-    
-    # Loop principal do menu
-    while True:
-        ecra.blit(fundo, (0, 0))  # Exibe o fundo do menu
-        ecra.blit(play_text, play_rect)  # Exibe o texto "Play" no centro da tela
 
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                return False
-            if evento.type == pygame.MOUSEBUTTONDOWN:
-                if play_rect.collidepoint(evento.pos):
-                    return True  # Inicia o jogo se "Play" for clicado
-
-        pygame.display.update()
 
 # Função principal do jogo
 def play():
@@ -174,11 +154,11 @@ def play():
     jogador.adicionar_animacao("andar", AnimacaoAndar())
     jogador.adicionar_animacao("disparar", AnimacaoDisparar())
     jogador.adicionar_animacao("atingido", AnimacaoAtingido())
-    jogador.definir_animacao("parado") #necessaria para iniciar
+    jogador.definir_animacao("parado")  # necessária para iniciar
     
     a_funcionar = True
     relogio = pygame.time.Clock()
-    posicao_fundo_x = 0 # Posição inicial do fundo
+    posicao_fundo_x = 0  # Posição inicial do fundo
 
     # Loop principal do jogo
     while a_funcionar:
@@ -211,14 +191,18 @@ def play():
         if posicao_fundo_x <= -largura_ecra:
             posicao_fundo_x = 0
 
-        # Desenha o fundo em movimento e o jogador
+        # Desenha o fundo em movimento
         ecra.blit(fundo, (posicao_fundo_x, 0))
         ecra.blit(fundo, (posicao_fundo_x + largura_ecra, 0))
 
-        # Atualizar e desenhar o jogadortempo)
+        # Atualiza a posição dos projéteis e do jogador
+        jogador.atualizar(delta_tempo)
+
+        # Desenha o jogador e projéteis na tela
         jogador.desenhar(ecra)
 
         pygame.display.update()
+
 
 def mostrar_score():
     print("Exibindo pontuação...")
