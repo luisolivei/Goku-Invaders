@@ -1,15 +1,14 @@
 import pygame
 import os
+#from menu import menu  # Importa o menu do arquivo menu.py
 
 # Configuração inicial da janela e velocidade
 largura_ecra = 800
 altura_ecra = 600
-velocidade_animacao = 0.1  # Velocidade de troca de frames de animação
+velocidade_animacao = 0.03  # Velocidade de troca de frames de animação
 velocidade_fundo = 0.8  # Velocidade de movimento do fundo
 
 pygame.init()
-ecra = pygame.display.set_mode((largura_ecra, altura_ecra))
-pygame.display.set_caption("Menu")
 
 # Classe do jogador
 class Jogador:
@@ -56,7 +55,7 @@ class Jogador:
 
 # Classe de animação base para carregar e controlar animações
 class Personagem:
-    def __init__(self, caminhos_sprites, cor_chave=(160, 192, 192)):
+    def __init__(self, caminhos_sprites, cor_chave=(144, 176, 216)):
         # Inicializa a lista de sprites e outros parâmetros de animação
         self.sprites = []
         self.indice_sprite = 0
@@ -92,15 +91,15 @@ class AnimacaoParado(Personagem):
     def __init__(self):
         # Carrega os sprites da animação de estar parado
         caminhos_sprites = [
-            "images/goku/parado.png", "images/parado/frame2.png",
+            "images/goku/parado/parado_1.gif",
         ]
         super().__init__(caminhos_sprites)
 
 class AnimacaoAndar(Personagem):
     def __init__(self):
-        # Carrega os sprites da animação de andar
+        # Carrega os sprites da animação de andar, esta a repetir a parada
         caminhos_sprites = [
-            "images/andar/frame1.png", "images/andar/frame2.png",
+            "images/goku/parado/parado_1.gif",
         ]
         super().__init__(caminhos_sprites)
 
@@ -108,7 +107,7 @@ class AnimacaoDisparar(Personagem):
     def __init__(self):
         # Carrega os sprites da animação de disparar
         caminhos_sprites = [
-            "images/disparar/frame1.png", "images/disparar/frame2.png",
+            "images/goku/disparar/disparar_1.gif", "images/goku/disparar/disparar_2.gif","images/goku/disparar/disparar_3.gif","images/goku/disparar/disparar_4.gif","images/goku/disparar/disparar_5.gif",
         ]
         super().__init__(caminhos_sprites)
 
@@ -116,7 +115,8 @@ class AnimacaoAtingido(Personagem):
     def __init__(self):
         # Carrega os sprites da animação de estar atingido
         caminhos_sprites = [
-            "images/atingido/frame1.png", "images/atingido/frame2.png",
+            "images/goku/disparar/disparar_1.gif",
+        #    "images/goku/atingido/frame1.png", "images/goku/atingido/frame2.png",
         ]
         super().__init__(caminhos_sprites)
 
@@ -167,17 +167,18 @@ def menu():
 
 # Função principal do jogo
 def play():
+    pygame.display.set_caption("Goku Invaders")
     # Inicializa o jogador e define animações
     jogador = Jogador(100, altura_ecra / 2 - 64 / 2)
     jogador.adicionar_animacao("parado", AnimacaoParado())
     jogador.adicionar_animacao("andar", AnimacaoAndar())
     jogador.adicionar_animacao("disparar", AnimacaoDisparar())
     jogador.adicionar_animacao("atingido", AnimacaoAtingido())
-    jogador.definir_animacao("parado")
+    jogador.definir_animacao("parado") #necessaria para iniciar
     
     a_funcionar = True
     relogio = pygame.time.Clock()
-    posicao_fundo_x = 0
+    posicao_fundo_x = 0 # Posição inicial do fundo
 
     # Loop principal do jogo
     while a_funcionar:
@@ -190,6 +191,9 @@ def play():
             elif evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_SPACE:
                     jogador.disparar()
+            elif evento.type == pygame.KEYUP:
+                if evento.key == pygame.K_SPACE:
+                    jogador.definir_animacao("parado")  # Retorna à animação "parado" ao soltar a tecla
 
         # Verifica as teclas pressionadas para movimento vertical
         tecla = pygame.key.get_pressed()
@@ -199,8 +203,8 @@ def play():
         elif tecla[pygame.K_DOWN] and jogador.pos_y < altura_ecra - 64:
             jogador.pos_y += 5
             jogador.definir_animacao("andar")
-        else:
-            jogador.definir_animacao("parado")  # Muda para "parado" se não estiver a mover
+#        else:
+#            jogador.definir_animacao("parado")  # Muda para "parado" se não estiver a mover
 
         # Atualiza a posição do fundo para movimento contínuo
         posicao_fundo_x -= velocidade_fundo
@@ -211,16 +215,30 @@ def play():
         ecra.blit(fundo, (posicao_fundo_x, 0))
         ecra.blit(fundo, (posicao_fundo_x + largura_ecra, 0))
 
-        jogador.atualizar(delta_tempo)
+        # Atualizar e desenhar o jogadortempo)
         jogador.desenhar(ecra)
 
         pygame.display.update()
 
+def mostrar_score():
+    print("Exibindo pontuação...")
+    pygame.time.wait(2000) 
+
+
 # Configuração do fundo e execução do menu
+ecra = pygame.display.set_mode((largura_ecra, altura_ecra))
+pygame.display.set_caption("Menu")
 fundo = pygame.image.load("images/bg.png").convert_alpha()
 fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))
 
-if menu():
-    play()
+# Loop principal para exibir o menu e reagir à seleção do jogador
+while True:
+    escolha = menu(ecra, largura_ecra, altura_ecra, fundo)  # Chamada correta da função menu
+    if escolha == "play":
+        play()  # Chama a função play para iniciar o jogo
+    elif escolha == "score":
+        mostrar_score()  # Chama a função mostrar_score para exibir a pontuação
+    elif escolha == "quit":
+        break  # Sai do loop e fecha o jogo
 
 pygame.quit()
