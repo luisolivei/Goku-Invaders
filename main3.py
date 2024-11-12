@@ -1,4 +1,5 @@
 import pygame
+from menu import menu  # Importa o menu do arquivo menu.py
 
 # Configuração inicial
 largura_ecra = 800
@@ -45,12 +46,12 @@ class Jogador:
             projetil.desenhar(superficie)
 
     def disparar(self):
-        novo_projetil = Projetil(self.pos_x + 64, self.pos_y +20) #posiçao saida porjectil
+        novo_projetil = Projetil(self.pos_x + 64, self.pos_y + 20)  # Posição de saída do projétil
         self.projeteis.append(novo_projetil)
 
 # Classe de animação
 class Animacao:
-    def __init__(self, sprite_sheet, dados_sprite, cor_chave=(160, 192, 192)): #cor rgb a filtrar as imagens
+    def __init__(self, sprite_sheet, dados_sprite, cor_chave=(160, 192, 192)):  # cor RGB a filtrar as imagens
         self.sprite_sheet = sprite_sheet
         self.dados_sprite = dados_sprite
         self.sprites = []
@@ -83,7 +84,7 @@ class Animacao:
 class AnimacaoDisparo(Animacao):
     def __init__(self, sprite_sheet):
         dados_sprite = [
-            (0, 0, 64, 80), (64, 0, 40, 80), (100, 0, 64, 80),(110+64, 0, 64, 80),(220, 0, 63, 80),
+            (0, 0, 64, 80), (64, 0, 40, 80), (100, 0, 64, 80), (110+64, 0, 64, 80), (220, 0, 63, 80),
         ]
         super().__init__(sprite_sheet, dados_sprite)
 
@@ -105,26 +106,6 @@ class Projetil:
 
     def saiu_do_ecra(self):
         return self.x > largura_ecra
-
-# Função para o menu inicial
-def menu():
-    font = pygame.font.Font(None, 74)
-    play_text = font.render("Play", True, (255, 255, 255))
-    play_rect = play_text.get_rect(center=(largura_ecra // 2, altura_ecra // 2))
-    
-    while True:
-        ecra.blit(fundo, (0, 0))  # Fundo do menu
-        ecra.blit(play_text, play_rect)  # Texto "Play" no centro da tela
-
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                return False
-            if evento.type == pygame.MOUSEBUTTONDOWN:
-                if play_rect.collidepoint(evento.pos):
-                    return True  # Inicia o jogo se "Play" for clicado
-
-        pygame.display.update()
 
 # Função principal do jogo
 def play():
@@ -176,7 +157,7 @@ fundo = pygame.image.load("images/bg.png").convert_alpha()
 fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))
 
 # Executa o menu; se o jogador escolher "Play", inicia o jogo
-if menu():
+if menu(ecra, largura_ecra, altura_ecra, fundo):
     play()
 
 pygame.quit()
