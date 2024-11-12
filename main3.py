@@ -81,7 +81,7 @@ class Animacao:
         return self.sprites[self.indice_sprite]
 
 # Subclasse para animação de disparo
-class AnimacaoPersonagem(Personagem):
+class AnimacaoPersonagem(Jogador, Animacao):
     def __init__(self, sprite_sheet):
         dados_sprite = [
             (0, 0, 64, 80), (64, 0, 40, 80), (100, 0, 64, 80), (110+64, 0, 64, 80), (220, 0, 63, 80),
