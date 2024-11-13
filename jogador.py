@@ -10,6 +10,7 @@ class Jogador:
         self.animacoes = {}  # Dicionário para armazenar animações
         self.animacao_atual = None  # Animação que o jogador está a usar no momento
         self.projeteis = []  # Lista de projéteis disparados pelo jogador
+        self.mask = pygame.mask.from_surface(self.imagemGoku) #criar uma mascara à volta do sprite do goku - CARINA
 
     def adicionar_animacao(self, nome, animacao):
         # Adiciona uma animação ao dicionário de animações
