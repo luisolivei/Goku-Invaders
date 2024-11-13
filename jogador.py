@@ -44,3 +44,12 @@ class Jogador:
         novo_projetil = Projetil(self.pos_x + 64, self.pos_y + 20)
         self.projeteis.append(novo_projetil)
         self.definir_animacao("disparar")
+
+    def perder_vida(self, dano):
+        # Diminui a vida do jogador ao ser atingido
+        self.vida -= dano
+        if self.vida <= 0:
+            self.vida = 0
+            print("Jogador morreu!")  # Mensagem de morte para debugging
+            return False  # Indica que o jogador está morto
+        return True  # Indica que o jogador ainda está vivo
