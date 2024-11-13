@@ -30,7 +30,7 @@ def menu(ecra, largura_ecra, altura_ecra, fundo):
     }
 
     # Dimensões fixas dos botões (largura e altura)
-    largura_botao = 140
+    largura_botao = 160
     altura_botao = 70
 
     # Loop principal do menu
