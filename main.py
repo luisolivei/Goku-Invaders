@@ -10,7 +10,7 @@ def play_game():
     global play
     # Configurações para o fundo e ambiente de jogo
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do jogo
-    pygame.display.set_caption("Goku Invaders")
+    pygame.display.set_caption("Goku Invaders") # defin menu
     fundo = pygame.image.load("images/bg.png").convert_alpha()
     fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))  # Ajusta o fundo ao tamanho da tela
 
@@ -23,14 +23,14 @@ def play_game():
     jogador.definir_animacao("parado")  # Necessária para iniciar a animação
 
     a_funcionar = True
-    relogio = pygame.time.Clock()
+    relogio = pygame.time.Clock() # inicia relogio
     posicao_fundo_x = 0  # Posição inicial do fundo
 
     # Loop principal do jogo
     while a_funcionar:
         delta_tempo = relogio.tick(60) / 1000  # Calcula o tempo entre frames
 
-        # Processa eventos de entrada
+        # Processa eventos de entrada aprenta no ecra
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 a_funcionar = False
