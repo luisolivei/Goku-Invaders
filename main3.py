@@ -6,7 +6,7 @@ largura_ecra = 800
 altura_ecra = 600
 velocidade_animacao = 0.1
 velocidade_fundo = 0.8  
-caminho_sprite_sheet = "images/imagens_disparo/1.png"
+caminho_sprite_sheet = "images/goku/parado/parado_1.gif"
 
 pygame.init()
 ecra = pygame.display.set_mode((largura_ecra, altura_ecra))
@@ -50,7 +50,7 @@ class Jogador:
         self.projeteis.append(novo_projetil)
 
 # Classe de animação
-class Animacao:
+class Personagem:
     def __init__(self, sprite_sheet, dados_sprite, cor_chave=(160, 192, 192)): #cor rgb a filtrar as imagens
         self.sprite_sheet = sprite_sheet
         self.dados_sprite = dados_sprite
@@ -111,7 +111,7 @@ class Projetil:
 def play():
     pygame.display.set_caption("Goku Invaders")
     jogador = Jogador(100, altura_ecra / 2 - 64 / 2, sprite_sheet)
-    jogador.adicionar_animacao("disparo", AnimacaoPersonagem(sprite_sheet))
+    jogador.adicionar_animacao("disparo",AnimacaoPersonagem(sprite_sheet))
     jogador.definir_animacao("disparo")  # Animação inicial
     
     a_funcionar = True
@@ -150,14 +150,24 @@ def play():
 
         pygame.display.update()
 
+def mostrar_score():
+    print("Exibindo pontuação...")
+    pygame.time.wait(2000) 
+
 # Carregar imagens e configurar fundo e jogador
 sprite_sheet = pygame.image.load(caminho_sprite_sheet).convert()
 sprite_sheet.set_colorkey((144, 176, 216))  # Define filtro para tornar fundo transparente
 fundo = pygame.image.load("images/bg.png").convert_alpha()
 fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))
 
-# Executa o menu; se o jogador escolher "Play", inicia o jogo
-if menu(ecra, largura_ecra, altura_ecra, fundo):
-    play()
+# Loop principal para exibir o menu e reagir à seleção do jogador
+while True:
+    escolha = menu(ecra, largura_ecra, altura_ecra, fundo)
+    if escolha == "play":
+        play()
+    elif escolha == "score":
+        mostrar_score()
+    elif escolha == "quit":
+        break
 
 pygame.quit()
