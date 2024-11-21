@@ -3,19 +3,18 @@ from config import largura_ecra
 
 class Inimigo:
     def __init__(self, tipo, pos_y, cores_fundo=[(132, 66, 4), (128, 0, 128)]):
-        self.tipo = tipo  # Tipo do inimigo (1, 2 ou 3)
-        self.vidas = {1: 3, 2: 5, 3: 7}[tipo]  # Define o número de vidas conforme o tipo
-        self.pos_x = largura_ecra  # Aparece da direita do ecrã
-        self.pos_y = pos_y  # Posição vertical especificada
-        self.cores_fundo = cores_fundo  # Lista de cores de fundo a serem removidas
-        self.direcao_sprite = 1  # Direção do avanço dos sprites (1 para frente, -1 para trás)
+        self.tipo = tipo
+        self.vidas = {1: 3, 2: 5, 3: 7}[tipo]
+        self.pos_x = largura_ecra
+        self.pos_y = pos_y
+        self.cores_fundo = cores_fundo
+        self.direcao_sprite = 1
 
-        self.escalas = {1: 50, 2: 100, 3: 100}  # Escalas em percentagem
-        self.escala = self.escalas.get(tipo, 100) / 100  # Fator de escala padrão 100%
+        self.escalas = {1: 50, 2: 100, 3: 100}
+        self.escala = self.escalas.get(tipo, 100) / 100
 
-        self.velocidade = 1  # Velocidade do inimigo
+        self.velocidade = 1
 
-        # Define as velocidades de animação para cada estado por tipo
         self.velocidades_animacoes = {
             1: {"andar": 0.2, "morto": 0.3},
             2: {"andar": 0.3, "morto": 0.3},
@@ -24,7 +23,7 @@ class Inimigo:
         self.velocidade_animacao_atual = self.velocidades_animacoes[self.tipo].get("andar", 0.1)
 
         self.animacoes = {
-            "andar": self.carregar_sprites("andar"),  
+            "andar": self.carregar_sprites("andar"),
             "morto": self.carregar_sprites("morto"),
         }
         self.animacao_atual = "andar"
@@ -35,7 +34,7 @@ class Inimigo:
 
     def carregar_sprites(self, estado, tipos_ficheiro=("gif", "png"), num_maximo=6):
         sprites = []
-        for i in range(1, num_maximo + 1):  
+        for i in range(1, num_maximo + 1):
             for tipo in tipos_ficheiro:
                 caminho = f"images/Inimigos/inimigo_{self.tipo}/inimigo_{self.tipo}_{estado}_{i}.{tipo}"
                 try:
@@ -44,9 +43,9 @@ class Inimigo:
                     sprite = pygame.transform.flip(sprite, True, False)
                     sprite = self.redimensionar_sprite(sprite)
                     sprites.append(sprite)
-                    break  
+                    break
                 except FileNotFoundError:
-                    continue  
+                    continue
         return sprites
 
     def remover_cores_fundo(self, sprite):
@@ -65,7 +64,7 @@ class Inimigo:
 
     def atualizar(self, delta_tempo, jogador):
         if not self.vivo:
-            return  
+            return
 
         self.velocidade_animacao_atual = self.velocidades_animacoes[self.tipo].get(self.animacao_atual, 0.1)
         self.tempo_desde_ultimo_sprite += delta_tempo
@@ -87,7 +86,7 @@ class Inimigo:
         if self.animacao_atual == "andar":
             self.pos_x -= self.velocidade
             if self.pos_x < 0:
-                self.vivo = False  
+                self.vivo = False
 
     def desenhar(self, ecra):
         if self.vivo:
@@ -95,8 +94,9 @@ class Inimigo:
             ecra.blit(sprite, (self.pos_x, self.pos_y))
 
     def verificar_colisao(self, projetil):
-        if not self.vivo:
-            return False  
+        # Ignora colisões enquanto está na animação "morto"
+        if not self.vivo or self.animacao_atual == "morto":
+            return False
 
         sprite = self.animacoes[self.animacao_atual][self.indice_sprite]
         inimigo_rect = sprite.get_rect(topleft=(self.pos_x, self.pos_y))
@@ -106,7 +106,7 @@ class Inimigo:
             self.vidas -= 1
             if self.vidas <= 0:
                 self.animacao_atual = "morto"
-                self.indice_sprite = 0  
+                self.indice_sprite = 0
             return True
 
         return False
