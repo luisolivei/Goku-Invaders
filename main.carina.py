@@ -154,11 +154,12 @@ def iniciar_jogo():
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do menu
     fundo = pygame.image.load("images/bg.png").convert_alpha()  # Imagem de fundo para o menu
     fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))  # Ajusta a imagem de fundo ao tamanho da tela
-
+    sons.tocar_musica_fundo()
+    
     # Loop principal para exibir o menu e reagir à seleção do jogador
     while True:
         escolha = menu(ecra, largura_ecra, altura_ecra, fundo)  # Chama a função menu e aguarda a escolha do jogador
-        sons.tocar_musica_fundo()
+        
         
         if escolha == "play":
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)  # Executa o fade-in ao iniciar o jogo
