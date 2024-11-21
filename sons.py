@@ -6,6 +6,9 @@ pygame.mixer.init()
 # Carrega e gerencia os sons
 class Sons:
     def __init__(self):
+
+        #Musica de fundo do menu
+        self.som_menu = "Sons/som_menu.mp3"
         # Música de fundo
         self.som_fundo = "Sons/musica_nivel.mp3"
         pygame.mixer.music.load(self.som_fundo)
@@ -19,7 +22,12 @@ class Sons:
         self.som_game_over = pygame.mixer.Sound("Sons/game_over.mp3")
         self.som_game_over.set_volume(1.0)  # Ajusta o volume do game over
  
+    def tocar_musica_menu(self):
+        pygame.mixer.music.load(self.som_menu)  # Chama a música do menu
+        pygame.mixer.music.play(-1)  # Inicia a música em loop
+
     def tocar_musica_fundo(self):
+        pygame.mixer.music.load(self.som_fundo) #chama a musica de fundo
         pygame.mixer.music.play(-1)  # Inicia a música em loop
  
     def parar_musica_fundo(self):
