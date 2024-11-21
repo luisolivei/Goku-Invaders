@@ -6,9 +6,11 @@ from inimigos import Inimigo
 from personagens import AnimacaoParado, AnimacaoAndar, AnimacaoDisparar, AnimacaoAtingido
 from menu import menu
 from fadeinout import fade_in_out
+from sons import Sons
 
 # Variável global para controle do estado do jogo
 play = False
+sons = Sons() # Inicia o som
 
 # Função para gerar inimigos de forma aleatória
 def gerar_inimigo():
@@ -19,11 +21,16 @@ def gerar_inimigo():
 # Função principal do jogo
 def play_game():
     global play
+
     # Configurações para o fundo e ambiente de jogo
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do jogo
     pygame.display.set_caption("Goku Invaders")
     fundo = pygame.image.load("images/bg.png").convert_alpha()
     fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))  # Ajusta o fundo ao tamanho da tela
+    
+
+    # Toca a música de fundo
+    sons.tocar_musica_fundo()
 
     # Inicializa o jogador e define animações
     jogador = Jogador(100, altura_ecra / 2 - 64 / 2)  # Define a posição inicial do jogador
@@ -102,17 +109,22 @@ def play_game():
             if pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50).colliderect(
                 pygame.Rect(jogador.pos_x, jogador.pos_y, 50, 50)):
                 # Diminui a vida do jogador com base no tipo do inimigo
-                dano = {1: 3, 2: 5, 3: 7}[inimigo.tipo] 
+                dano = {1: 30, 2: 50, 3: 70}[inimigo.tipo] 
                 jogador.vida -= dano
                 inimigos.remove(inimigo)  # Remove o inimigo após a colisão
+                sons.tocar_colisao() # Toca som de colisao
                 if jogador.vida <= 0:
                     print("Jogador morreu!")
                     a_funcionar = False  # Termina o jogo se a vida do jogador acabar
+                    sons.tocar_game_over()
+            
 
             # Verifica colisão com projéteis do jogador
             for projetil in jogador.projeteis[:]:
                 if inimigo.verificar_colisao(projetil):
                     jogador.projeteis.remove(projetil)  # Remove o projétil que colidiu
+                    sons.tocar_disparo()  # Toca som de disparo
+            
 
             # Remove inimigo se estiver morto
             if not inimigo.vivo:
@@ -142,10 +154,13 @@ def iniciar_jogo():
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do menu
     fundo = pygame.image.load("images/bg.png").convert_alpha()  # Imagem de fundo para o menu
     fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))  # Ajusta a imagem de fundo ao tamanho da tela
-
+    sons.tocar_musica_fundo()
+    
     # Loop principal para exibir o menu e reagir à seleção do jogador
     while True:
         escolha = menu(ecra, largura_ecra, altura_ecra, fundo)  # Chama a função menu e aguarda a escolha do jogador
+        
+        
         if escolha == "play":
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)  # Executa o fade-in ao iniciar o jogo
             play = True
@@ -163,7 +178,11 @@ def iniciar_jogo():
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
             break  # Sai do loop e fecha o jogo
 
+            # Para a música ao sair do jogo
+            sons.parar_musica_fundo()
+
     pygame.quit()
 
 # Inicializa o jogo
 iniciar_jogo()
+
