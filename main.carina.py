@@ -1,6 +1,7 @@
 import pygame
 from config import largura_ecra, altura_ecra, velocidade_fundo
 from jogador import Jogador
+from inimigos import Inimigo
 from personagens import AnimacaoParado, AnimacaoAndar, AnimacaoDisparar, AnimacaoAtingido
 from menu import menu
 from fadeinout import fade_in_out
