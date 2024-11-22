@@ -1,11 +1,6 @@
 import pygame
 
-# Define `play` global para rastrear o estado do jogo entre o menu e o jogo
-play = False
-
-def menu(ecra, largura_ecra, altura_ecra, fundo):
-    global play  # Usa `play` como variável global
-
+def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes):
     pygame.font.init()
     font_titulo = pygame.font.Font("fonts/Saiyan-Sans.ttf", 100)  # Fonte para o título
     font_botoes = pygame.font.Font("fonts/Saiyan-Sans.ttf", 60)   # Fonte para os botões
@@ -19,18 +14,11 @@ def menu(ecra, largura_ecra, altura_ecra, fundo):
     botao_hover_cor = (255, 70, 70)
     sombra_cor = (50, 50, 50)
 
-    # Texto do botão principal com base no estado do jogo
-    texto_play_resume = "Resume" if play else "Play"
-
     # Botões e suas posições
-    botoes = {
-        texto_play_resume: (largura_ecra // 2, altura_ecra // 2),
-        "Score": (largura_ecra // 2, altura_ecra // 2 + 100),
-        "Quit": (largura_ecra // 2, altura_ecra // 2 + 200)
-    }
+    botoes = {opcao: (largura_ecra // 2, altura_ecra // 2 + i * 100) for i, opcao in enumerate(opcoes)}
 
     # Dimensões fixas dos botões (largura e altura)
-    largura_botao = 160
+    largura_botao = 300
     altura_botao = 70
 
     # Loop principal do menu
@@ -40,11 +28,9 @@ def menu(ecra, largura_ecra, altura_ecra, fundo):
 
         # Checa a posição do mouse para os efeitos de hover
         mouse_pos = pygame.mouse.get_pos()
-
         for texto, posicao in botoes.items():
             # Renderizar o texto do botão
             botao_texto = font_botoes.render(texto, True, (255, 255, 255))
-
             # Definir retângulo do botão com largura e altura fixas
             botao_rect = pygame.Rect(0, 0, largura_botao, altura_botao)
             botao_rect.center = posicao
@@ -70,18 +56,15 @@ def menu(ecra, largura_ecra, altura_ecra, fundo):
                 pygame.quit()
                 return "quit"
             if evento.type == pygame.MOUSEBUTTONDOWN:
-                # Checa cada botão individualmente
-                for texto, posicao in botoes.items():
-                    botao_rect = pygame.Rect(0, 0, largura_botao, altura_botao)
-                    botao_rect.center = posicao
-                    if botao_rect.collidepoint(evento.pos):
-                        if texto == "Play" or texto == "Resume":
-                            play = True  # Define `play` como True ao clicar em "Play" ou "Resume"
-                            return "play"
-                        elif texto == "Score":
-                            return "score"
-                        elif texto == "Quit":
-                            pygame.quit()
-                            return "quit"
+                if evento.button == 1:  # Verifica se o botão esquerdo do mouse foi clicado
+                    # Checa cada botão individualmente
+                    for texto, posicao in botoes.items():
+                        botao_rect = pygame.Rect(0, 0, largura_botao, altura_botao)
+                        botao_rect.center = posicao
+                        if botao_rect.collidepoint(evento.pos):
+                            return texto  # Retorna o texto do botão clicado
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_ESCAPE:
+                    return "quit"  # Permite sair do menu com ESC
 
         pygame.display.update()
