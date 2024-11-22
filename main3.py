@@ -17,6 +17,41 @@ def gerar_inimigo():
     tipo = random.choice([1, 2, 3])  # Escolhe aleatoriamente o tipo do inimigo
     pos_y = random.randint(50, altura_ecra - 50)  # Posição vertical aleatória
     return Inimigo(tipo, pos_y)
+
+# Função para exibir a tela de Game Over
+def tela_game_over(ecra):
+    global pontuacao
+    fonte = pygame.font.Font(None, 72)
+    texto_game_over = fonte.render("GAME OVER", True, (255, 0, 0))
+    fonte_pontuacao = pygame.font.Font(None, 36)
+    texto_pontuacao = fonte_pontuacao.render(f"Sua pontuação: {pontuacao}", True, (255, 255, 0))
+
+    # Desenha os textos na tela
+    ecra.fill((0, 0, 0))  # Fundo preto
+    ecra.blit(texto_game_over, (largura_ecra // 2 - texto_game_over.get_width() // 2, altura_ecra // 3))
+    ecra.blit(texto_pontuacao, (largura_ecra // 2 - texto_pontuacao.get_width() // 2, altura_ecra // 2))
+    
+    # Exibe opções: Continuar ou Sair
+    fonte_opcoes = pygame.font.Font(None, 36)
+    texto_opcoes = fonte_opcoes.render("Pressione 'C' para Continuar ou 'Q' para Sair", True, (255, 255, 255))
+    ecra.blit(texto_opcoes, (largura_ecra // 2 - texto_opcoes.get_width() // 2, altura_ecra * 2 / 3))
+    
+    pygame.display.update()
+
+    # Espera pela escolha do jogador
+    esperando = True
+    while esperando:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_c:  # Pressionar 'C' para continuar
+                    return True
+                elif evento.key == pygame.K_q:  # Pressionar 'Q' para sair
+                    pygame.quit()
+                    exit()
+
 # Função principal do jogo
 def play_game():
     global play, pontuacao
@@ -109,6 +144,7 @@ def play_game():
                     print("Jogador morreu!")
                     a_funcionar = False  # Termina o jogo se a vida do jogador acabar
                     sons.tocar_game_over()
+                    tela_game_over(ecra)  # Exibe a tela de Game Over
 
         # Verifica colisão com projéteis do jogador
         for projetil in jogador.projeteis[:]:
