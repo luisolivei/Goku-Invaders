@@ -16,9 +16,9 @@ class Inimigo:
         self.velocidade = 1
 
         self.velocidades_animacoes = {
-            1: {"andar": 0.2, "morto": 0.3},
-            2: {"andar": 0.3, "morto": 0.3},
-            3: {"andar": 0.5, "morto": 0.2},
+            1: {"andar": 0.2, "morto": 0.1},
+            2: {"andar": 0.3, "morto": 0.1},
+            3: {"andar": 0.5, "morto": 0.1},
         }
         self.velocidade_animacao_atual = self.velocidades_animacoes[self.tipo].get("andar", 0.1)
 
