@@ -19,38 +19,35 @@ def gerar_inimigo():
     return Inimigo(tipo, pos_y)
 
 # Função para exibir a tela de Game Over
-def tela_game_over(ecra):
+def tela_game_over(ecra, fundo):
     global pontuacao
-    fonte = pygame.font.Font(None, 72)
-    texto_game_over = fonte.render("GAME OVER", True, (255, 0, 0))
-    fonte_pontuacao = pygame.font.Font(None, 36)
-    texto_pontuacao = fonte_pontuacao.render(f"Sua pontuação: {pontuacao}", True, (255, 255, 0))
+    mensagem = "GAME OVER"
+    submensagem = f"Pontuação Final: {pontuacao}"
+    opcoes = ["Reiniciar", "Sair"]
 
-    # Desenha os textos na tela
-    ecra.fill((0, 0, 0))  # Fundo preto
-    ecra.blit(texto_game_over, (largura_ecra // 2 - texto_game_over.get_width() // 2, altura_ecra // 3))
+    # Exibe a mensagem de Game Over no centro da tela
+    fonte_titulo = pygame.font.Font(None, 64)
+    texto_mensagem = fonte_titulo.render(mensagem, True, (255, 0, 0))  # Vermelho para o título
+    ecra.blit(texto_mensagem, (largura_ecra // 2 - texto_mensagem.get_width() // 2, altura_ecra // 3))
+
+    # Exibe a pontuação final
+    fonte_pontuacao = pygame.font.Font(None, 48)
+    texto_pontuacao = fonte_pontuacao.render(submensagem, True, (255, 255, 0))  # Amarelo para a pontuação
     ecra.blit(texto_pontuacao, (largura_ecra // 2 - texto_pontuacao.get_width() // 2, altura_ecra // 2))
-    
-    # Exibe opções: Continuar ou Sair
-    fonte_opcoes = pygame.font.Font(None, 36)
-    texto_opcoes = fonte_opcoes.render("Pressione 'C' para Continuar ou 'Q' para Sair", True, (255, 255, 255))
-    ecra.blit(texto_opcoes, (largura_ecra // 2 - texto_opcoes.get_width() // 2, altura_ecra * 2 / 3))
-    
+
+    # Chama o menu sem o título
+    escolha = menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem, submensagem, exibir_titulo=False)
+
+    # Atualiza a tela para mostrar as informações
     pygame.display.update()
 
-    # Espera pela escolha do jogador
-    esperando = True
-    while esperando:
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-            if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_c:  # Pressionar 'C' para continuar
-                    return True
-                elif evento.key == pygame.K_q:  # Pressionar 'Q' para sair
-                    pygame.quit()
-                    exit()
+    # Retorna a escolha do jogador
+    if escolha == "Reiniciar":
+        pontuacao = 0  # Reseta a pontuação ao reiniciar o jogo
+        return True  # Reiniciar o jogo
+    elif escolha == "Sair":
+        pygame.quit()
+        exit()
 
 # Função principal do jogo
 def play_game():
@@ -144,7 +141,10 @@ def play_game():
                     print("Jogador morreu!")
                     a_funcionar = False  # Termina o jogo se a vida do jogador acabar
                     sons.tocar_game_over()
-                    tela_game_over(ecra)  # Exibe a tela de Game Over
+                    if tela_game_over(ecra, fundo):
+                        play_game()
+                    else:
+                        play = False  # Exibe a tela de Game Over
 
         # Verifica colisão com projéteis do jogador
         for projetil in jogador.projeteis[:]:
@@ -178,7 +178,8 @@ def mostrar_score():
 def pause_menu(ecra, fundo):
     global play
     while True:
-        escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Continuar", "Score", "Quit"])
+        # Exibe o menu com título (ou sem título, dependendo da escolha)
+        escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Continuar", "Score", "Quit"], exibir_titulo=True)
         if escolha == "Continuar":
             return  # Apenas retorna, mantendo o estado do jogo
         elif escolha == "Score":
@@ -197,6 +198,7 @@ def iniciar_jogo():
 
     # Loop principal para exibir o menu e reagir à seleção do jogador
     while True:
+        # Exibe o menu inicial com título
         escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Play", "Score", "Quit"])
         if escolha == "Play":
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
