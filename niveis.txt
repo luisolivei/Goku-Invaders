@@ -1,0 +1,98 @@
+1. Criar um Gerenciador de Níveis
+Adicione uma variável para rastrear o nível atual e métodos para configurar cada nível.
+No arquivo principal do jogo:
+Defina uma variável global nivel.
+Crie uma função para inicializar os parâmetros do nível com base no nível atual.
+python
+
+
+nivel = 1  # Nível inicial
+
+def configurar_nivel():
+    global nivel, velocidade_fundo, frequencia_inimigos, tipos_inimigos
+    
+    # Aumenta a dificuldade conforme o nível
+    velocidade_fundo = 2 + nivel * 0.5  # Fundo move-se mais rápido
+    frequencia_inimigos = max(1, 5 - nivel)  # Reduz intervalo entre inimigos
+    tipos_inimigos = [1, 2, 3]  # Pode introduzir novos tipos de inimigos em níveis avançados
+    
+    print(f"Iniciando o nível {nivel}. Velocidade do fundo: {velocidade_fundo}, Frequência de inimigos: {frequencia_inimigos}")
+
+2. Avançar para o Próximo Nível
+Determine quando o jogador completa um nível e chame a função para configurar o próximo.
+Exemplo:
+Complete um nível após derrotar um certo número de inimigos ou atingir uma pontuação específica.
+Adicionar a lógica no loop principal do jogo:
+
+# Define uma condição para passar de nível
+inimigos_derrotados = 0
+limite_para_proximo_nivel = nivel * 10  # Exemplo: precisa derrotar 10 inimigos por nível
+
+# Dentro do loop principal:
+if inimigos_derrotados >= limite_para_proximo_nivel:
+    nivel += 1
+    configurar_nivel()  # Reconfigura o jogo para o próximo nível
+    inimigos_derrotados = 0  # Reseta a contagem
+    print(f"Parabéns! Você avançou para o nível {nivel}.")
+
+Mensagem de transição de nível
+Mostre uma mensagem breve antes de iniciar o próximo nível:
+
+def exibir_mensagem_nivel(ecra, fundo, nivel):
+    fonte = pygame.font.Font(None, 64)
+    mensagem = f"Nível {nivel}"
+    texto = fonte.render(mensagem, True, (255, 255, 255))
+    ecra.blit(fundo, (0, 0))  # Redesenha o fundo
+    ecra.blit(texto, (largura_ecra // 2 - texto.get_width() // 2, altura_ecra // 2))
+    pygame.display.update()
+    pygame.time.wait(2000)  # Espera 2 segundos antes de começar o próximo nível
+
+3. Modificar o Gerador de Inimigos
+Ajuste o comportamento dos inimigos com base no nível.
+Atualizar a função inimigos:
+
+nivel = 1  # Nível inicial
+inimigos_por_nivel = {1: 10, 2: 15, 3: 20}  # Inimigos necessários para concluir o nível
+inimigos_derrotados = 0  # Contador de inimigos derrotados
+
+No loop principal (play_game), verifique se o jogador atingiu o critério para passar de nível:
+
+# Verifica progresso no nível atual
+if inimigos_derrotados >= inimigos_por_nivel.get(nivel, 20):
+    nivel += 1  # Aumenta o nível
+    inimigos_derrotados = 0  # Reseta o contador de derrotados
+    aumentar_dificuldade(nivel)  # Ajusta parâmetros para o novo nível
+    exibir_mensagem_nivel(ecra, fundo, nivel)
+
+Criar uma função para alterar parâmetros de dificuldade com base no nível:
+
+def aumentar_dificuldade(nivel):
+    global velocidade_fundo
+    # Aumenta a velocidade do fundo para simular maior intensidade
+    velocidade_fundo += 0.2
+    # Atualiza atributos de inimigos
+    for inimigo in Inimigo.velocidades_animacoes.values():
+        inimigo["andar"] += 0.1  # Aumenta a velocidade das animações
+
+4. Adicionar diferentes fundos ou efeitos visuais para cada nível.
+
+def configurar_nivel():
+    global fundo, nivel
+    
+    # Troca o fundo baseado no nível
+    if nivel == 1:
+        fundo = pygame.image.load("images/bg1.png").convert_alpha()
+    elif nivel == 2:
+        fundo = pygame.image.load("images/bg2.png").convert_alpha()
+    elif nivel == 3:
+        fundo = pygame.image.load("images/bg3.png").convert_alpha()
+    
+    fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))
+
+5. Mostrar o Nível na Tela
+Adicione uma HUD para exibir o nível atual.
+
+No loop principal, inclua:
+# Exibe o nível
+nivel_texto = fonte.render(f"Nível: {nivel}", True, (255, 255, 255))
+ecra.blit(nivel_texto, (largura_ecra // 2 - nivel_texto.get_width() // 2, 10))
