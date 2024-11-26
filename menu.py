@@ -1,13 +1,16 @@
 import pygame
 
-def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes):
+def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensagem=None, exibir_titulo=True):
     pygame.font.init()
     font_titulo = pygame.font.Font("fonts/Saiyan-Sans.ttf", 100)  # Fonte para o título
     font_botoes = pygame.font.Font("fonts/Saiyan-Sans.ttf", 60)   # Fonte para os botões
+    font_mensagem = pygame.font.Font("fonts/Saiyan-Sans.ttf", 80)  # Fonte para mensagens principais
+    font_submensagem = pygame.font.Font("fonts/Saiyan-Sans.ttf", 50)  # Fonte para submensagens
 
     # Texto do título
-    titulo_text = font_titulo.render("Goku Invaders", True, (255, 255, 255))
-    titulo_rect = titulo_text.get_rect(center=(largura_ecra // 2, altura_ecra // 4.5))
+    if exibir_titulo:
+        titulo_text = font_titulo.render("Goku Invaders", True, (255, 255, 255))
+        titulo_rect = titulo_text.get_rect(center=(largura_ecra // 2, altura_ecra // 4.5))
 
     # Definindo as cores
     botao_cor = (166, 148, 131)
@@ -21,10 +24,28 @@ def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes):
     largura_botao = 300
     altura_botao = 70
 
+    # Mensagens opcionais
+    if mensagem:
+        mensagem_text = font_mensagem.render(mensagem, True, (255, 0, 0))
+        mensagem_rect = mensagem_text.get_rect(center=(largura_ecra // 2, altura_ecra // 6))
+
+    if submensagem:
+        submensagem_text = font_submensagem.render(submensagem, True, (255, 255, 0))
+        submensagem_rect = submensagem_text.get_rect(center=(largura_ecra // 2, altura_ecra // 3.5))
+
     # Loop principal do menu
     while True:
         ecra.blit(fundo, (0, 0))  # Fundo do menu
-        ecra.blit(titulo_text, titulo_rect)  # Título no topo
+
+        # Renderiza o título se necessário
+        if exibir_titulo:
+            ecra.blit(titulo_text, titulo_rect)
+
+        # Renderiza mensagens opcionais, se fornecidas
+        if mensagem:
+            ecra.blit(mensagem_text, mensagem_rect)
+        if submensagem:
+            ecra.blit(submensagem_text, submensagem_rect)
 
         # Checa a posição do mouse para os efeitos de hover
         mouse_pos = pygame.mouse.get_pos()
