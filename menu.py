@@ -2,6 +2,7 @@ import pygame
 
 def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensagem=None, exibir_titulo=True):
     pygame.font.init()
+    # Configuração das fontes
     font_titulo = pygame.font.Font("fonts/Saiyan-Sans.ttf", 100)  # Fonte para o título
     font_botoes = pygame.font.Font("fonts/Saiyan-Sans.ttf", 60)   # Fonte para os botões
     font_mensagem = pygame.font.Font("fonts/Saiyan-Sans.ttf", 80)  # Fonte para mensagens principais
@@ -9,8 +10,24 @@ def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensa
 
     # Texto do título
     if exibir_titulo:
-        titulo_text = font_titulo.render("Goku Invaders", True, (255, 255, 255))
-        titulo_rect = titulo_text.get_rect(center=(largura_ecra // 2, altura_ecra // 4.5))
+        # Texto do título dividido em partes
+        texto_antes_o = "G"
+        texto_o = "O"
+        texto_depois_o = "ku Invaders"
+
+        # Renderizar as partes do texto
+        titulo_antes_o = font_titulo.render(texto_antes_o, True, (255, 255, 255))  # Branco
+        titulo_o = font_titulo.render(texto_o, True, (255, 165, 0))  # Laranja
+        titulo_depois_o = font_titulo.render(texto_depois_o, True, (255, 255, 255))  # Branco
+
+        # Calcular a largura total e centralizar
+        total_largura = (
+            titulo_antes_o.get_width() +
+            titulo_o.get_width() +
+            titulo_depois_o.get_width()
+        )
+        posicao_inicial_x = (largura_ecra - total_largura) // 2
+        posicao_y = altura_ecra // 4.5
 
     # Definindo as cores
     botao_cor = (166, 148, 131)
@@ -39,7 +56,9 @@ def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensa
 
         # Renderiza o título se necessário
         if exibir_titulo:
-            ecra.blit(titulo_text, titulo_rect)
+            ecra.blit(titulo_antes_o, (posicao_inicial_x, posicao_y))
+            ecra.blit(titulo_o, (posicao_inicial_x + titulo_antes_o.get_width(), posicao_y))
+            ecra.blit(titulo_depois_o, (posicao_inicial_x + titulo_antes_o.get_width() + titulo_o.get_width(), posicao_y))
 
         # Renderiza mensagens opcionais, se fornecidas
         if mensagem:
