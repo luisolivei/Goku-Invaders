@@ -30,8 +30,8 @@ def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensa
     botoes = {opcao: (largura_ecra // 2, altura_ecra // 2 + i * 100) for i, opcao in enumerate(opcoes)}
 
     # Dimensões fixas dos botões (largura e altura)
-    largura_botao = 300
-    altura_botao = 70
+    largura_botao = 250
+    altura_botao = 68
 
     # Mensagens opcionais
     if mensagem:
@@ -68,9 +68,10 @@ def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensa
             # Cores ajustadas com maior transparência
             sombra_surface.fill((50, 50, 50, 100))  # Sombra mais transparente
             if pygame.Rect(0, 0, largura_botao, altura_botao).move(posicao[0] - largura_botao // 2, posicao[1] - altura_botao // 2).collidepoint(mouse_pos):
-                botao_surface.fill((255, 70, 70, 150))  # Hover: vermelho mais transparente
+                # Alteração da cor de hover para um laranja suave
+                botao_surface.fill((255, 165, 0, 150))  # Hover: laranja suave com transparência
             else:
-                botao_surface.fill((166, 148, 131, 100))  # Normal: bege mais transparente
+                botao_surface.fill((166, 148, 131, 10))  # Normal: bege mais transparente
 
             # Desenhar sombra primeiro
             ecra.blit(sombra_surface, (posicao[0] - largura_botao // 2 + 4, posicao[1] - altura_botao // 2 + 4))
