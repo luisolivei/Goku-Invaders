@@ -192,7 +192,7 @@ def pause_menu(ecra, fundo):
 def iniciar_jogo():
     global play
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do menu
-    fundo = pygame.image.load("images/bg.png").convert_alpha()  # Imagem de fundo para o menu
+    fundo = pygame.image.load("images/try1.jpg").convert_alpha()  # Imagem de fundo para o menu
     fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))  # Ajusta a imagem de fundo ao tamanho da tela
     sons.tocar_musica_menu()
 
