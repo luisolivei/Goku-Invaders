@@ -12,7 +12,7 @@ class Sons:
         # Música de fundo
         self.som_fundo = "Sons/musica_nivel.mp3"
         pygame.mixer.music.load(self.som_fundo)
-        pygame.mixer.music.set_volume(0.5)  # Ajusta o volume da música de fundo
+        pygame.mixer.music.set_volume(0.3)  # Ajusta o volume da música de fundo
         # Sons de efeitos
         self.som_disparo = pygame.mixer.Sound("Sons/disparos.mp3")
         self.som_disparo.set_volume(0.7)  # Ajusta o volume do disparo
