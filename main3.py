@@ -39,7 +39,7 @@ def tela_game_over(ecra, fundo):
     escolha = menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem, submensagem, exibir_titulo=False)
 
     # Atualiza a tela para mostrar as informações
-    pygame.display.update()
+    #pygame.display.update()
 
     # Retorna a escolha do jogador
     if escolha == "Reiniciar":
