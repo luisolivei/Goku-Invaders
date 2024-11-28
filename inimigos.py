@@ -85,8 +85,9 @@ class Inimigo:
 
         if self.animacao_atual == "andar":
             self.pos_x -= self.velocidade
-            if self.pos_x < 0:
+            if self.pos_x < 0:  # Inimigo saiu pela esquerda ecra
                 self.vivo = False
+                return "fora"  # Retorna estado saída pela esquerda
 
     def desenhar(self, ecra):
         if self.vivo:
