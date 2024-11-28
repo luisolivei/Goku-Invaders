@@ -6,7 +6,7 @@ def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensa
     font_titulo = pygame.font.Font("fonts/Saiyan-Sans.ttf", 100)  # Fonte para o título
     font_botoes = pygame.font.Font("fonts/Saiyan-Sans.ttf", 60)   # Fonte para os botões
     font_mensagem = pygame.font.Font("fonts/Saiyan-Sans.ttf", 80)  # Fonte para mensagens principais
-    font_submensagem = pygame.font.Font("fonts/Saiyan-Sans.ttf", 50)  # Fonte para submensagens
+    font_submensagem = pygame.font.Font("fonts/arial.ttf", 50)  # Fonte para submensagens
 
     # Texto do título
     if exibir_titulo:
