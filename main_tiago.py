@@ -11,6 +11,7 @@ from sons import Sons
 # Variável global para controle do estado do jogo
 play = False
 sons = Sons()  # Inicia o som
+pontuacao = 0  # Variável para a pontuação
 
 # Função para gerar inimigos de forma aleatória
 def gerar_inimigo():
@@ -20,7 +21,8 @@ def gerar_inimigo():
 
 # Função principal do jogo
 def play_game():
-    global play
+    global play, pontuacao
+    pontuacao = 0  # Reset na pontuação ao iniciar um novo jogo
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do jogo
     pygame.display.set_caption("Goku Invaders")
     fundo = pygame.image.load("images/bg.png").convert_alpha()
@@ -109,6 +111,10 @@ def play_game():
                     print("Jogador morreu!")
                     a_funcionar = False  # Termina o jogo se a vida do jogador acabar
                     sons.tocar_game_over()
+                    if tela_game_over(ecra, fundo):
+                        play_game()
+                    else:
+                        play = False  # Exibe a tela de Game Over
 
         # Verifica colisão com projéteis do jogador
         for projetil in jogador.projeteis[:]:
@@ -116,20 +122,24 @@ def play_game():
                 if inimigo.verificar_colisao(projetil):
                     jogador.projeteis.remove(projetil)  # Remove o projétil que colidiu
                     sons.tocar_disparo()  # Toca som de disparo
+                    pontuacao += {1: 30, 2: 50, 3: 70}[inimigo.tipo]  # Aumenta a pontuação
                     break  # Evita múltiplas colisões para o mesmo projétil
 
         # Atualiza a posição dos projéteis e do jogador
         jogador.atualizar(delta_tempo)
         jogador.desenhar(ecra)
 
-        # Exibe a vida do jogador na tela
+        # Exibe a vida e pontuação do jogador na tela
         fonte = pygame.font.Font(None, 36)
         vida_texto = fonte.render(f"Vida: {jogador.vida}", True, (255, 0, 0))
+        score_texto = fonte.render(f"Score: {pontuacao}", True, (255, 255, 0))
         ecra.blit(vida_texto, (10, 10))
+        ecra.blit(score_texto, (largura_ecra - 150, 10))
         pygame.display.update()
 
 # Função para exibir a pontuação
 def mostrar_score():
+    global pontuacao
     print("Exibindo pontuação...")  # Aqui você pode substituir por código para exibir a pontuação na tela
     pygame.time.wait(2000)  # Espera 2 segundos para simular a exibição da pontuação
 
@@ -145,6 +155,37 @@ def pause_menu(ecra, fundo):
         elif escolha == "Quit":
             pygame.quit()
             exit()
+
+# Função para exibir a tela de Game Over
+def tela_game_over(ecra, fundo):
+    global pontuacao
+    mensagem = "GAME OVER"
+    submensagem = f"Pontuação Final: {pontuacao}"
+    opcoes = ["Reiniciar", "Sair"]
+
+    # Exibe a mensagem de Game Over no centro da tela
+    fonte_titulo = pygame.font.Font(None, 64)
+    texto_mensagem = fonte_titulo.render(mensagem, True, (255, 0, 0))  # Vermelho para o título
+    ecra.blit(texto_mensagem, (largura_ecra // 2 - texto_mensagem.get_width() // 2, altura_ecra // 3))
+
+    # Exibe a pontuação final
+    fonte_pontuacao = pygame.font.Font(None, 48)
+    texto_pontuacao = fonte_pontuacao.render(submensagem, True, (255, 255, 0))  # Amarelo para a pontuação
+    ecra.blit(texto_pontuacao, (largura_ecra // 2 - texto_pontuacao.get_width() // 2, altura_ecra // 2))
+
+    # Chama o menu sem o título
+    escolha = menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem, submensagem, exibir_titulo=False)
+
+    # Atualiza a tela para mostrar as informações
+    #pygame.display.update()
+
+    # Retorna a escolha do jogador
+    if escolha == "Reiniciar":
+        pontuacao = 0  # Reseta a pontuação ao reiniciar o jogo
+        return True  # Reiniciar o jogo
+    elif escolha == "Sair":
+        pygame.quit()
+        exit()
 
 # Configuração inicial do menu
 def iniciar_jogo():

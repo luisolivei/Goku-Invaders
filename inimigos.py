@@ -100,7 +100,7 @@ class Inimigo:
 
         sprite = self.animacoes[self.animacao_atual][self.indice_sprite]
         inimigo_rect = sprite.get_rect(topleft=(self.pos_x, self.pos_y))
-        projetil_rect = pygame.Rect(projetil.x, projetil.y, projetil.largura, projetil.altura)
+        projetil_rect = projetil.imagem.get_rect(topleft=(projetil.x, projetil.y))
 
         if inimigo_rect.colliderect(projetil_rect):
             self.vidas -= 1

@@ -7,51 +7,77 @@ from personagens import AnimacaoParado, AnimacaoAndar, AnimacaoDisparar, Animaca
 from menu import menu
 from fadeinout import fade_in_out
 from sons import Sons
+from projetil import Projetil
 
-# Variável global para controle do estado do jogo
+# Variáveis globais para controle do estado do jogo
 play = False
-sons = Sons() # Inicia o som
+pontuacao = 0  # Variável para a pontuação
+sons = Sons()  # Inicia o som
 
-# Função para gerar inimigos de forma aleatória
 def gerar_inimigo():
     tipo = random.choice([1, 2, 3])  # Escolhe aleatoriamente o tipo do inimigo
     pos_y = random.randint(50, altura_ecra - 50)  # Posição vertical aleatória
     return Inimigo(tipo, pos_y)
 
+# Função para exibir a tela de Game Over
+def tela_game_over(ecra, fundo):
+    global pontuacao
+    mensagem = "GAME OVER"
+    submensagem = f"Pontuação Final: {pontuacao}"
+    opcoes = ["Reiniciar", "Sair"]
+
+    # Exibe a mensagem de Game Over no centro da tela
+    fonte_titulo = pygame.font.Font(None, 64)
+    texto_mensagem = fonte_titulo.render(mensagem, True, (255, 0, 0))  # Vermelho para o título
+    ecra.blit(texto_mensagem, (largura_ecra // 2 - texto_mensagem.get_width() // 2, altura_ecra // 3))
+
+    # Exibe a pontuação final
+    fonte_pontuacao = pygame.font.Font(None, 48)
+    texto_pontuacao = fonte_pontuacao.render(submensagem, True, (255, 255, 0))  # Amarelo para a pontuação
+    ecra.blit(texto_pontuacao, (largura_ecra // 2 - texto_pontuacao.get_width() // 2, altura_ecra // 2))
+
+    # Chama o menu sem o título
+    escolha = menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem, submensagem, exibir_titulo=False)
+
+    # Atualiza a tela para mostrar as informações
+    pygame.display.update()
+
+    # Retorna a escolha do jogador
+    if escolha == "Reiniciar":
+        pontuacao = 0  # Reseta a pontuação ao reiniciar o jogo
+        return True  # Reiniciar o jogo
+    elif escolha == "Sair":
+        pygame.quit()
+        exit()
+
 # Função principal do jogo
 def play_game():
-    global play
-
-    # Configurações para o fundo e ambiente de jogo
+    global play, pontuacao
+    pontuacao = 0  # Reseta a pontuação ao iniciar um novo jogo
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do jogo
     pygame.display.set_caption("Goku Invaders")
     fundo = pygame.image.load("images/bg.png").convert_alpha()
     fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))  # Ajusta o fundo ao tamanho da tela
-    
-
-    # Toca a música de fundo
     sons.tocar_musica_fundo()
 
     # Inicializa o jogador e define animações
-    jogador = Jogador(100, altura_ecra / 2 - 64 / 2)  # Define a posição inicial do jogador
+    jogador = Jogador(100, altura_ecra / 2 - 64 / 2)
     jogador.adicionar_animacao("parado", AnimacaoParado())
     jogador.adicionar_animacao("andar", AnimacaoAndar())
     jogador.adicionar_animacao("disparar", AnimacaoDisparar())
     jogador.adicionar_animacao("atingido", AnimacaoAtingido())
     jogador.definir_animacao("parado")  # Necessária para iniciar a animação
-
-    # Define a vida inicial do jogador
     jogador.vida = 100
+    jogador.disparando = False  # Adiciona estado para controlar o disparo
 
     inimigos = []  # Lista para armazenar inimigos
     relogio = pygame.time.Clock()  # Inicia o relógio para controlar o FPS
     posicao_fundo_x = 0  # Posição inicial do fundo
-
     a_funcionar = True
 
     # Loop principal do jogo
     while a_funcionar:
-        delta_tempo = relogio.tick(60) / 1000  # Calcula o tempo entre frames
+        delta_tempo = relogio.tick(60) / 1000  # Calcula o tempo entre frames, 60hz
 
         # Gera inimigos aleatórios periodicamente
         if random.randint(1, 100) < 2:  # Probabilidade de gerar um inimigo a cada frame
@@ -63,32 +89,32 @@ def play_game():
                 a_funcionar = False
                 play = False  # Define play como False para retornar ao menu
             elif evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_SPACE:
-                    jogador.disparar()
-                    jogador.definir_animacao("disparar")  # Define a animação de disparo
-
+                if evento.key == pygame.K_SPACE and not jogador.disparando:
+                    jogador.disparar()  # Ativa o disparo
+                    jogador.definir_animacao("disparar")
+                    jogador.disparando = True  # Define o estado como disparando
                 elif evento.key == pygame.K_ESCAPE:  # Verifica se a tecla Esc foi pressionada
-                    play = False
-                    return  # Retorna ao menu
-            
+                    pause_menu(ecra, fundo)  # Chama a função de pausa
+                    jogador.definir_animacao("parado")  # Restaura o estado após a pausa
             elif evento.type == pygame.KEYUP:
                 if evento.key == pygame.K_SPACE:
-                    # Após soltar a tecla de disparo, retorna à animação de andar ou parado
+                    jogador.disparando = False  # Libera o estado de disparo
                     tecla = pygame.key.get_pressed()
+                    # Define a animação correta após o disparo
                     if tecla[pygame.K_UP] or tecla[pygame.K_DOWN]:
-                        jogador.definir_animacao("andar")  # Continua com a animação de movimento
+                        jogador.definir_animacao("andar")
                     else:
-                        jogador.definir_animacao("parado")  # Retorna à animação parado se não houver movimento
+                        jogador.definir_animacao("parado")
 
         # Verifica as teclas pressionadas para movimento vertical
         tecla = pygame.key.get_pressed()
         if tecla[pygame.K_UP] and jogador.pos_y > 0:
             jogador.pos_y -= 5
-            if not tecla[pygame.K_SPACE]:
+            if not jogador.disparando:  # Não muda a animação se estiver disparando
                 jogador.definir_animacao("andar")
         elif tecla[pygame.K_DOWN] and jogador.pos_y < altura_ecra - 64:
             jogador.pos_y += 5
-            if not tecla[pygame.K_SPACE]:
+            if not jogador.disparando:  # Não muda a animação se estiver disparando
                 jogador.definir_animacao("andar")
 
         # Atualiza a posição do fundo para movimento contínuo
@@ -106,83 +132,85 @@ def play_game():
             inimigo.desenhar(ecra)
 
             # Verifica colisão do inimigo com o jogador
-            if pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50).colliderect(
+            if inimigo.vivo and pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50).colliderect(
                 pygame.Rect(jogador.pos_x, jogador.pos_y, 50, 50)):
-                # Diminui a vida do jogador com base no tipo do inimigo
-                dano = {1: 30, 2: 50, 3: 70}[inimigo.tipo] 
+                dano = {1: 30, 2: 50, 3: 70}[inimigo.tipo]
                 jogador.vida -= dano
                 inimigos.remove(inimigo)  # Remove o inimigo após a colisão
-                sons.tocar_colisao() # Toca som de colisao
+                sons.tocar_colisao()
                 if jogador.vida <= 0:
                     print("Jogador morreu!")
                     a_funcionar = False  # Termina o jogo se a vida do jogador acabar
                     sons.tocar_game_over()
-            
+                    if tela_game_over(ecra, fundo):
+                        play_game()
+                    else:
+                        play = False  # Exibe a tela de Game Over
 
-            # Verifica colisão com projéteis do jogador
-            for projetil in jogador.projeteis[:]:
+        # Verifica colisão com projéteis do jogador
+        for projetil in jogador.projeteis[:]:
+            for inimigo in inimigos[:]:
                 if inimigo.verificar_colisao(projetil):
                     jogador.projeteis.remove(projetil)  # Remove o projétil que colidiu
+                    inimigos.remove(inimigo)  # Remove o inimigo atingido
                     sons.tocar_disparo()  # Toca som de disparo
-            
-
-            # Remove inimigo se estiver morto
-            if not inimigo.vivo:
-                inimigos.remove(inimigo)
+                    pontuacao += 10  # Aumenta a pontuação
+                    break  # Evita múltiplas colisões para o mesmo projétil
 
         # Atualiza a posição dos projéteis e do jogador
         jogador.atualizar(delta_tempo)
-
-        # Desenha o jogador e projéteis na tela
         jogador.desenhar(ecra)
 
-        # Exibe a vida do jogador na tela
+        # Exibe a vida e pontuação do jogador na tela
         fonte = pygame.font.Font(None, 36)
         vida_texto = fonte.render(f"Vida: {jogador.vida}", True, (255, 0, 0))
+        score_texto = fonte.render(f"Score: {pontuacao}", True, (255, 255, 0))
         ecra.blit(vida_texto, (10, 10))
-
+        ecra.blit(score_texto, (largura_ecra - 150, 10))
         pygame.display.update()
 
-# Função para exibir a pontuação
+# Função para exibir a pontuação ao final
 def mostrar_score():
-    print("Exibindo pontuação...")  # Aqui poderias substituir por código para exibir a pontuação na tela
+    global pontuacao
+    print(f"Sua pontuação final foi: {pontuacao}")  # Substitua por exibição gráfica, se necessário
     pygame.time.wait(2000)  # Espera 2 segundos para simular a exibição da pontuação
+
+# Função de pausa que exibe o menu de pausa
+def pause_menu(ecra, fundo):
+    global play
+    while True:
+        # Exibe o menu com título (ou sem título, dependendo da escolha)
+        escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Continuar", "Score", "Quit"], exibir_titulo=True)
+        if escolha == "Continuar":
+            return  # Apenas retorna, mantendo o estado do jogo
+        elif escolha == "Score":
+            mostrar_score()
+        elif escolha == "Quit":
+            pygame.quit()
+            exit()
 
 # Configuração inicial do menu
 def iniciar_jogo():
     global play
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do menu
-    fundo = pygame.image.load("images/bg.png").convert_alpha()  # Imagem de fundo para o menu
-    fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))  # Ajusta a imagem de fundo ao tamanho da tela
+    fundo = pygame.image.load("images/try1.jpg").convert_alpha()  # Carrega a imagem de fundo
+    fundo = pygame.transform.smoothscale(fundo, (largura_ecra, altura_ecra))  # Redimensiona suavemente
     sons.tocar_musica_menu()
-    
+
     # Loop principal para exibir o menu e reagir à seleção do jogador
     while True:
-        escolha = menu(ecra, largura_ecra, altura_ecra, fundo)  # Chama a função menu e aguarda a escolha do jogador
-        
-        
-        if escolha == "play":
-            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)  # Executa o fade-in ao iniciar o jogo
+        # Exibe o menu inicial com título
+        escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Play", "Score", "Quit"])
+        if escolha == "Play":
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
             play = True
             play_game()  # Inicia o jogo
-
-            # Executa o fade-out ao retornar ao menu após o jogo
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
-            if play:  # Se `play` estiver True, continua o loop para retornar ao jogo
-                continue
-        elif escolha == "score":
-            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
-            mostrar_score()  # Exibe a pontuação
-            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
-        elif escolha == "quit":
-            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
-            break  # Sai do loop e fecha o jogo
-
-            # Para a música ao sair do jogo
-            sons.parar_musica_fundo()
-
-    pygame.quit()
+        elif escolha == "Score":
+            mostrar_score()
+        elif escolha == "Quit":
+            pygame.quit()
+            break
 
 # Inicializa o jogo
 iniciar_jogo()
-
