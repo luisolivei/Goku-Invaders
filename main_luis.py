@@ -125,48 +125,54 @@ def play_game():
         ecra.blit(fundo, (posicao_fundo_x, 0))
         ecra.blit(fundo, (posicao_fundo_x + largura_ecra, 0))
 
-        # Atualiza e desenha cada inimigo
-        for inimigo in inimigos[:]:  # Cópia da lista para remoção segura
+        for projetil in jogador.projeteis[:]:  # Cópia para remoção segura
+            for inimigo in inimigos[:]:  # Outra cópia para remoção segura
+                if inimigo.verificar_colisao(projetil):
+                    jogador.projeteis.remove(projetil)  # Remove o projétil
+                    inimigo.vidas -= 1  # Reduz a vida do inimigo
+                    sons.tocar_disparo()
+
+                    if inimigo.vidas <= 0:  # Se a vida do inimigo chegar a zero
+                        inimigos.remove(inimigo)  # Remove o inimigo da lista
+                        pontuacao += 10  # Adiciona pontos
+                    break 
+
+# Atualiza e desenha cada inimigo
+        for inimigo in inimigos[:]:
             inimigo.atualizar(delta_tempo, jogador)
             inimigo.desenhar(ecra)
 
-            # Verifica colisão do inimigo com o jogador
+    # Verifica colisão com o jogador
+        for inimigo in inimigos[:]:  # Cópia da lista para remoção segura
             if inimigo.vivo and pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50).colliderect(
-                pygame.Rect(jogador.pos_x, jogador.pos_y, 50, 50)):
-                dano = {1: 30, 2: 50, 3: 70}[inimigo.tipo]
-                jogador.vida -= dano
-                inimigos.remove(inimigo)  # Remove o inimigo após a colisão
-                sons.tocar_colisao()
+            pygame.Rect(jogador.pos_x, jogador.pos_y, 50, 50)):
+                dano = {1: 30, 2: 50, 3: 70}[inimigo.tipo]  # Define o dano dependendo do tipo do inimigo
+                jogador.vida -= dano  # Diminui a vida do jogador
+                sons.tocar_colisao()  # Toca som de colisão
+
                 if jogador.vida <= 0:
                     print("Jogador morreu!")
                     a_funcionar = False  # Termina o jogo se a vida do jogador acabar
-                    sons.tocar_game_over()
-                    if tela_game_over(ecra, fundo):
-                        play_game()
-                    else:
-                        play = False  # Exibe a tela de Game Over
+                    sons.tocar_game_over()  # Toca som de game over
+                if tela_game_over(ecra, fundo):
+                    play_game()  # Reinicia o jogo
+                else:
+                    play = False  # Exibe a tela de Game Over
 
-        # Verifica colisão com projéteis do jogador
-        for projetil in jogador.projeteis[:]:
-            for inimigo in inimigos[:]:
-                if inimigo.verificar_colisao(projetil):
-                    jogador.projeteis.remove(projetil)  # Remove o projétil que colidiu
-                    inimigos.remove(inimigo)  # Remove o inimigo atingido
-                    sons.tocar_disparo()  # Toca som de disparo
-                    pontuacao += 10  # Aumenta a pontuação
-                    break  # Evita múltiplas colisões para o mesmo projétil
 
-        # Atualiza a posição dos projéteis e do jogador
+# Atualiza a posição dos projéteis e do jogador
         jogador.atualizar(delta_tempo)
         jogador.desenhar(ecra)
 
-        # Exibe a vida e pontuação do jogador na tela
+# Exibe a vida e pontuação do jogador na tela
         fonte = pygame.font.Font(None, 36)
         vida_texto = fonte.render(f"Vida: {jogador.vida}", True, (255, 0, 0))
         score_texto = fonte.render(f"Score: {pontuacao}", True, (255, 255, 0))
         ecra.blit(vida_texto, (10, 10))
         ecra.blit(score_texto, (largura_ecra - 150, 10))
         pygame.display.update()
+
+
 
 # Função para exibir a pontuação ao final
 def mostrar_score():
