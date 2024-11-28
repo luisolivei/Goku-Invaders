@@ -149,18 +149,22 @@ def play_game():
             if inimigo.vivo and pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50).colliderect(
                 pygame.Rect(jogador.pos_x, jogador.pos_y, 50, 50)
             ):
-                dano = {1: 30, 2: 50, 3: 70}[inimigo.tipo]
-                jogador.vida -= dano
-                sons.tocar_colisao()
+                dano = {1: 30, 2: 50, 3: 70}[inimigo.tipo]  # Define o dano dependendo do tipo do inimigo
+                jogador.vida -= dano  # Diminui a vida do jogador
+                sons.tocar_colisao()  # Toca som de colisão
 
-                if jogador.vida <= 0:
-                    print("Jogador morreu!")
-                    a_funcionar = False
-                    sons.tocar_game_over()
-                if tela_game_over(ecra, fundo):
-                    play_game()
-                else:
-                    play = False
+                # Remove o inimigo após colisão com o jogador
+                inimigos.remove(inimigo)
+
+        # Verifica se o jogador morreu
+        if jogador.vida <= 0:
+            print("Jogador morreu!")
+            a_funcionar = False
+            sons.tocar_game_over()
+            if tela_game_over(ecra, fundo):
+                play_game()  # Reinicia o jogo
+            else:
+                play = False
 
         # Atualiza a posição dos projéteis e do jogador
         jogador.atualizar(delta_tempo)

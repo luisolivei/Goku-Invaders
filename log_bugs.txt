@@ -1,0 +1,4 @@
+28-11
+
+corrigido>colisão inimigo com jogador, mata jogador no imediato
+>tamanho explosao muito grande
