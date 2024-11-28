@@ -2,6 +2,7 @@ import pygame
 
 def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensagem=None, exibir_titulo=True):
     pygame.font.init()
+    # Configuração das fontes
     font_titulo = pygame.font.Font("fonts/Saiyan-Sans.ttf", 100)  # Fonte para o título
     font_botoes = pygame.font.Font("fonts/Saiyan-Sans.ttf", 60)   # Fonte para os botões
     font_mensagem = pygame.font.Font("fonts/Saiyan-Sans.ttf", 80)  # Fonte para mensagens principais
@@ -9,20 +10,28 @@ def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensa
 
     # Texto do título
     if exibir_titulo:
-        titulo_text = font_titulo.render("Goku Invaders", True, (255, 255, 255))
-        titulo_rect = titulo_text.get_rect(center=(largura_ecra // 2, altura_ecra // 4.5))
+        texto_antes_o = "G"
+        texto_o = "O"
+        texto_depois_o = "ku Invaders"
 
-    # Definindo as cores
-    botao_cor = (166, 148, 131)
-    botao_hover_cor = (255, 70, 70)
-    sombra_cor = (50, 50, 50)
+        titulo_antes_o = font_titulo.render(texto_antes_o, True, (255, 255, 255))  # Branco
+        titulo_o = font_titulo.render(texto_o, True, (255, 165, 0))  # Laranja
+        titulo_depois_o = font_titulo.render(texto_depois_o, True, (255, 255, 255))  # Branco
+
+        total_largura = (
+            titulo_antes_o.get_width() +
+            titulo_o.get_width() +
+            titulo_depois_o.get_width()
+        )
+        posicao_inicial_x = (largura_ecra - total_largura) // 2
+        posicao_y = altura_ecra // 4.5
 
     # Botões e suas posições
     botoes = {opcao: (largura_ecra // 2, altura_ecra // 2 + i * 100) for i, opcao in enumerate(opcoes)}
 
     # Dimensões fixas dos botões (largura e altura)
-    largura_botao = 300
-    altura_botao = 70
+    largura_botao = 250
+    altura_botao = 68
 
     # Mensagens opcionais
     if mensagem:
@@ -39,7 +48,9 @@ def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensa
 
         # Renderiza o título se necessário
         if exibir_titulo:
-            ecra.blit(titulo_text, titulo_rect)
+            ecra.blit(titulo_antes_o, (posicao_inicial_x, posicao_y))
+            ecra.blit(titulo_o, (posicao_inicial_x + titulo_antes_o.get_width(), posicao_y))
+            ecra.blit(titulo_depois_o, (posicao_inicial_x + titulo_antes_o.get_width() + titulo_o.get_width(), posicao_y))
 
         # Renderiza mensagens opcionais, se fornecidas
         if mensagem:
@@ -50,25 +61,26 @@ def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensa
         # Checa a posição do mouse para os efeitos de hover
         mouse_pos = pygame.mouse.get_pos()
         for texto, posicao in botoes.items():
-            # Renderizar o texto do botão
-            botao_texto = font_botoes.render(texto, True, (255, 255, 255))
-            # Definir retângulo do botão com largura e altura fixas
-            botao_rect = pygame.Rect(0, 0, largura_botao, altura_botao)
-            botao_rect.center = posicao
+            # Cria uma superfície semi-transparente para o botão
+            botao_surface = pygame.Surface((largura_botao, altura_botao), pygame.SRCALPHA)
+            sombra_surface = pygame.Surface((largura_botao, altura_botao), pygame.SRCALPHA)
 
-            # Caixa de sombra
-            sombra_rect = botao_rect.copy()
-            sombra_rect.topleft = (botao_rect.topleft[0] + 4, botao_rect.topleft[1] + 4)
-            pygame.draw.rect(ecra, sombra_cor, sombra_rect, border_radius=12)
-
-            # Efeito de hover (mudança de cor e "elevação" da caixa do botão)
-            if botao_rect.collidepoint(mouse_pos):
-                pygame.draw.rect(ecra, botao_hover_cor, botao_rect, border_radius=12)
+            # Cores ajustadas com maior transparência
+            sombra_surface.fill((50, 50, 50, 100))  # Sombra mais transparente
+            if pygame.Rect(0, 0, largura_botao, altura_botao).move(posicao[0] - largura_botao // 2, posicao[1] - altura_botao // 2).collidepoint(mouse_pos):
+                # Alteração da cor de hover para um laranja suave
+                botao_surface.fill((255, 165, 0, 150))  # Hover: laranja suave com transparência
             else:
-                pygame.draw.rect(ecra, botao_cor, botao_rect, border_radius=12)
+                botao_surface.fill((166, 148, 131, 10))  # Normal: bege mais transparente
 
-            # Desenha o texto do botão centralizado dentro do retângulo
-            botao_texto_rect = botao_texto.get_rect(center=botao_rect.center)
+            # Desenhar sombra primeiro
+            ecra.blit(sombra_surface, (posicao[0] - largura_botao // 2 + 4, posicao[1] - altura_botao // 2 + 4))
+            # Desenhar botão transparente
+            ecra.blit(botao_surface, (posicao[0] - largura_botao // 2, posicao[1] - altura_botao // 2))
+
+            # Renderizar texto do botão
+            botao_texto = font_botoes.render(texto, True, (255, 255, 255))
+            botao_texto_rect = botao_texto.get_rect(center=posicao)
             ecra.blit(botao_texto, botao_texto_rect)
 
         # Detecta eventos de clique nos botões
@@ -78,7 +90,6 @@ def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensa
                 return "quit"
             if evento.type == pygame.MOUSEBUTTONDOWN:
                 if evento.button == 1:  # Verifica se o botão esquerdo do mouse foi clicado
-                    # Checa cada botão individualmente
                     for texto, posicao in botoes.items():
                         botao_rect = pygame.Rect(0, 0, largura_botao, altura_botao)
                         botao_rect.center = posicao
