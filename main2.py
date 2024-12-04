@@ -18,6 +18,7 @@ def mostrar_tela_final(ecra):
     """
     Exibe uma tela de conclusão com mensagem de "Jogo Completo" e créditos.
     """
+    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
     # Define o fundo da tela final
     fundo_final = pygame.image.load("images/try2.jpg").convert_alpha()  # Imagem de fundo final
     fundo_final = pygame.transform.scale(fundo_final, (largura_ecra, altura_ecra))
@@ -43,11 +44,14 @@ def mostrar_tela_final(ecra):
     pygame.display.update()
     pygame.time.wait(10000)  # Aguarda 5 segundos antes de voltar ao menu
 
+    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
+
 
 def mostrar_historia(ecra, nivel):
     """
     Função que exibe uma tela de história com uma imagem e um botão 'Continuar'.
     """
+    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
     # Carregar a imagem da história baseada no nível
     if nivel == 1:
         imagem_historia = pygame.image.load("images/try4.jpg").convert_alpha()
@@ -91,6 +95,8 @@ def mostrar_historia(ecra, nivel):
                 if botao_rect.collidepoint(evento.pos):  # Verifica se o clique foi dentro do botão
                     continuar = True  # Quando o jogador clica, a história termina e o jogo continua
 
+    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
+
 
 # Função para carregar o fundo de acordo com o nível
 def carregar_fundo(nivel):
@@ -123,6 +129,7 @@ def gerar_inimigo(nivel):
 
 # Função para exibir a tela de Game Over
 def tela_game_over(ecra, fundo):
+    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
     global pontuacao
     mensagem = "GAME OVER"
     submensagem = f"Pontuação Final: {pontuacao}"
@@ -140,6 +147,8 @@ def tela_game_over(ecra, fundo):
 
     # Chama o menu sem o título
     escolha = menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem, submensagem, exibir_titulo=False)
+
+    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
 
     # Atualiza a tela para mostrar as informações
     #pygame.display.update()
@@ -341,6 +350,7 @@ def iniciar_jogo():
         elif escolha == "Score":
             mostrar_score()
         elif escolha == "Quit":
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
             pygame.quit()
             break
 
