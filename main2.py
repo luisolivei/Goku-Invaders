@@ -20,7 +20,7 @@ def mostrar_historia(ecra, nivel):
     """
     # Carregar a imagem da história baseada no nível
     if nivel == 1:
-        imagem_historia = pygame.image.load("images/try2.jpg").convert_alpha()
+        imagem_historia = pygame.image.load("images/try4.jpg").convert_alpha()
         texto_historia = "Você é o herói que precisa salvar o universo!"
     elif nivel == 2:
         imagem_historia = pygame.image.load("images/bg2.png").convert_alpha()
@@ -158,7 +158,10 @@ def play_game():
             nivel += 1
             fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
             print(f"Parabéns! Você avançou para o nível {nivel}")
-            mostrar_historia(ecra, nivel)   
+            mostrar_historia(ecra, nivel)
+
+            #Limpar inimigos
+            inimigos.clear()   
 
         # Processa eventos de entrada
         for evento in pygame.event.get():
@@ -216,9 +219,23 @@ def play_game():
 
         # Atualiza e desenha cada inimigo
         for inimigo in inimigos[:]:
-            inimigo.atualizar(delta_tempo, jogador)
+            estado = inimigo.atualizar(delta_tempo, jogador)
             inimigo.desenhar(ecra)
-            if inimigo.vidas <= 0:  # Se o inimigo morreu, ele é removido
+
+            if estado == "fora":  # Saiu pela esquerda
+                pontuacao -= {1: 50, 2: 100, 3: 150}[inimigo.tipo]
+                inimigos.remove(inimigo)
+
+        # Verifica colisão com o jogador
+        for inimigo in inimigos[:]:
+            if inimigo.vivo and pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50).colliderect(
+                pygame.Rect(jogador.pos_x, jogador.pos_y, 50, 50)
+            ):
+                dano = {1: 30, 2: 50, 3: 70}[inimigo.tipo]  # Define o dano dependendo do tipo do inimigo
+                jogador.vida -= dano  # Diminui a vida do jogador
+                sons.tocar_colisao()  # Toca som de colisão
+
+                # Remove o inimigo após colisão com o jogador
                 inimigos.remove(inimigo)
 
         # Verifica colisões do jogador
