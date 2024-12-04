@@ -1,0 +1,40 @@
+
+VERIFICAR SEMPRE:
+Teclas:
+Cima, Baixo > Movimento esperado no jogador
+Espaço > Esperado Projectil e animação do Personagem
+ESC > passa ao estado Pausa
+Enter (Somente Menu e Pausa) > esperado avançar/continuar jogo
+Click em botoes selectivos 
+
+
+Colisões: Projectil / Inimigo:
+    # verificar se dano esta a ser infligido na vida inimigo, resultando morte inimigo final
+    # verificar se som "atingido" passa
+    # verificar animação "morto" resulta em queda/explosao do inimigo
+    # verificar se projectil não colide quando inimigo "morto", esperado é ignorar e avançar projectil no ecra
+    # verificar animação/velocidade
+
+Colisões: Inimigo com jogador:
+    # verificar dano vida (depende do inimigo 1,2,3)
+    # verificar som morte
+    # verificar morte se vida <= 0
+    # verificar que passa para menu game over, após animaçao "morto"
+
+
+Score:
+    #validar se score inicia em 0 
+    # validar score adicionado se inimigo morto
+    # validar score subtraido se inimgo passa extremidade esquerda
+    # validar score guardado ao passar nivel
+    # validar score apresentado no estado Gameover
+    # validar score menu inicial
+
+Jogador:
+    #validar vida
+    #validar animação:  
+        #parado/andar (cima/baixo)
+        #atinguido(morto)
+        #disparar se 
+
+ 
