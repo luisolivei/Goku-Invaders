@@ -7,7 +7,6 @@ from personagens import AnimacaoParado, AnimacaoAndar, AnimacaoDisparar, Animaca
 from menu import menu
 from fadeinout import fade_in_out
 from sons import Sons
-from projetil import Projetil
 
 # Variáveis globais para controle do estado do jogo
 play = False
@@ -38,9 +37,6 @@ def tela_game_over(ecra, fundo):
 
     # Chama o menu sem o título
     escolha = menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem, submensagem, exibir_titulo=False)
-
-    # Atualiza a tela para mostrar as informações
-    pygame.display.update()
 
     # Retorna a escolha do jogador
     if escolha == "Reiniciar":
@@ -92,7 +88,7 @@ def play_game():
                 if evento.key == pygame.K_SPACE and not jogador.disparando:
                     jogador.disparar()  # Ativa o disparo
                     jogador.definir_animacao("disparar")
-                    jogador.disparando = True  # Define o estado como disparando
+                    jogador.disparando = True
                 elif evento.key == pygame.K_ESCAPE:  # Verifica se a tecla Esc foi pressionada
                     pause_menu(ecra, fundo)  # Chama a função de pausa
                     jogador.definir_animacao("parado")  # Restaura o estado após a pausa
@@ -126,36 +122,49 @@ def play_game():
         ecra.blit(fundo, (posicao_fundo_x, 0))
         ecra.blit(fundo, (posicao_fundo_x + largura_ecra, 0))
 
+        # Atualiza a posição dos projéteis e verifica colisões
+        for projetil in jogador.projeteis[:]:  # Cópia para remoção segura
+            for inimigo in inimigos[:]:  # Outra cópia para remoção segura
+                if inimigo.verificar_colisao(projetil):
+                    jogador.projeteis.remove(projetil)  # Remove o projétil
+                    sons.tocar_disparo()
+
+                    # Adiciona pontuação somente se o inimigo foi morto
+                    if inimigo.vidas <= 0 and inimigo.animacao_atual == "morto":
+                        pontuacao += {1: 50, 2: 100, 3: 150}[inimigo.tipo]
+                        #inimigos.remove(inimigo)
+                    break
+
         # Atualiza e desenha cada inimigo
-        for inimigo in inimigos[:]:  # Cópia da lista para remoção segura
-            inimigo.atualizar(delta_tempo, jogador)
+        for inimigo in inimigos[:]:
+            estado = inimigo.atualizar(delta_tempo, jogador)
             inimigo.desenhar(ecra)
 
-            # Verifica colisão do inimigo com o jogador
-            if inimigo.vivo and pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50).colliderect(
-                pygame.Rect(jogador.pos_x, jogador.pos_y, 50, 50)):
-                dano = {1: 30, 2: 50, 3: 70}[inimigo.tipo]
-                jogador.vida -= dano
-                inimigos.remove(inimigo)  # Remove o inimigo após a colisão
-                sons.tocar_colisao()
-                if jogador.vida <= 0:
-                    print("Jogador morreu!")
-                    a_funcionar = False  # Termina o jogo se a vida do jogador acabar
-                    sons.tocar_game_over()
-                    if tela_game_over(ecra, fundo):
-                        play_game()
-                    else:
-                        play = False  # Exibe a tela de Game Over
+            if estado == "fora":  # Saiu pela esquerda
+                pontuacao -= {1: 50, 2: 100, 3: 150}[inimigo.tipo]
+                inimigos.remove(inimigo)
 
-        # Verifica colisão com projéteis do jogador
-        for projetil in jogador.projeteis[:]:
-            for inimigo in inimigos[:]:
-                if inimigo.verificar_colisao(projetil):
-                    jogador.projeteis.remove(projetil)  # Remove o projétil que colidiu
-                    inimigos.remove(inimigo)  # Remove o inimigo atingido
-                    sons.tocar_disparo()  # Toca som de disparo
-                    pontuacao += 10  # Aumenta a pontuação
-                    break  # Evita múltiplas colisões para o mesmo projétil
+        # Verifica colisão com o jogador
+        for inimigo in inimigos[:]:
+            if inimigo.vivo and pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50).colliderect(
+                pygame.Rect(jogador.pos_x, jogador.pos_y, 50, 50)
+            ):
+                dano = {1: 30, 2: 50, 3: 70}[inimigo.tipo]  # Define o dano dependendo do tipo do inimigo
+                jogador.vida -= dano  # Diminui a vida do jogador
+                sons.tocar_colisao()  # Toca som de colisão
+                jogador.definir_animacao("atingido")  #Muda a animação do jogador para "atingido"
+                inimigos.remove(inimigo) # Remove o inimigo após colisão com o jogador      
+
+
+        # Verifica se o jogador morreu
+        if jogador.vida <= 0:
+            print("Jogador morreu!")
+            a_funcionar = False
+            sons.tocar_game_over()
+            if tela_game_over(ecra, fundo):
+                play_game()  # Reinicia o jogo
+            else:
+                play = False
 
         # Atualiza a posição dos projéteis e do jogador
         jogador.atualizar(delta_tempo)
@@ -179,7 +188,6 @@ def mostrar_score():
 def pause_menu(ecra, fundo):
     global play
     while True:
-        # Exibe o menu com título (ou sem título, dependendo da escolha)
         escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Continuar", "Score", "Quit"], exibir_titulo=True)
         if escolha == "Continuar":
             return  # Apenas retorna, mantendo o estado do jogo
@@ -197,14 +205,12 @@ def iniciar_jogo():
     fundo = pygame.transform.smoothscale(fundo, (largura_ecra, altura_ecra))  # Redimensiona suavemente
     sons.tocar_musica_menu()
 
-    # Loop principal para exibir o menu e reagir à seleção do jogador
     while True:
-        # Exibe o menu inicial com título
         escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Play", "Score", "Quit"])
         if escolha == "Play":
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
             play = True
-            play_game()  # Inicia o jogo
+            play_game()
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
         elif escolha == "Score":
             mostrar_score()
