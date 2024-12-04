@@ -14,6 +14,36 @@ pontuacao = 0  # Variável para a pontuação
 nivel = 1  # Variável para o nível atual
 sons = Sons()  # Inicia o som
 
+def mostrar_tela_final(ecra):
+    """
+    Exibe uma tela de conclusão com mensagem de "Jogo Completo" e créditos.
+    """
+    # Define o fundo da tela final
+    fundo_final = pygame.image.load("images/try2.jpg").convert_alpha()  # Imagem de fundo final
+    fundo_final = pygame.transform.scale(fundo_final, (largura_ecra, altura_ecra))
+    ecra.blit(fundo_final, (0, 0))
+
+    # Exibe o texto "Jogo Completo"
+    fonte_titulo = pygame.font.Font(None, 64)
+    titulo = fonte_titulo.render("Jogo Completo!", True, (255, 255, 0))  # Texto amarelo
+    ecra.blit(titulo, (largura_ecra // 2 - titulo.get_width() // 2, altura_ecra // 3))
+
+    # Exibe os créditos
+    fonte_creditos = pygame.font.Font(None, 36)
+    creditos = [
+        "Obrigado por jogar!",
+        "Criado por: Luis oliveira, Tiago de Jesus e Carla Carvalho",
+        "Desenvolvido em Python com Pygame"
+    ]
+    for i, linha in enumerate(creditos):
+        texto_creditos = fonte_creditos.render(linha, True, (255, 255, 255))  # Texto branco
+        ecra.blit(texto_creditos, (largura_ecra // 2 - texto_creditos.get_width() // 2, altura_ecra // 2 + i * 40))
+
+    # Atualiza a tela e espera alguns segundos
+    pygame.display.update()
+    pygame.time.wait(10000)  # Aguarda 5 segundos antes de voltar ao menu
+
+
 def mostrar_historia(ecra, nivel):
     """
     Função que exibe uma tela de história com uma imagem e um botão 'Continuar'.
@@ -27,7 +57,8 @@ def mostrar_historia(ecra, nivel):
         texto_historia = "Avançando para um novo desafio... Prepare-se!"
     elif nivel == 3:
         imagem_historia = pygame.image.load("images/bg3.png").convert_alpha()
-        texto_historia = "O confronto final se aproxima!"
+        texto_historia = "O confronto final se aproxima!" 
+    
     
     imagem_historia = pygame.transform.scale(imagem_historia, (largura_ecra, altura_ecra))  # Ajusta a imagem ao tamanho da tela
 
@@ -64,27 +95,32 @@ def mostrar_historia(ecra, nivel):
 # Função para carregar o fundo de acordo com o nível
 def carregar_fundo(nivel):
     if nivel == 1:
-        return pygame.image.load("images/bg3.png").convert_alpha()  # Fundo do nível 1
+        fundo = pygame.image.load("images/bg3.png").convert_alpha()  # Fundo do nível 1
     elif nivel == 2:
-        return pygame.image.load("images/bg2.png").convert_alpha()  # Fundo do nível 2
+        fundo = pygame.image.load("images/bg2.png").convert_alpha()  # Fundo do nível 2
     elif nivel == 3:
-        return pygame.image.load("images/bg.png").convert_alpha()  # Fundo do nível 3
-    return pygame.image.load("images/bg.png").convert_alpha()  # Fundo padrão
+        fundo = pygame.image.load("images/bg.png").convert_alpha()  # Fundo do nível 3
+    else:
+        fundo = pygame.image.load("images/bg.png").convert_alpha()  # Fundo padrão
+
+    # Redimensiona o fundo para o tamanho da tela
+    return pygame.transform.scale(fundo, (largura_ecra, altura_ecra)) 
+
+
 
 def gerar_inimigo(nivel):
     if nivel == 1:
-        tipo = 1  # Gera o inimigo do tipo 1 para o nível 1
+        tipo = random.choice([1, 2])  # Apenas inimigos do tipo 1 e 2 no nível 1
     elif nivel == 2:
-        tipo = 2  # Gera o inimigo do tipo 2 para o nível 2
+        tipo = random.choice([2, 3])  # Apenas inimigos do tipo 2 e 3 no nível 2
     elif nivel == 3:
-        tipo = 3  # Gera o inimigo do tipo 3 para o nível 3
+        tipo = 3  # Apenas inimigos do tipo 3 no nível 3
     else:
-        tipo = random.choice([1, 2, 3])  # Para níveis além do 3, escolhe aleatoriamente entre os 3 tipos
-
-    pos_y = random.randint(50, altura_ecra - 50)
+        tipo = random.choice([1, 2, 3])  # Para níveis superiores, inclui todos os tipos
     
-      # Posição vertical aleatória
-    return Inimigo(tipo , pos_y)
+    pos_y = random.randint(50, altura_ecra - 50)  # Posição vertical aleatória
+    return Inimigo(tipo, pos_y)
+
 # Função para exibir a tela de Game Over
 def tela_game_over(ecra, fundo):
     global pontuacao
@@ -149,19 +185,25 @@ def play_game():
 
         # Gera inimigos aleatórios periodicamente
         # Aumenta a probabilidade com o nível, mas limita o número de inimigos
-        probabilidade_inimigos = max(2, 200 - nivel * 20)  # Reduz a chance de gerar inimigos com o aumento de nível
+        probabilidade_inimigos = max(1, 150 - nivel * 20)  # Reduz a chance de gerar inimigos com o aumento de nível
         if random.randint(1, probabilidade_inimigos) == 1:
             inimigos.append(gerar_inimigo(nivel))
 
-        # Verifica se o jogador atingiu o próximo nível
-        if pontuacao >= nivel * 100:  # A cada 500 pontos por nível
+# Verifica se o jogador atingiu o próximo nível
+        if pontuacao >= nivel * 500:  # A cada 500 pontos por nível
             nivel += 1
+            if nivel > 3:  # Limita o jogo ao nível 3
+                mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
+                iniciar_jogo()  # Volta ao menu inicial
+                return  # Finaliza o loop principal
             fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
             print(f"Parabéns! Você avançou para o nível {nivel}")
             mostrar_historia(ecra, nivel)
 
-            #Limpar inimigos
-            inimigos.clear()   
+    # Limpar inimigos
+            inimigos.clear()
+
+
 
         # Processa eventos de entrada
         for evento in pygame.event.get():
