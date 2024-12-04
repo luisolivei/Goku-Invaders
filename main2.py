@@ -32,11 +32,11 @@ def mostrar_tela_final(ecra):
     fonte_creditos = pygame.font.Font(None, 36)
     creditos = [
         "Obrigado por jogar!",
-        "Criado por: Luis oliveira, Tiago de Jesus e Carla Carvalho",
+        "Criado por: Tiago Bastos, Luis Oliveira, Carina Gameiro, Aleff Almeida e Guilherme Borges",
         "Desenvolvido em Python com Pygame"
     ]
     for i, linha in enumerate(creditos):
-        texto_creditos = fonte_creditos.render(linha, True, (255, 255, 255))  # Texto branco
+        texto_creditos = fonte_creditos.render(linha, True, (255, 255, 0))  # Texto amarelo
         ecra.blit(texto_creditos, (largura_ecra // 2 - texto_creditos.get_width() // 2, altura_ecra // 2 + i * 40))
 
     # Atualiza a tela e espera alguns segundos
