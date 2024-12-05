@@ -15,9 +15,9 @@ class Sons:
         }
         # Sons de efeitos
         self.som_disparo = pygame.mixer.Sound("Sons/disparos.mp3")
-        self.som_disparo.set_volume(0.7)  # Ajusta o volume do disparo
+        self.som_disparo.set_volume(0.2)  # Ajusta o volume do disparo
         self.som_colisao = pygame.mixer.Sound("Sons/colisao.mp3")
-        self.som_colisao.set_volume(0.8)  # Ajusta o volume da colisão
+        self.som_colisao.set_volume(0.2)  # Ajusta o volume da colisão
  
         self.som_game_over = pygame.mixer.Sound("Sons/game_over.mp3")
         self.som_game_over.set_volume(1.0)  # Ajusta o volume do game over
@@ -41,6 +41,7 @@ class Sons:
  
     def tocar_colisao(self):
         self.som_colisao.play()
+        
  
     def tocar_game_over(self):
         self.som_game_over.play()
