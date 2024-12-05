@@ -22,26 +22,25 @@ def tela_game_over(ecra, fundo):
     submensagem = f"Score: {pontuacao}"
     opcoes = ["Reiniciar", "Sair"]
 
-    # Carregar a imagem de Game Over
-    imagem_game_over = pygame.image.load("images/try4.jpg").convert_alpha()  # Caminho para a imagem
-    imagem_game_over = pygame.transform.scale(imagem_game_over, (largura_ecra, altura_ecra))  # Ajusta a imagem para o tamanho da tela
-
-
+    try:
+        # Carregar a imagem de Game Over
+        imagem_game_over = pygame.image.load("images/11.png").convert_alpha()  # Caminho para a imagem
+        imagem_game_over = pygame.transform.scale(imagem_game_over, (largura_ecra, altura_ecra))  # Ajusta a imagem para a tela
+    except pygame.error as e:
+        print(f"Erro ao carregar imagem: {e}")
+        return  # Caso a imagem não carregue, não continua a função
 
     # Exibe a imagem de fundo
     ecra.blit(imagem_game_over, (0, 0))
 
-
-
-
     # Exibe a mensagem de Game Over no centro da tela
     fonte_titulo = pygame.font.Font(None, 64)
-    texto_mensagem = fonte_titulo.render(mensagem, True, (255, 165, 0))  # Vermelho para o título
+    texto_mensagem = fonte_titulo.render(mensagem, True, (255, 165, 0))  # Cor para o título
     ecra.blit(texto_mensagem, (largura_ecra // 2 - texto_mensagem.get_width() // 2, altura_ecra // 3))
 
     # Exibe a pontuação final
     fonte_pontuacao = pygame.font.Font(None, 48)
-    texto_pontuacao = fonte_pontuacao.render(submensagem, True, (255, 255, 0))  # Amarelo para a pontuação
+    texto_pontuacao = fonte_pontuacao.render(submensagem, True, (255, 255, 0))  # Cor para a pontuação
     ecra.blit(texto_pontuacao, (largura_ecra // 2 - texto_pontuacao.get_width() // 2, altura_ecra // 2))
 
     # Chama o menu sem o título
@@ -49,10 +48,8 @@ def tela_game_over(ecra, fundo):
 
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
 
-    # Atualiza a tela para mostrar as informações
-    #pygame.display.update()
+    pygame.display.update()  # Atualiza a tela para garantir que a imagem seja visível
 
-    # Retorna a escolha do jogador
     if escolha == "Reiniciar":
         pontuacao = 0  # Reseta a pontuação ao reiniciar o jogo
         return True  # Reiniciar o jogo
