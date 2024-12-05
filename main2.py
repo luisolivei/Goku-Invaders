@@ -85,7 +85,8 @@ def play_game():
             inimigos.append(gerar_inimigo(nivel))
 
 # Verifica se o jogador atingiu o próximo nível
-        if pontuacao >= nivel * 500:  # A cada 500 pontos por nível
+    # Verifica se o jogador atingiu o próximo nível
+        if nivel == 1 and pontuacao >= 800:  # Nível 1: 800 pontos para avançar
             nivel += 1
             if nivel > 3:  # Limita o jogo ao nível 3
                 mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
@@ -95,12 +96,44 @@ def play_game():
             print(f"Parabéns! Você avançou para o nível {nivel}")
             mostrar_historia(ecra, nivel)
 
-    # Limpar inimigos
+            # Limpar inimigos e projéteis
             inimigos.clear()
-    # Limpar projeteis
             jogador.projeteis.clear()
 
-    # limpar disparos
+            jogador.disparando = False
+            jogador.definir_animacao("parado")
+
+        elif nivel == 2 and pontuacao >= 2000:  # Nível 2: 2000 pontos para avançar
+            nivel += 1
+            if nivel > 3:  # Limita o jogo ao nível 3
+                mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
+                iniciar_jogo()  # Volta ao menu inicial
+                return  # Finaliza o loop principal
+            fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
+            print(f"Parabéns! Você avançou para o nível {nivel}")
+            mostrar_historia(ecra, nivel)
+
+            # Limpar inimigos e projéteis
+            inimigos.clear()
+            jogador.projeteis.clear()
+
+            jogador.disparando = False
+            jogador.definir_animacao("parado")
+
+        elif nivel == 3 and pontuacao >= 3550:  # Nível 3: 3550 pontos para avançar
+            nivel += 1
+            if nivel > 3:  # Limita o jogo ao nível 3
+                mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
+                iniciar_jogo()  # Volta ao menu inicial
+                return  # Finaliza o loop principal
+            fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
+            print(f"Parabéns! Você avançou para o nível {nivel}")
+            mostrar_historia(ecra, nivel)
+
+            # Limpar inimigos e projéteis
+            inimigos.clear()
+            jogador.projeteis.clear()
+
             jogador.disparando = False
             jogador.definir_animacao("parado")
 
