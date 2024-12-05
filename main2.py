@@ -8,7 +8,6 @@ from menu import menu
 from fadeinout import fade_in_out
 from sons import Sons
 from niveis import carregar_fundo,gerar_inimigo,mostrar_historia,mostrar_tela_final
-from game_over import tela_game_over
 
 # Variáveis globais para controle do estado do jogo
 play = False
@@ -98,6 +97,7 @@ def play_game():
 
     # Limpar inimigos
             inimigos.clear()
+    # Limpar projeteis
             jogador.projeteis.clear()
 
 
