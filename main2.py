@@ -68,6 +68,7 @@ def play_game():
     jogador.definir_animacao("parado")  # Necessária para iniciar a animação
     jogador.vida = 100
     jogador.disparando = False  # Adiciona estado para controlar o disparo
+    jogador.temporizador_atingido = 0  # Temporizador para controlar a animação "atingido"
 
     inimigos = []  # Lista para armazenar inimigos
     relogio = pygame.time.Clock()  # Inicia o relógio para controlar o FPS
@@ -203,6 +204,11 @@ def play_game():
                 inimigos.remove(inimigo)
 
         # Verifica colisão com o jogador
+        # Atualiza o temporizador da animação "atingido"
+        if jogador.temporizador_atingido > 0:
+            jogador.temporizador_atingido -= delta_tempo
+            if jogador.temporizador_atingido <= 0:
+                jogador.definir_animacao("parado")  # Retorna para a animação padrão
         for inimigo in inimigos[:]:
             if inimigo.vivo and pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50).colliderect(
                 pygame.Rect(jogador.pos_x, jogador.pos_y, 50, 50)
@@ -213,6 +219,11 @@ def play_game():
 
                 # Remove o inimigo após colisão com o jogador
                 inimigos.remove(inimigo)
+                
+                # Ativa a animação "atingido" no jogador
+                jogador.definir_animacao("atingido")
+                jogador.temporizador_atingido = 0.3  # Define a duração da animação "atingido" (0.5 segundos)
+
 
         # Verifica colisões do jogador
         if jogador.vida <= 0:

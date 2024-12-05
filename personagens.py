@@ -66,7 +66,6 @@ class AnimacaoDisparar(Personagem):
 class AnimacaoAtingido(Personagem):
     def __init__(self):
         caminhos_sprites = [
-            "images/goku/atingido/atingido_2.gif",
-            "images/goku/atingido/atingido_7.gif"
+            "images/goku/atingido/atingido_6.gif",
         ]
         super().__init__(caminhos_sprites)
