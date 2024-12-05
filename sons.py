@@ -7,12 +7,12 @@ pygame.mixer.init()
 class Sons:
     def __init__(self):
 
-        #Musica de fundo do menu
-        self.som_menu = "Sons/som_menu.mp3"
-        # Música de fundo
-        self.som_fundo = "Sons/musica_nivel.mp3"
-        pygame.mixer.music.load(self.som_fundo)
-        pygame.mixer.music.set_volume(0.3)  # Ajusta o volume da música de fundo
+        # Dicionário com músicas por nível
+        self.musicas = {
+            1: "Sons/musica_nivel.mp3",
+            2: "Sons/musica_nivel2.mp3",
+            3: "Sons/musica_ultimo_nivel.mp3"
+        }
         # Sons de efeitos
         self.som_disparo = pygame.mixer.Sound("Sons/disparos.mp3")
         self.som_disparo.set_volume(0.7)  # Ajusta o volume do disparo
@@ -23,13 +23,16 @@ class Sons:
         self.som_game_over.set_volume(1.0)  # Ajusta o volume do game over
  
     def tocar_musica_menu(self):
-        pygame.mixer.music.load(self.som_menu)  # Chama a música do menu
+        pygame.mixer.music.load("Sons/som_menu.mp3")  # Chama a música do menu
+        pygame.mixer.music.set_volume(0.3)
         pygame.mixer.music.play(-1)  # Inicia a música em loop
 
-    def tocar_musica_fundo(self):
-        pygame.mixer.music.load(self.som_fundo) #chama a musica de fundo
-        pygame.mixer.music.play(-1)  # Inicia a música em loop
- 
+    def tocar_musica_fundo(self, nivel):
+        if nivel in self.musicas:
+            pygame.mixer.music.load(self.musicas[nivel])
+            pygame.mixer.music.set_volume(0.3)
+            pygame.mixer.music.play(-1)
+
     def parar_musica_fundo(self):
         pygame.mixer.music.stop()  # Para a música de fundo
  
