@@ -70,7 +70,7 @@ def play_game():
     pygame.display.set_caption("Goku Invaders")
     fundo = carregar_fundo(nivel)  # Carrega o fundo de acordo com o nível
     fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))  # Ajusta o fundo ao tamanho da tela
-    sons.tocar_musica_fundo()
+    sons.tocar_musica_fundo(nivel)
 
     # Inicializa o jogador e define animações
     jogador = Jogador(100, altura_ecra / 2 - 64 / 2)
@@ -110,6 +110,9 @@ def play_game():
             print(f"Parabéns! Você avançou para o nível {nivel}")
             mostrar_historia(ecra, nivel)
 
+            # Toca a música correspondente ao nível
+            sons.tocar_musica_fundo(nivel)
+
             # Limpar inimigos e projéteis
             inimigos.clear()
             jogador.projeteis.clear()
@@ -127,6 +130,9 @@ def play_game():
             print(f"Parabéns! Você avançou para o nível {nivel}")
             mostrar_historia(ecra, nivel)
 
+            # Toca a música correspondente ao nível
+            sons.tocar_musica_fundo(nivel)
+
             # Limpar inimigos e projéteis
             inimigos.clear()
             jogador.projeteis.clear()
@@ -143,6 +149,9 @@ def play_game():
             fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
             print(f"Parabéns! Você avançou para o nível {nivel}")
             mostrar_historia(ecra, nivel)
+
+            # Toca a música correspondente ao nível
+            sons.tocar_musica_fundo(nivel)
 
             # Limpar inimigos e projéteis
             inimigos.clear()
