@@ -100,6 +100,10 @@ def play_game():
     # Limpar projeteis
             jogador.projeteis.clear()
 
+    # limpar disparos
+            jogador.disparando = False
+            jogador.definir_animacao("parado")
+
 
 
         # Processa eventos de entrada
