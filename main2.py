@@ -14,6 +14,7 @@ play = False
 pontuacao = 0  # Variável para a pontuação
 nivel = 1  # Variável para o nível atual
 sons = Sons()  # Inicia o som
+caminho_fonte = "fonts/Dest.otf"
 
 def tela_game_over(ecra, fundo):
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
@@ -237,13 +238,13 @@ def play_game():
         jogador.desenhar(ecra)
 
         # Exibe a vida, pontuação e nível na tela
-        fonte = pygame.font.Font(None, 36)
+        fonte = pygame.font.Font(caminho_fonte, 40)  # Define o tamanho da fonte ()
         vida_texto = fonte.render(f"Vida: {jogador.vida}", True, (255, 0, 0))
         score_texto = fonte.render(f"Score: {pontuacao}", True, (255, 255, 0))
-        nivel_texto = fonte.render(f"Nível: {nivel}", True, (0, 255, 0))
+        nivel_texto = fonte.render(f"Nível: {nivel}", True, (255, 165, 0))
         ecra.blit(vida_texto, (10, 10))
-        ecra.blit(score_texto, (largura_ecra - 150, 10))
-        ecra.blit(nivel_texto, (10, 50))  # Exibe o nível abaixo da vida
+        ecra.blit(score_texto, (largura_ecra - 190, 10))
+        ecra.blit(nivel_texto, (largura_ecra - 470, 8))  # Exibe o nível abaixo da vida
         pygame.display.update()
 
 # Função para exibir a pontuação ao final
