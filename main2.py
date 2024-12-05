@@ -1,6 +1,6 @@
 import pygame
 import random
-from config import largura_ecra, altura_ecra, velocidade_fundo
+from config import largura_ecra, altura_ecra, velocidade_fundo,caminho_fonte
 from jogador import Jogador
 from inimigos import Inimigo
 from personagens import AnimacaoParado, AnimacaoAndar, AnimacaoDisparar, AnimacaoAtingido
@@ -14,18 +14,29 @@ play = False
 pontuacao = 0  # Variável para a pontuação
 nivel = 1  # Variável para o nível atual
 sons = Sons()  # Inicia o som
-caminho_fonte = "fonts/Dest.otf"
 
 def tela_game_over(ecra, fundo):
-    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
+    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 60)
     global pontuacao
     mensagem = "GAME OVER"
-    submensagem = f"Pontuação Final: {pontuacao}"
+    submensagem = f"Score: {pontuacao}"
     opcoes = ["Reiniciar", "Sair"]
+
+    # Carregar a imagem de Game Over
+    imagem_game_over = pygame.image.load("images/try4.jpg").convert_alpha()  # Caminho para a imagem
+    imagem_game_over = pygame.transform.scale(imagem_game_over, (largura_ecra, altura_ecra))  # Ajusta a imagem para o tamanho da tela
+
+
+
+    # Exibe a imagem de fundo
+    ecra.blit(imagem_game_over, (0, 0))
+
+
+
 
     # Exibe a mensagem de Game Over no centro da tela
     fonte_titulo = pygame.font.Font(None, 64)
-    texto_mensagem = fonte_titulo.render(mensagem, True, (255, 0, 0))  # Vermelho para o título
+    texto_mensagem = fonte_titulo.render(mensagem, True, (255, 165, 0))  # Vermelho para o título
     ecra.blit(texto_mensagem, (largura_ecra // 2 - texto_mensagem.get_width() // 2, altura_ecra // 3))
 
     # Exibe a pontuação final
@@ -48,6 +59,7 @@ def tela_game_over(ecra, fundo):
     elif escolha == "Sair":
         pygame.quit()
         exit()
+    
 # Função principal do jogo
 
 def play_game():
