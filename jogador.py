@@ -1,16 +1,20 @@
 # jogador.py
 import pygame
-from projetil import Projetil
+from projetil import Projetil, Projetil2
 
 class Jogador:
     def __init__(self, pos_x, pos_y):
         # Posição inicial do jogador
         self.pos_x = pos_x
         self.pos_y = pos_y
-        self.animacoes = {}  # Dicionário para armazenar animações
-        self.animacao_atual = None  # Animação que o jogador está a usar no momento
-        self.projeteis = []  # Lista de projéteis disparados pelo jogador
-        
+        self.animacoes = {}
+        self.animacao_atual = None
+        self.projeteis = []
+        self.projetil2 = None  # Adicionado para Projetil2
+        self.vida = 100
+        self.kills_recent = 0  # Contador de mortes recentes para desbloqueio do ataque especial
+        self.tempo_desde_primeiro_kill = 0
+        self.ataque_especial_desbloqueado = False  # Adicionado: Inicializa o ataque especial como bloqueado
 
     def adicionar_animacao(self, nome, animacao):
         # Adiciona uma animação ao dicionário de animações
@@ -53,3 +57,15 @@ class Jogador:
             print("Jogador morreu!")  # Mensagem de morte para debugging
             return False  # Indica que o jogador está morto
         return True  # Indica que o jogador ainda está vivo
+    
+    def disparar2(self):
+        if self.ataque_especial_desbloqueado and not self.projetil2:  # Verifica se o ataque especial está desbloqueado
+            self.projetil2 = Projetil2(self.pos_x + 64, self.pos_y)  # Cria um novo Projetil2
+            self.definir_animacao("disparar2")  # Define a animação específica para disparar2
+            self.ataque_especial_desbloqueado = False  # Desbloqueio é consumido ao disparar
+
+    def incrementar_kill(self):
+        self.kills_recent += 1
+        if self.kills_recent >= 3:
+            self.ataque_especial_desbloqueado = True
+            self.kills_recent = 0

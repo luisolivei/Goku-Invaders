@@ -69,3 +69,10 @@ class AnimacaoAtingido(Personagem):
             "images/goku/atingido/atingido_6.gif",
         ]
         super().__init__(caminhos_sprites)
+
+class AnimacaoDispararEspecial(Personagem):
+    def __init__(self):
+        caminhos_sprites = [
+            f"images/projectil2/animacao_disparar2_{i}.gif" for i in range(1, 12)
+        ]
+        super().__init__(caminhos_sprites)

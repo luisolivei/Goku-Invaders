@@ -34,3 +34,76 @@ class Projetil:
     def saiu_do_ecra(self):
         # Verifica se o projetil saiu da tela
         return self.x > largura_ecra
+
+
+class Projetil2:
+    def __init__(self, x, y, duracao=5, velocidade=6):
+        self.x = x
+        self.y = y
+        self.raio_fim_x = x + 64  # Exemplo de como definir raio_fim_x
+        self.duracao = duracao  # Duração em segundos
+        self.velocidade = velocidade
+        self.sprites = self.carregar_sprites()
+        self.tempo_decorrido = 0
+        self.ativo = True
+        self.indice_sprite = 0
+        self.tempo_por_frame = duracao / len(self.sprites)
+        self.sprite_inicio = self.sprites[0]  # Parte inicial do raio
+        self.sprite_corpo = self.sprites[1]  # Parte repetível do raio
+        self.sprite_fim = self.sprites[2]  # Parte final do raio
+
+    def carregar_sprites(self):
+        # Adapta caminhos conforme os ficheiros do raio (início, corpo, fim)
+        caminhos = [
+            "images/projectil2/raio_inicio.gif",  # Parte inicial do raio
+            "images/projectil2/raio_corpo.gif",   # Parte repetível do raio
+            "images/projectil2/raio_fim.gif"      # Parte final do raio
+        ]
+        return [pygame.image.load(caminho).convert_alpha() for caminho in caminhos]
+
+    def atualizar(self, delta_tempo, estado_tecla):
+        if self.ativo:
+            self.tempo_decorrido += delta_tempo
+
+            # O raio_inicio não se move até que a tecla seja liberada
+            if estado_tecla:
+                self.x += self.velocidade  # O corpo e fim do raio se movem apenas enquanto a tecla estiver pressionada
+
+            # A lógica com base no estado da tecla (se necessário)
+            if not estado_tecla:
+                self.x = self.x  # O raio_inicio permanece fixo até que a tecla seja liberada
+
+            # Desativa o projetil após a duração
+            if self.tempo_decorrido >= self.duracao:
+                self.ativo = False
+                self.tempo_decorrido = 0  # Reinicia o tempo decorrido para permitir uso futuro
+
+    def desenhar(self, superficie):
+        if not self.ativo:
+            return
+
+        # Calcula o comprimento total disponível para o raio
+        comprimento_total = largura_ecra - self.x
+        largura_inicio = self.sprite_inicio.get_width()
+        largura_fim = self.sprite_fim.get_width()
+        largura_corpo = self.sprite_corpo.get_width()
+
+        # Desenha o início do raio
+        superficie.blit(self.sprite_inicio, (self.x, self.y))
+
+        # Calcula o número de repetições necessárias para preencher o corpo
+        comprimento_restante = comprimento_total - largura_inicio - largura_fim
+        numero_repeticoes = max(0, comprimento_restante // largura_corpo)
+
+        # Desenha o corpo do raio repetido
+        for i in range(numero_repeticoes):
+            pos_x = self.x + largura_inicio + i * largura_corpo
+            superficie.blit(self.sprite_corpo, (pos_x, self.y))
+
+        # Desenha o fim do raio
+        pos_fim = self.x + largura_inicio + numero_repeticoes * largura_corpo
+        superficie.blit(self.sprite_fim, (pos_fim, self.y))
+
+    def saiu_do_ecra(self):
+        # Verifica se a parte final do projétil saiu do ecrã
+        return self.x > largura_ecra
