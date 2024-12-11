@@ -1,4 +1,6 @@
 import pygame
+import cv2
+import numpy as np
 import random
 from inimigos import Inimigo
 from config import largura_ecra, altura_ecra
@@ -15,7 +17,6 @@ def carregar_fundo(nivel):
     else:
         fundo = pygame.image.load("images/bg.png").convert_alpha()  # Fundo padrão
 
-    # Redimensiona o fundo para o tamanho da tela
     return pygame.transform.scale(fundo, (largura_ecra, altura_ecra))
 
 
@@ -33,8 +34,42 @@ def gerar_inimigo(nivel):
     return Inimigo(tipo, pos_y)
 
 
+def reproduzir_video(video_path, ecra):
+    # Carrega o vídeo com OpenCV
+    cap = cv2.VideoCapture(video_path)
+
+    if not cap.isOpened():
+        print("Erro ao abrir o vídeo!")
+        return
+
+    clock = pygame.time.Clock()
+    while True:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+        ret, frame = cap.read()
+        if not ret:
+            break  # Se o vídeo terminar, sai do loop
+
+        # Converte o quadro para o formato adequado para o Pygame
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame = np.transpose(frame, (1, 0, 2))
+        frame = np.flip(frame, axis=0)
+        frame = pygame.surfarray.make_surface(frame)
+
+        ecra.blit(frame, (0, 0))
+        pygame.display.update()
+        pygame.time.wait(800)
+        clock.tick(30)  # Limita a 30 FPS para uma reprodução suave
+
+    cap.release()
+
+
 def mostrar_historia(ecra, nivel):
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
+    
     # Carregar a imagem da história baseada no nível
     if nivel == 1:
         imagem_historia = pygame.image.load("images/historia1.png").convert_alpha()
@@ -45,11 +80,13 @@ def mostrar_historia(ecra, nivel):
     elif nivel == 3:
         imagem_historia = pygame.image.load("images/historia2.jpg").convert_alpha()
         texto_historia = "Percorri o universo e nao a encontrei!! Sera Agora?"
+        # Aqui, você começa a mostrar um vídeo após o nível 3
+        # Vamos reproduzir um vídeo após o nível 3
+        reproduzir_video("tryf.mp4", ecra)
     elif nivel > 3:  # História final
         imagem_historia = pygame.image.load("images/historia_1.png").convert_alpha()
-        texto_historia = "Parabéns!!! Resgatas-te a Kika"
-    
-    
+        texto_historia = "Parabéns!!! Resgataste a Kika"
+
     imagem_historia = pygame.transform.scale(imagem_historia, (largura_ecra, altura_ecra))  # Ajusta a imagem ao tamanho da tela
 
     # Desenha a imagem de fundo
@@ -74,7 +111,7 @@ def mostrar_historia(ecra, nivel):
     fonte_botao = pygame.font.Font(None, 38)
     texto_botao = fonte_botao.render("Continuar", True, (255, 0, 0))  # Texto do botão em vermelho
 
-        # Fundo opaco do botão
+    # Fundo opaco do botão
     botao_surface = pygame.Surface((texto_botao.get_width() + 20, texto_botao.get_height() + 10))  # Margem ao redor do texto
     botao_surface.fill((0, 0, 0))  # Fundo preto
     botao_surface.set_alpha(200)  # Reduz opacidade do fundo do botão
@@ -102,9 +139,6 @@ def mostrar_historia(ecra, nivel):
                     continuar = True  # Quando o jogador clica, a história termina e o jogo continua
 
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
-
-
-
 
 def mostrar_tela_final(ecra):
     
@@ -134,9 +168,3 @@ def mostrar_tela_final(ecra):
     pygame.display.update()
     pygame.time.wait(10000)  # Aguarda 5 segundos antes de voltar ao menu
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
-
-
-
-
-
-
