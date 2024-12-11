@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import random
 from inimigos import Inimigo
-from config import largura_ecra, altura_ecra
+from config import largura_ecra, altura_ecra, caminho_fonte
 from fadeinout import fade_in_out
 
 # Função para carregar o fundo de acordo com o nível
@@ -53,6 +53,9 @@ def reproduzir_video(video_path, ecra):
         if not ret:
             break  # Se o vídeo terminar, sai do loop
 
+        # Redimensiona o quadro do vídeo para caber na janela do jogo
+        frame = cv2.resize(frame, (largura_ecra, altura_ecra))
+
         # Converte o quadro para o formato adequado para o Pygame
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         frame = np.transpose(frame, (1, 0, 2))
@@ -61,8 +64,8 @@ def reproduzir_video(video_path, ecra):
 
         ecra.blit(frame, (0, 0))
         pygame.display.update()
-        pygame.time.wait(800)
-        clock.tick(30)  # Limita a 30 FPS para uma reprodução suave
+        pygame.time.wait(95)
+        clock.tick(60)  # Limita a 30 FPS para uma reprodução suave
 
     cap.release()
 
@@ -82,10 +85,10 @@ def mostrar_historia(ecra, nivel):
         texto_historia = "Percorri o universo e nao a encontrei!! Sera Agora?"
         # Aqui, você começa a mostrar um vídeo após o nível 3
         # Vamos reproduzir um vídeo após o nível 3
-        reproduzir_video("tryf.mp4", ecra)
+        
     elif nivel > 3:  # História final
-        imagem_historia = pygame.image.load("images/historia_1.png").convert_alpha()
-        texto_historia = "Parabéns!!! Resgataste a Kika"
+        reproduzir_video("tryf.mp4", ecra)
+        return
 
     imagem_historia = pygame.transform.scale(imagem_historia, (largura_ecra, altura_ecra))  # Ajusta a imagem ao tamanho da tela
 
@@ -125,7 +128,10 @@ def mostrar_historia(ecra, nivel):
     ecra.blit(texto_botao, (botao_x + 10, botao_y + 5))  # Texto centralizado no fundo do botão
 
     pygame.display.update()  # Atualiza a tela
-    pygame.time.wait(4000)
+    
+    
+
+
 
     # Espera até que o jogador clique no botão "Continuar"
     continuar = False
@@ -140,28 +146,35 @@ def mostrar_historia(ecra, nivel):
 
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
 
-def mostrar_tela_final(ecra):
+def mostrar_tela_final(ecra,):
     
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
+
+
     # Define o fundo da tela final
     fundo_final = pygame.image.load("images/try2.jpg").convert_alpha()  # Imagem de fundo final
-    fundo_final = pygame.transform.scale(fundo_final, (largura_ecra, altura_ecra))
+    fundo_final = pygame.transform.scale(fundo_final, (largura_ecra, altura_ecra))  # Redimensiona suavemente
     ecra.blit(fundo_final, (0, 0))
 
     # Exibe o texto "Jogo Completo"
-    fonte_titulo = pygame.font.Font(None, 64)
-    titulo = fonte_titulo.render("Jogo Completo!", True, (255, 255, 0))  # Texto amarelo
-    ecra.blit(titulo, (largura_ecra // 2 - titulo.get_width() // 2, altura_ecra // 3))
+    fonte_titulo = pygame.font.Font(caminho_fonte, 64)
+    titulo = fonte_titulo.render("Resgataste a Kika", True, (0, 0, 0))  # Texto amarelo
+    ecra.blit(titulo, (largura_ecra // 2 - titulo.get_width()  // 2, altura_ecra // 3-100))
 
     # Exibe os créditos
-    fonte_creditos = pygame.font.Font(None, 36)
+    fonte_creditos = pygame.font.Font(caminho_fonte, 40)
     creditos = [
         "Obrigado por jogar!",
-        "Criado por: Tiago Bastos, Luis Oliveira, Carina Gameiro, Aleff Almeida e Guilherme Borges",
-        "Desenvolvido em Python com Pygame"
+        "Jogo Criado por:",
+        "Tiago Bastos",
+        "Luis Oliveira ",
+        "Carina Gameiro", 
+        "Aleff Almeida",
+        "Guilherme Borges",
+        
     ]
     for i, linha in enumerate(creditos):
-        texto_creditos = fonte_creditos.render(linha, True, (255, 255, 0))  # Texto amarelo
+        texto_creditos = fonte_creditos.render(linha, True, (0, 0, 0))  # Texto amarelo
         ecra.blit(texto_creditos, (largura_ecra // 2 - texto_creditos.get_width() // 2, altura_ecra // 2 + i * 40))
 
     # Atualiza a tela e espera alguns segundos

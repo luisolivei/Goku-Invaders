@@ -7,7 +7,7 @@ from personagens import AnimacaoParado, AnimacaoAndar, AnimacaoDisparar, Animaca
 from menu import menu
 from fadeinout import fade_in_out
 from sons import Sons
-from niveis import carregar_fundo,gerar_inimigo,mostrar_historia,mostrar_tela_final
+from niveis import carregar_fundo,gerar_inimigo,mostrar_historia,mostrar_tela_final,reproduzir_video
 
 # Variáveis globais para controle do estado do jogo
 play = False
@@ -140,7 +140,7 @@ def play_game():
         elif nivel == 3 and pontuacao >= 400:  # Nível 3: 3550 pontos para avançar
             nivel += 1
             if nivel > 3:  # Limita o jogo ao nível 3
-                mostrar_historia(ecra, nivel)
+                reproduzir_video("tryf.mp4", ecra)
                 mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
                 iniciar_jogo()  # Volta ao menu inicial
                 return  # Finaliza o loop principal
