@@ -43,8 +43,8 @@ def mostrar_historia(ecra, nivel):
         imagem_historia = pygame.image.load("images/historia1.png").convert_alpha()
         texto_historia = "Raptamos a Kika!!! Conseguiras resgata-la?"
     elif nivel == 3:
-        imagem_historia = pygame.image.load("images/bg3.png").convert_alpha()
-        texto_historia = "O confronto final se aproxima!" 
+        imagem_historia = pygame.image.load("images/historia2.jpg").convert_alpha()
+        texto_historia = "Percorri o universo e nao a encontrei!! Sera Agora?"
     
     
     imagem_historia = pygame.transform.scale(imagem_historia, (largura_ecra, altura_ecra))  # Ajusta a imagem ao tamanho da tela
@@ -53,7 +53,7 @@ def mostrar_historia(ecra, nivel):
     ecra.blit(imagem_historia, (0, 0))
 
     # Exibe o texto da história
-    fonte = pygame.font.Font(None, 48)
+    fonte = pygame.font.Font(None, 46)
 
     # Fundo opaco para o texto da história
     texto_surface = fonte.render(texto_historia, True, (255, 255, 255))  # Texto em branco
