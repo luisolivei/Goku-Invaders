@@ -14,7 +14,7 @@ play = False
 pontuacao = 0  # Variável para a pontuação
 nivel = 1  # Variável para o nível atual
 sons = Sons()  # Inicia o som
-
+ 
 def tela_game_over(ecra, fundo):
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 60)
     global pontuacao

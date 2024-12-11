@@ -37,11 +37,11 @@ def mostrar_historia(ecra, nivel):
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
     # Carregar a imagem da história baseada no nível
     if nivel == 1:
-        imagem_historia = pygame.image.load("images/try4.jpg").convert_alpha()
-        texto_historia = "Você é o herói que precisa salvar o universo!"
+        imagem_historia = pygame.image.load("images/historia1.png").convert_alpha()
+        texto_historia = "Raptamos a Kika!!! Conseguiras resgata-la?"
     elif nivel == 2:
-        imagem_historia = pygame.image.load("images/bg2.png").convert_alpha()
-        texto_historia = "Avançando para um novo desafio... Prepare-se!"
+        imagem_historia = pygame.image.load("images/historia1.png").convert_alpha()
+        texto_historia = "Raptamos a Kika!!! Conseguiras resgata-la?"
     elif nivel == 3:
         imagem_historia = pygame.image.load("images/bg3.png").convert_alpha()
         texto_historia = "O confronto final se aproxima!" 
@@ -54,16 +54,35 @@ def mostrar_historia(ecra, nivel):
 
     # Exibe o texto da história
     fonte = pygame.font.Font(None, 48)
-    texto = fonte.render(texto_historia, True, (255, 255, 255))  # Texto em branco
-    ecra.blit(texto, (largura_ecra // 2 - texto.get_width() // 2, altura_ecra // 3))
 
-    # Desenha o botão "Continuar"
-    fonte_botao = pygame.font.Font(None, 36)
+    # Fundo opaco para o texto da história
+    texto_surface = fonte.render(texto_historia, True, (255, 255, 255))  # Texto em branco
+    texto_fundo = pygame.Surface((texto_surface.get_width(), texto_surface.get_height()))
+    texto_fundo.fill((0, 0, 0))  # Fundo preto
+    texto_fundo.set_alpha(200)  # Reduz opacidade do fundo para 200
+
+    # Posiciona fundo e texto
+    texto_x = largura_ecra // 2 - texto_surface.get_width() // 2
+    texto_y = altura_ecra // 2 + 200
+    ecra.blit(texto_fundo, (texto_x, texto_y))  # Fundo do texto
+    ecra.blit(texto_surface, (texto_x, texto_y))  # Texto em si
+
+    # Desenha o botão "Continuar" no canto inferior direito
+    fonte_botao = pygame.font.Font(None, 38)
     texto_botao = fonte_botao.render("Continuar", True, (255, 0, 0))  # Texto do botão em vermelho
-    botao_rect = pygame.Rect(largura_ecra // 2 - texto_botao.get_width() // 2, altura_ecra // 2 + 100, texto_botao.get_width(), texto_botao.get_height())
-    
-    pygame.draw.rect(ecra, (0, 0, 0), botao_rect)  # Fundo do botão (preto)
-    ecra.blit(texto_botao, (largura_ecra // 2 - texto_botao.get_width() // 2, altura_ecra // 2 + 100))  # Texto do botão
+
+        # Fundo opaco do botão
+    botao_surface = pygame.Surface((texto_botao.get_width() + 20, texto_botao.get_height() + 10))  # Margem ao redor do texto
+    botao_surface.fill((0, 0, 0))  # Fundo preto
+    botao_surface.set_alpha(200)  # Reduz opacidade do fundo do botão
+
+    # Posiciona o botão
+    botao_x = largura_ecra - texto_botao.get_width() - 40  # 20 px de margem direita + margem extra do fundo
+    botao_y = altura_ecra - texto_botao.get_height() - 30  # 20 px de margem inferior + margem extra do fundo
+    botao_rect = pygame.Rect(botao_x, botao_y, texto_botao.get_width() + 20, texto_botao.get_height() + 10)  # Define o retângulo
+
+    ecra.blit(botao_surface, (botao_x, botao_y))  # Fundo opaco do botão
+    ecra.blit(texto_botao, (botao_x + 10, botao_y + 5))  # Texto centralizado no fundo do botão
 
     pygame.display.update()  # Atualiza a tela
 
@@ -79,6 +98,8 @@ def mostrar_historia(ecra, nivel):
                     continuar = True  # Quando o jogador clica, a história termina e o jogo continua
 
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
+
+
 
 
 def mostrar_tela_final(ecra):
