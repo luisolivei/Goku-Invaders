@@ -7,7 +7,7 @@ from personagens import AnimacaoParado, AnimacaoAndar, AnimacaoDisparar, Animaca
 from menu import menu
 from fadeinout import fade_in_out
 from sons import Sons
-from niveis import carregar_fundo,gerar_inimigo,mostrar_historia,mostrar_tela_final
+from niveis import carregar_fundo,gerar_inimigo,mostrar_historia,mostrar_tela_final,reproduzir_video
 
 # Variáveis globais para controle do estado do jogo
 play = False
@@ -97,7 +97,7 @@ def play_game():
 
 # Verifica se o jogador atingiu o próximo nível
     # Verifica se o jogador atingiu o próximo nível
-        if nivel == 1 and pontuacao >= 800:  # Nível 1: 800 pontos para avançar
+        if nivel == 1 and pontuacao >= 1000:  # Nível 1: 800 pontos para avançar
             nivel += 1
             if nivel > 3:  # Limita o jogo ao nível 3
                 mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
@@ -117,7 +117,7 @@ def play_game():
             jogador.disparando = False
             jogador.definir_animacao("parado")
 
-        elif nivel == 2 and pontuacao >= 2000:  # Nível 2: 2000 pontos para avançar
+        elif nivel == 2 and pontuacao >= 2300:  # Nível 2: 2000 pontos para avançar
             nivel += 1
             if nivel > 3:  # Limita o jogo ao nível 3
                 mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
@@ -137,9 +137,10 @@ def play_game():
             jogador.disparando = False
             jogador.definir_animacao("parado")
 
-        elif nivel == 3 and pontuacao >= 3550:  # Nível 3: 3550 pontos para avançar
+        elif nivel == 3 and pontuacao >= 3900:  # Nível 3: 3600 pontos para avançar
             nivel += 1
             if nivel > 3:  # Limita o jogo ao nível 3
+                reproduzir_video("tryf.mp4", ecra)
                 mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
                 iniciar_jogo()  # Volta ao menu inicial
                 return  # Finaliza o loop principal
@@ -289,7 +290,7 @@ def pause_menu(ecra, fundo):
 def iniciar_jogo():
     global play
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do menu
-    fundo = pygame.image.load("images/try1.jpg").convert_alpha()  # Carrega a imagem de fundo
+    fundo = pygame.image.load("images/imagem_inicial.jpg").convert_alpha()  # Carrega a imagem de fundo
     fundo = pygame.transform.smoothscale(fundo, (largura_ecra, altura_ecra))  # Redimensiona suavemente
     sons.tocar_musica_menu()
 

@@ -1,7 +1,9 @@
 import pygame
+import cv2
+import numpy as np
 import random
 from inimigos import Inimigo
-from config import largura_ecra, altura_ecra
+from config import largura_ecra, altura_ecra, caminho_fonte
 from fadeinout import fade_in_out
 
 # Função para carregar o fundo de acordo com o nível
@@ -15,7 +17,6 @@ def carregar_fundo(nivel):
     else:
         fundo = pygame.image.load("images/bg.png").convert_alpha()  # Fundo padrão
 
-    # Redimensiona o fundo para o tamanho da tela
     return pygame.transform.scale(fundo, (largura_ecra, altura_ecra))
 
 
@@ -33,8 +34,45 @@ def gerar_inimigo(nivel):
     return Inimigo(tipo, pos_y)
 
 
+def reproduzir_video(video_path, ecra):
+    # Carrega o vídeo com OpenCV
+    cap = cv2.VideoCapture(video_path)
+
+    if not cap.isOpened():
+        print("Erro ao abrir o vídeo!")
+        return
+
+    clock = pygame.time.Clock()
+    while True:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+        ret, frame = cap.read()
+        if not ret:
+            break  # Se o vídeo terminar, sai do loop
+
+        # Redimensiona o quadro do vídeo para caber na janela do jogo
+        frame = cv2.resize(frame, (largura_ecra, altura_ecra))
+
+        # Converte o quadro para o formato adequado para o Pygame
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        frame = np.transpose(frame, (1, 0, 2))
+        frame = np.flip(frame, axis=0)
+        frame = pygame.surfarray.make_surface(frame)
+
+        ecra.blit(frame, (0, 0))
+        pygame.display.update()
+        pygame.time.wait(95)
+        clock.tick(60)  # Limita a 30 FPS para uma reprodução suave
+
+    cap.release()
+
+
 def mostrar_historia(ecra, nivel):
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
+    
     # Carregar a imagem da história baseada no nível
     if nivel == 1:
         imagem_historia = pygame.image.load("images/historia1.png").convert_alpha()
@@ -43,17 +81,19 @@ def mostrar_historia(ecra, nivel):
         imagem_historia = pygame.image.load("images/historia1.png").convert_alpha()
         texto_historia = "Raptamos a Kika!!! Conseguiras resgata-la?"
     elif nivel == 3:
-        imagem_historia = pygame.image.load("images/bg3.png").convert_alpha()
-        texto_historia = "O confronto final se aproxima!" 
-    
-    
+        imagem_historia = pygame.image.load("images/historia2.jpg").convert_alpha()
+        texto_historia = "Percorri o universo e nao a encontrei!! Sera Agora?"  
+    elif nivel > 3:  # História final
+        reproduzir_video("tryf.mp4", ecra)
+        return
+
     imagem_historia = pygame.transform.scale(imagem_historia, (largura_ecra, altura_ecra))  # Ajusta a imagem ao tamanho da tela
 
     # Desenha a imagem de fundo
     ecra.blit(imagem_historia, (0, 0))
 
     # Exibe o texto da história
-    fonte = pygame.font.Font(None, 48)
+    fonte = pygame.font.Font(None, 46)
 
     # Fundo opaco para o texto da história
     texto_surface = fonte.render(texto_historia, True, (255, 255, 255))  # Texto em branco
@@ -71,7 +111,7 @@ def mostrar_historia(ecra, nivel):
     fonte_botao = pygame.font.Font(None, 38)
     texto_botao = fonte_botao.render("Continuar", True, (255, 0, 0))  # Texto do botão em vermelho
 
-        # Fundo opaco do botão
+    # Fundo opaco do botão
     botao_surface = pygame.Surface((texto_botao.get_width() + 20, texto_botao.get_height() + 10))  # Margem ao redor do texto
     botao_surface.fill((0, 0, 0))  # Fundo preto
     botao_surface.set_alpha(200)  # Reduz opacidade do fundo do botão
@@ -85,6 +125,11 @@ def mostrar_historia(ecra, nivel):
     ecra.blit(texto_botao, (botao_x + 10, botao_y + 5))  # Texto centralizado no fundo do botão
 
     pygame.display.update()  # Atualiza a tela
+    
+    
+    
+
+
 
     # Espera até que o jogador clique no botão "Continuar"
     continuar = False
@@ -99,40 +144,38 @@ def mostrar_historia(ecra, nivel):
 
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
 
-
-
-
-def mostrar_tela_final(ecra):
+def mostrar_tela_final(ecra,):
     
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
+
+
     # Define o fundo da tela final
     fundo_final = pygame.image.load("images/try2.jpg").convert_alpha()  # Imagem de fundo final
-    fundo_final = pygame.transform.scale(fundo_final, (largura_ecra, altura_ecra))
+    fundo_final = pygame.transform.scale(fundo_final, (largura_ecra, altura_ecra))  # Redimensiona suavemente
     ecra.blit(fundo_final, (0, 0))
 
     # Exibe o texto "Jogo Completo"
-    fonte_titulo = pygame.font.Font(None, 64)
-    titulo = fonte_titulo.render("Jogo Completo!", True, (255, 255, 0))  # Texto amarelo
-    ecra.blit(titulo, (largura_ecra // 2 - titulo.get_width() // 2, altura_ecra // 3))
+    fonte_titulo = pygame.font.Font(caminho_fonte, 64)
+    titulo = fonte_titulo.render("Resgataste a Kika", True, (0, 0, 0))  # Texto amarelo
+    ecra.blit(titulo, (largura_ecra // 2 - titulo.get_width()  // 2, altura_ecra // 3-100))
 
     # Exibe os créditos
-    fonte_creditos = pygame.font.Font(None, 36)
+    fonte_creditos = pygame.font.Font(caminho_fonte, 40)
     creditos = [
         "Obrigado por jogar!",
-        "Criado por: Tiago Bastos, Luis Oliveira, Carina Gameiro, Aleff Almeida e Guilherme Borges",
-        "Desenvolvido em Python com Pygame"
+        "Jogo Criado por:",
+        "Tiago Bastos",
+        "Luis Oliveira ",
+        "Carina Gameiro", 
+        "Aleff Almeida",
+        "Guilherme Borges",
+        
     ]
     for i, linha in enumerate(creditos):
-        texto_creditos = fonte_creditos.render(linha, True, (255, 255, 0))  # Texto amarelo
+        texto_creditos = fonte_creditos.render(linha, True, (255, 255, 0, 200) )  # Texto amarelo
         ecra.blit(texto_creditos, (largura_ecra // 2 - texto_creditos.get_width() // 2, altura_ecra // 2 + i * 40))
 
     # Atualiza a tela e espera alguns segundos
     pygame.display.update()
     pygame.time.wait(10000)  # Aguarda 5 segundos antes de voltar ao menu
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
-
-
-
-
-
-
