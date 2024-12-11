@@ -45,6 +45,9 @@ def mostrar_historia(ecra, nivel):
     elif nivel == 3:
         imagem_historia = pygame.image.load("images/historia2.jpg").convert_alpha()
         texto_historia = "Percorri o universo e nao a encontrei!! Sera Agora?"
+    elif nivel > 3:  # História final
+        imagem_historia = pygame.image.load("images/historia_1.png").convert_alpha()
+        texto_historia = "Parabéns!!! Resgatas-te a Kika"
     
     
     imagem_historia = pygame.transform.scale(imagem_historia, (largura_ecra, altura_ecra))  # Ajusta a imagem ao tamanho da tela
@@ -85,6 +88,7 @@ def mostrar_historia(ecra, nivel):
     ecra.blit(texto_botao, (botao_x + 10, botao_y + 5))  # Texto centralizado no fundo do botão
 
     pygame.display.update()  # Atualiza a tela
+    pygame.time.wait(4000)
 
     # Espera até que o jogador clique no botão "Continuar"
     continuar = False
