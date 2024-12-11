@@ -97,7 +97,7 @@ def play_game():
 
 # Verifica se o jogador atingiu o próximo nível
     # Verifica se o jogador atingiu o próximo nível
-        if nivel == 1 and pontuacao >= 80:  # Nível 1: 800 pontos para avançar
+        if nivel == 1 and pontuacao >= 1000:  # Nível 1: 800 pontos para avançar
             nivel += 1
             if nivel > 3:  # Limita o jogo ao nível 3
                 mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
@@ -117,7 +117,7 @@ def play_game():
             jogador.disparando = False
             jogador.definir_animacao("parado")
 
-        elif nivel == 2 and pontuacao >= 200:  # Nível 2: 2000 pontos para avançar
+        elif nivel == 2 and pontuacao >= 2300:  # Nível 2: 2000 pontos para avançar
             nivel += 1
             if nivel > 3:  # Limita o jogo ao nível 3
                 mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
@@ -137,7 +137,7 @@ def play_game():
             jogador.disparando = False
             jogador.definir_animacao("parado")
 
-        elif nivel == 3 and pontuacao >= 400:  # Nível 3: 3550 pontos para avançar
+        elif nivel == 3 and pontuacao >= 3900:  # Nível 3: 3600 pontos para avançar
             nivel += 1
             if nivel > 3:  # Limita o jogo ao nível 3
                 reproduzir_video("tryf.mp4", ecra)

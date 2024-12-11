@@ -82,10 +82,7 @@ def mostrar_historia(ecra, nivel):
         texto_historia = "Raptamos a Kika!!! Conseguiras resgata-la?"
     elif nivel == 3:
         imagem_historia = pygame.image.load("images/historia2.jpg").convert_alpha()
-        texto_historia = "Percorri o universo e nao a encontrei!! Sera Agora?"
-        # Aqui, você começa a mostrar um vídeo após o nível 3
-        # Vamos reproduzir um vídeo após o nível 3
-        
+        texto_historia = "Percorri o universo e nao a encontrei!! Sera Agora?"  
     elif nivel > 3:  # História final
         reproduzir_video("tryf.mp4", ecra)
         return
@@ -128,6 +125,7 @@ def mostrar_historia(ecra, nivel):
     ecra.blit(texto_botao, (botao_x + 10, botao_y + 5))  # Texto centralizado no fundo do botão
 
     pygame.display.update()  # Atualiza a tela
+    
     
     
 
@@ -174,7 +172,7 @@ def mostrar_tela_final(ecra,):
         
     ]
     for i, linha in enumerate(creditos):
-        texto_creditos = fonte_creditos.render(linha, True, (0, 0, 0))  # Texto amarelo
+        texto_creditos = fonte_creditos.render(linha, True, (255, 255, 0, 200) )  # Texto amarelo
         ecra.blit(texto_creditos, (largura_ecra // 2 - texto_creditos.get_width() // 2, altura_ecra // 2 + i * 40))
 
     # Atualiza a tela e espera alguns segundos
