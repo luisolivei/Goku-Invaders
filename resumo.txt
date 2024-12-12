@@ -1,0 +1,47 @@
+Introdução
+    -Goku Invaders é um jogo arcade desenvolvido em Python com a biblioteca Pygame, 
+    inspirado em clássicos do género Space invader. 
+    -O jogador assume o papel de Goku para enfrentar hordas de inimigos, 
+    avançar níveis desafiantes e acumular pontuações.
+
+Objetivos do Jogo
+    -Sobreviver: Evitar colisões com inimigos para preservar a vida.
+    -Eliminar Inimigos: Derrotar inimigos para alcançar os objetivos de cada nível.
+    -Avançar Níveis: Cumprir metas específicas para desbloquear novos cenários e desafios.
+-----
+
+Principais Funcionalidades
+-Níveis Progressivos: O jogo conta com 3 níveis, cada um com desafios únicos:
+    Nível 1: Matar 10 inimigos (tipos 1 e 2).
+    Nível 2: Matar 20 inimigos (tipos 1, 2 e 3).
+    Nível 3: Matar 30 inimigos, com aumento na velocidade da tela.
+-Gestão de Recursos:
+    Sistema de vida do jogador.
+    Pontuação acumulada entre níveis.
+-Animações Personalizadas: 
+    Animaçao do jogador e dos inimigos é acompanhada por animações para simular movimento e estado(vivo/morto).
+-História e Contexto: 
+    Entre os níveis, o jogador é apresentado a cenas ilustrativas que avançam a narrativa do jogo.
+------
+
+Aspectos Técnicos
+Lógica do Jogo:
+    Sistema de colisões para projéteis e inimigos. (main.py)
+    Atualizações contínuas para animações e estados do jogo.(personagem.py e inimigos.py)
+Estrutura Modular:
+    Funcionalidades separadas em ficheiros como main.py, jogador.py e inimigos.py para 
+    facilitar a manutenção e expansão do código.
+Gráficos e Som:
+    Sprites animados e temáticos para personagens e projéteis.
+    Efeitos sonoros dinâmicos para disparos, colisões e transições de níveis.
+Interface:
+    Indicadores de vida, pontuação atual e nível exibidos no ecrã.
+Estado de jogo:
+    Menu interativo para pausas e navegação.
+
+------´
+
+Aspectos Diferenciais do Projeto
+    Desafios Progressivos: Dificuldade crescente para testar a habilidade do jogador.
+    Elementos Narrativos: Inserção de cenas e mensagens que conectam os níveis e adicionam contexto à experiência.
+    Aprendizagem Técnico: Exploração prática de conceitos como manipulação gráfica, colisões e design de jogo.
