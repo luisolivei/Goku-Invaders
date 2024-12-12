@@ -5,15 +5,15 @@ def fade_in_out(ecra, cor, largura, altura, tempo):
     fade_surface.fill(cor)
 
     # Fade-in: aumenta a opacidade gradualmente
-    for alpha in range(0, 255, 5):  # Ajuste o passo (5) para a velocidade de fade desejada
+    for alpha in range(0, 256, 6):  # Ajuste o passo (5) para a velocidade de fade desejada
         fade_surface.set_alpha(alpha)
         ecra.blit(fade_surface, (0, 0))
         pygame.display.update()
-        pygame.time.delay(int(tempo / 51))  # Ajuste a duração conforme necessário
+        pygame.time.delay(int(tempo / 55))  # Ajuste a duração conforme necessário
 
     # Fade-out: diminui a opacidade gradualmente
-    for alpha in range(255, -1, -5):
+    for alpha in range(255, -1, -6):
         fade_surface.set_alpha(alpha)
         ecra.blit(fade_surface, (0, 0))
         pygame.display.update()
-        pygame.time.delay(int(tempo / 51))
+        pygame.time.delay(int(tempo / 55))

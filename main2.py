@@ -7,7 +7,7 @@ from personagens import AnimacaoParado, AnimacaoAndar, AnimacaoDisparar, Animaca
 from menu import menu
 from fadeinout import fade_in_out
 from sons import Sons
-from niveis import carregar_fundo,gerar_inimigo,mostrar_historia,mostrar_tela_final,reproduzir_video
+from niveis import carregar_fundo,gerar_inimigo,mostrar_historia,mostrar_tela_final,reproduzir_video,nivel_concluido
 
 # Variáveis globais para controle do estado do jogo
 play = False
@@ -97,15 +97,17 @@ def play_game():
 
 # Verifica se o jogador atingiu o próximo nível
     # Verifica se o jogador atingiu o próximo nível
-        if nivel == 1 and pontuacao >= 1000:  # Nível 1: 800 pontos para avançar
+        if nivel == 1 and pontuacao >= 300:  # Nível 1: 800 pontos para avançar
             nivel += 1
+            pygame.time.wait(1000)
             if nivel > 3:  # Limita o jogo ao nível 3
                 mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
                 iniciar_jogo()  # Volta ao menu inicial
                 return  # Finaliza o loop principal
             fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
-            print(f"Parabéns! Você avançou para o nível {nivel}")
+            nivel_concluido(ecra, nivel)
             mostrar_historia(ecra, nivel)
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
 
             # Toca a música correspondente ao nível
             sons.tocar_musica_fundo(nivel)
@@ -117,15 +119,17 @@ def play_game():
             jogador.disparando = False
             jogador.definir_animacao("parado")
 
-        elif nivel == 2 and pontuacao >= 2300:  # Nível 2: 2000 pontos para avançar
+        elif nivel == 2 and pontuacao >= 500:  # Nível 2: 2000 pontos para avançar
             nivel += 1
+            pygame.time.wait(1000)
             if nivel > 3:  # Limita o jogo ao nível 3
                 mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
                 iniciar_jogo()  # Volta ao menu inicial
                 return  # Finaliza o loop principal
             fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
-            print(f"Parabéns! Você avançou para o nível {nivel}")
+            nivel_concluido(ecra, nivel)
             mostrar_historia(ecra, nivel)
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
 
             # Toca a música correspondente ao nível
             sons.tocar_musica_fundo(nivel)
@@ -137,15 +141,16 @@ def play_game():
             jogador.disparando = False
             jogador.definir_animacao("parado")
 
-        elif nivel == 3 and pontuacao >= 3900:  # Nível 3: 3600 pontos para avançar
+        elif nivel == 3 and pontuacao >= 700:  # Nível 3: 3600 pontos para avançar
             nivel += 1
+            pygame.time.wait(1000)
             if nivel > 3:  # Limita o jogo ao nível 3
                 reproduzir_video("tryf.mp4", ecra)
                 mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
                 iniciar_jogo()  # Volta ao menu inicial
                 return  # Finaliza o loop principal
             fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
-            print(f"Parabéns! Você avançou para o nível {nivel}")
+            nivel_concluido(ecra, nivel)
             mostrar_historia(ecra, nivel)
 
             # Toca a música correspondente ao nível

@@ -126,22 +126,21 @@ def mostrar_historia(ecra, nivel):
 
     pygame.display.update()  # Atualiza a tela
     
-    
-    
-
-
-
-    # Espera até que o jogador clique no botão "Continuar"
+    # Espera até que o jogador pressione Enter ou clique no botão "Continuar"
     continuar = False
     while not continuar:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
                 exit()
+        # Verifica se o mouse foi clicado no botão
             if evento.type == pygame.MOUSEBUTTONDOWN:
                 if botao_rect.collidepoint(evento.pos):  # Verifica se o clique foi dentro do botão
-                    continuar = True  # Quando o jogador clica, a história termina e o jogo continua
-
+                    continuar = True
+        # Verifica se a tecla Enter foi pressionada
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_RETURN:  # Tecla Enter
+                    continuar = True
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
 
 def mostrar_tela_final(ecra,):
@@ -179,3 +178,11 @@ def mostrar_tela_final(ecra,):
     pygame.display.update()
     pygame.time.wait(10000)  # Aguarda 5 segundos antes de voltar ao menu
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
+
+def nivel_concluido(ecra, nivel):
+    fonte = pygame.font.Font(caminho_fonte, 64)
+    mensagem = f"Nível {nivel} concluído!"
+    texto = fonte.render(mensagem, True, (255, 255, 0))  # Amarelo
+    ecra.blit(texto, (largura_ecra // 2 - texto.get_width() // 2, altura_ecra // 2))
+    pygame.display.update()
+    pygame.time.wait(2000)
