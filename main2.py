@@ -100,12 +100,9 @@ def play_game():
         if nivel == 1 and pontuacao >= 300:  # Nível 1: 800 pontos para avançar
             nivel += 1
             pygame.time.wait(1000)
-            if nivel > 3:  # Limita o jogo ao nível 3
-                mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
-                iniciar_jogo()  # Volta ao menu inicial
-                return  # Finaliza o loop principal
             fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
             nivel_concluido(ecra, nivel)
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
             mostrar_historia(ecra, nivel)
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
 
@@ -122,12 +119,9 @@ def play_game():
         elif nivel == 2 and pontuacao >= 500:  # Nível 2: 2000 pontos para avançar
             nivel += 1
             pygame.time.wait(1000)
-            if nivel > 3:  # Limita o jogo ao nível 3
-                mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
-                iniciar_jogo()  # Volta ao menu inicial
-                return  # Finaliza o loop principal
             fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
             nivel_concluido(ecra, nivel)
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
             mostrar_historia(ecra, nivel)
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
 
@@ -151,7 +145,9 @@ def play_game():
                 return  # Finaliza o loop principal
             fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
             nivel_concluido(ecra, nivel)
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
             mostrar_historia(ecra, nivel)
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
 
             # Toca a música correspondente ao nível
             sons.tocar_musica_fundo(nivel)

@@ -181,7 +181,7 @@ def mostrar_tela_final(ecra,):
 
 def nivel_concluido(ecra, nivel):
     fonte = pygame.font.Font(caminho_fonte, 64)
-    mensagem = f"Nível {nivel} concluído!"
+    mensagem = f"Nível {nivel-1} concluído!"
     texto = fonte.render(mensagem, True, (255, 255, 0))  # Amarelo
     ecra.blit(texto, (largura_ecra // 2 - texto.get_width() // 2, altura_ecra // 2))
     pygame.display.update()
