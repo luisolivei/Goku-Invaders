@@ -1,5 +1,7 @@
 import pygame
-from config import largura_ecra
+from config import largura_ecra, altura_ecra
+from projetil import Projetil
+import random
 
 class Inimigo:
     def __init__(self, tipo, pos_y, cores_fundo=[(132, 66, 4), (128, 0, 128)]):
@@ -110,4 +112,65 @@ class Inimigo:
                 self.indice_sprite = 0
             return True
 
+        return False
+
+class InimigoFinal:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.velocidade = 3
+        self.vidas = 10
+        self.vivo = True
+        self.projeteis = []  # Lista para armazenar projéteis do inimigo
+        self.tempo_desde_ultimo_disparo = 0  # Controle do tempo entre disparos
+        self.sprites = self.carregar_sprites()
+
+    def carregar_sprites(self):
+        return [pygame.image.load(f"images/inimigos/inimigo_final/final.gif").convert_alpha()]
+
+    def atualizar(self, delta_tempo):
+        if not self.vivo:
+            return
+
+        # Movimento vertical aleatório
+        if random.randint(1, 100) <= 5:  # Pequena chance de mudar direção
+            self.velocidade *= -1
+        self.y += self.velocidade
+        if self.y < 0 or self.y > altura_ecra - 64:
+            self.velocidade *= -1
+
+        # Disparo de projéteis
+        self.tempo_desde_ultimo_disparo += delta_tempo
+        if self.tempo_desde_ultimo_disparo >= 2:  # Dispara a cada 2 segundos
+            self.disparar()
+            self.tempo_desde_ultimo_disparo = 0
+
+        # Atualiza os projéteis
+        for projetil in self.projeteis[:]:
+            projetil.atualizar()
+            if projetil.saiu_do_ecra():  # Remove projéteis que saíram da tela
+                self.projeteis.remove(projetil)
+
+    def disparar(self):
+        novo_projetil = Projetil(self.x - 20, self.y + 32, velocidade=5, sentido="esquerda")
+        self.projeteis.append(novo_projetil)
+
+    def desenhar(self, ecra):
+        if self.vivo:
+            sprite = self.sprites[0]  # Exibe o sprite atual
+            ecra.blit(sprite, (self.x, self.y))
+
+        # Desenha os projéteis
+        for projetil in self.projeteis:
+            projetil.desenhar(ecra)
+
+    def verificar_colisao(self, projetil):
+        # Verifica colisão com o projétil do jogador
+        if pygame.Rect(self.x, self.y, 64, 64).colliderect(
+            pygame.Rect(projetil.x, projetil.y, 32, 32)
+        ):
+            self.vidas -= 1
+            if self.vidas <= 0:
+                self.vivo = False
+            return True
         return False

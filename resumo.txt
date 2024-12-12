@@ -25,21 +25,19 @@ Principais Funcionalidades
 ------
 
 Aspectos Técnicos
-Lógica do Jogo:
-    Sistema de colisões para projéteis e inimigos. (main.py)
-    Atualizações contínuas para animações e estados do jogo.(personagem.py e inimigos.py)
 Estrutura Modular:
     Funcionalidades separadas em ficheiros como main.py, jogador.py e inimigos.py para 
     facilitar a manutenção e expansão do código.
+Lógica do Jogo:
+    Sistema de colisões para projéteis e inimigos. (main.py)
+    Atualizações contínuas para animações e estados do jogo.(personagem.py e inimigos.py)
 Gráficos e Som:
-    Sprites animados e temáticos para personagens e projéteis.
+    Sprites animados e temáticos para personagens e projéteis.(inimigos.py)
     Efeitos sonoros dinâmicos para disparos, colisões e transições de níveis.
-Interface:
-    Indicadores de vida, pontuação atual e nível exibidos no ecrã.
 Estado de jogo:
-    Menu interativo para pausas e navegação.
+    Menu interativo para pausas e navegação e gameover/final jogo
 
-------´
+------
 
 Aspectos Diferenciais do Projeto
     Desafios Progressivos: Dificuldade crescente para testar a habilidade do jogador.

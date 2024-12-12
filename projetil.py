@@ -3,7 +3,7 @@ import pygame
 from config import largura_ecra
 
 class Projetil:
-    def __init__(self, x, y, velocidade=5, cores_fundo=[(144, 176, 216)]):
+    def __init__(self, x, y, velocidade=5, cores_fundo=[(144, 176, 216)],sentido="direita"):
         # Inicializa a posição e velocidade do projetil
         self.x = x
         self.y = y
@@ -12,6 +12,12 @@ class Projetil:
         self.imagem = pygame.transform.scale(self.imagem, (20, 20))  # Ajusta o tamanho da imagem
         self.cores_fundo = cores_fundo
         self.remover_cores_fundo()
+        self.sentido = sentido  # "direita" ou "esquerda"
+
+        # Inverte o sprite horizontalmente se o sentido for "esquerda" para inimigo final
+        if self.sentido == "esquerda":
+            self.imagem = pygame.transform.flip(self.imagem, True, False)
+
     
     def remover_cores_fundo(self):
         # Converte a imagem para acesso direto aos pixels
@@ -24,18 +30,24 @@ class Projetil:
                     self.imagem.set_at((x, y), (0, 0, 0, 0))  # Define o pixel como transparente
 
     def atualizar(self):
-        # Move o projetil horizontalmente
-        self.x += self.velocidade
+        # Atualiza a posição com base no sentido
+        if self.sentido == "direita":
+            self.x += self.velocidade
+        elif self.sentido == "esquerda":
+            self.x -= self.velocidade
 
     def desenhar(self, superficie):
         # Desenha o projétil na tela
         superficie.blit(self.imagem, (self.x, self.y))
 
     def saiu_do_ecra(self):
-        # Verifica se o projetil saiu da tela
-        return self.x > largura_ecra
+        # Verifica se o projétil saiu do ecrã (considerando ambos os sentidos)
+        if self.sentido == "direita":
+            return self.x > largura_ecra
+        elif self.sentido == "esquerda":
+            return self.x < 0
 
-
+#em desenvolvimento, nao implementado, testar em main_tiago
 class Projetil2:
     def __init__(self, x, y, duracao=5, velocidade=6):
         self.x = x

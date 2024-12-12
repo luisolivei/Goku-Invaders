@@ -14,6 +14,8 @@ def carregar_fundo(nivel):
         fundo = pygame.image.load("images/bg2.png").convert_alpha()  # Fundo do nível 2
     elif nivel == 3:
         fundo = pygame.image.load("images/bg.png").convert_alpha()  # Fundo do nível 3
+    elif nivel == 4:
+        fundo = pygame.image.load("images/bg.png").convert_alpha()
     else:
         fundo = pygame.image.load("images/bg.png").convert_alpha()  # Fundo padrão
 
@@ -26,7 +28,7 @@ def gerar_inimigo(nivel):
     elif nivel == 2:
         tipo = random.choice([2, 3])  # Apenas inimigos do tipo 2 e 3 no nível 2
     elif nivel == 3:
-        tipo = 3  # Apenas inimigos do tipo 3 no nível 3
+        tipo = random.choice([1, 2, 3])  # Apenas inimigos do tipo 3 no nível 3
     else:
         tipo = random.choice([1, 2, 3])  # Para níveis superiores, inclui todos os tipos
     
@@ -82,8 +84,12 @@ def mostrar_historia(ecra, nivel):
         texto_historia = "Raptamos a Kika!!! Conseguiras resgata-la?"
     elif nivel == 3:
         imagem_historia = pygame.image.load("images/historia2.jpg").convert_alpha()
-        texto_historia = "Percorri o universo e nao a encontrei!! Sera Agora?"  
-    elif nivel > 3:  # História final
+        texto_historia = "Percorri o universo e nao a encontrei!! Sera Agora?"
+    elif nivel == 4:
+        imagem_historia = pygame.image.load("images/historia2.jpg").convert_alpha()
+        texto_historia = "Percorri o universo e nao a encontrei!! Sera Agora?" 
+
+    elif nivel > 4:  # História final
         reproduzir_video("tryf.mp4", ecra)
         return
 
