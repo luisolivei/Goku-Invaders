@@ -24,13 +24,13 @@ def carregar_fundo(nivel):
 
 def gerar_inimigo(nivel):
     if nivel == 1:
-        tipo = random.choice([1, 2])  # Apenas inimigos do tipo 1 e 2 no nível 1
+        tipo = random.choice([5, 4])  # Apenas inimigos do tipo 1 e 2 no nível 1
     elif nivel == 2:
         tipo = random.choice([2, 3])  # Apenas inimigos do tipo 2 e 3 no nível 2
     elif nivel == 3:
         tipo = random.choice([1, 2, 3])  # Apenas inimigos do tipo 3 no nível 3
     else:
-        tipo = random.choice([1, 2, 3])  # Para níveis superiores, inclui todos os tipos
+        tipo = random.choice([1, 2, 3, 4, 5])  # Para níveis superiores, inclui todos os tipos
     
     pos_y = random.randint(50, altura_ecra - 50)  # Posição vertical aleatória
     return Inimigo(tipo, pos_y)

@@ -98,7 +98,7 @@ def play_game():
 
 # Verifica se o jogador atingiu o próximo nível
     # Verifica se o jogador atingiu o próximo nível
-        if nivel == 1 and pontuacao >= 200:  # Nível 1: 1000 pontos para avançar
+        if nivel == 1 and pontuacao >= 500:  # Nível 1: 1000 pontos para avançar
             nivel += 1
             fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
             print(f"Parabéns! Você avançou para o nível {nivel}")
@@ -114,7 +114,7 @@ def play_game():
             jogador.disparando = False
             jogador.definir_animacao("parado")
 
-        elif nivel == 2 and pontuacao >= 400:  # Nível 2: 2300 pontos para avançar
+        elif nivel == 2 and pontuacao >= 800:  # Nível 2: 2300 pontos para avançar
             nivel += 1
             fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
             print(f"Parabéns! Você avançou para o nível {nivel}")
@@ -130,7 +130,7 @@ def play_game():
             jogador.disparando = False
             jogador.definir_animacao("parado")
 
-        elif nivel == 3 and pontuacao >= 600:  # Nível 3: 3900 pontos para avançar
+        elif nivel == 3 and pontuacao >= 1000:  # Nível 3: 3900 pontos para avançar
             nivel += 1
             if nivel > 5:  # Limita o jogo ao nível 4
                 reproduzir_video("tryf.mp4", ecra)
@@ -212,7 +212,7 @@ def play_game():
 
                     # Adiciona pontuação somente se o inimigo foi morto
                     if inimigo.vidas <= 0 and inimigo.animacao_atual == "morto":
-                        pontuacao += {1: 50, 2: 100, 3: 150}[inimigo.tipo]
+                        pontuacao += {1: 50, 2: 100, 3: 150, 4: 100, 5: 50}[inimigo.tipo]
                     break
 
         # Atualiza e desenha cada inimigo
@@ -220,8 +220,8 @@ def play_game():
             estado = inimigo.atualizar(delta_tempo, jogador)
             inimigo.desenhar(ecra)
 
-            if estado == "fora":  # Saiu pela esquerda
-                pontuacao -= {1: 50, 2: 100, 3: 150}[inimigo.tipo]
+            if estado == "fora":  # Saiu pela esquerda remove score 
+                pontuacao -= {1: 50, 2: 100, 3: 150, 4: 100, 5: 50}[inimigo.tipo]
                 inimigos.remove(inimigo)
 
         # Atualiza e desenha o inimigo final
@@ -265,7 +265,7 @@ def play_game():
             if inimigo.vivo and pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50).colliderect(
                 pygame.Rect(jogador.pos_x, jogador.pos_y, 50, 50)
             ):
-                dano = {1: 30, 2: 50, 3: 70}[inimigo.tipo]  # Define o dano dependendo do tipo do inimigo
+                dano = {1: 30, 2: 50, 3: 70, 4:30, 5:30}[inimigo.tipo]  # Define o dano dependendo do tipo do inimigo
                 jogador.vida -= dano  # Diminui a vida do jogador
                 sons.tocar_colisao()  # Toca som de colisão
 
