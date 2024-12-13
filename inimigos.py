@@ -4,15 +4,15 @@ from projetil import Projetil
 import random
 
 class Inimigo:
-    def __init__(self, tipo, pos_y, cores_fundo=[(132, 66, 4), (128, 0, 128)]):
+    def __init__(self, tipo, pos_y, cores_fundo=[(132, 66, 4), (128, 0, 128), (153, 217, 234),(96, 64, 168)]):
         self.tipo = tipo
-        self.vidas = {1: 3, 2: 5, 3: 7}[tipo]
+        self.vidas = {1: 3, 2: 5, 3: 7, 4: 5, 5: 3}[tipo]
         self.pos_x = largura_ecra
         self.pos_y = pos_y
         self.cores_fundo = cores_fundo
         self.direcao_sprite = 1
 
-        self.escalas = {1: 50, 2: 100, 3: 100}
+        self.escalas = {1: 50, 2: 100, 3: 100, 4:100, 5:80}
         self.escala = self.escalas.get(tipo, 100) / 100
 
         self.velocidade = 1
@@ -21,6 +21,8 @@ class Inimigo:
             1: {"andar": 0.2, "morto": 0.1},
             2: {"andar": 0.3, "morto": 0.1},
             3: {"andar": 0.5, "morto": 0.1},
+            4: {"andar": 0.3, "morto": 0.3},
+            5: {"andar": 0.3, "morto": 0.1},
         }
         self.velocidade_animacao_atual = self.velocidades_animacoes[self.tipo].get("andar", 0.1)
 
