@@ -132,14 +132,19 @@ def play_game():
 
         elif nivel == 3 and pontuacao >= 1000:  # Nível 3: 3900 pontos para avançar
             nivel += 1
-            if nivel > 5:  # Limita o jogo ao nível 4
-                reproduzir_video("tryf.mp4", ecra)
-                mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
-                iniciar_jogo()  # Volta ao menu inicial
-                return  # Finaliza o loop principal
             fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
             print(f"Parabéns! Você avançou para o nível {nivel}")
             mostrar_historia(ecra, nivel)
+
+            # Toca a música correspondente ao nível
+            sons.tocar_musica_fundo(nivel)
+
+            # Limpar inimigos e projéteis
+            inimigos.clear()
+            jogador.projeteis.clear()
+
+            jogador.disparando = False
+            jogador.definir_animacao("parado")
         
         elif nivel == 4 and inimigo_final is None:
             # No nível final, cria o inimigo final apenas uma vez
