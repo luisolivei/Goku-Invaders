@@ -322,14 +322,32 @@ def play_game():
         jogador.atualizar(delta_tempo)
         jogador.desenhar(ecra)
 
-        # Exibe a vida, pontuação e nível na tela
-        fonte = pygame.font.Font(caminho_fonte, 40)  # Define o tamanho da fonte ()
-        vida_texto = fonte.render(f"Vida: {jogador.vida}", True, (255, 0, 0))
+        
+        
+        fonte = pygame.font.Font(caminho_fonte, 40)
+        
+        # Carregar a imagem do ícone (coração, por exemplo)
+        icone_vida = pygame.image.load('images/coracao.png')  # Substitua pelo caminho da sua imagem
+        icone_vida = pygame.transform.scale(icone_vida, (40, 40))  # Ajusta o tamanho do ícone
+
+        # Renderizar o texto da vida
+        vida_texto = fonte.render(f"{jogador.vida}", True, (255, 0, 0))
+
+        # Determinar as posições na tela
+        posicao_vida = (10, 10)  # Coordenadas para o ícone
+        posicao_texto_vida = (50, 10)  # Texto ao lado do ícone (ajustar conforme o tamanho do ícone)
+
+        # Desenhar o ícone e o texto na tela
+        ecra.blit(icone_vida, posicao_vida)
+        ecra.blit(vida_texto, posicao_texto_vida)
+
+        # Renderizar os outros textos (como já estavam)
         score_texto = fonte.render(f"Score: {pontuacao}", True, (255, 255, 0))
         nivel_texto = fonte.render(f"Nível: {nivel}", True, (255, 165, 0))
-        ecra.blit(vida_texto, (10, 10))
         ecra.blit(score_texto, (largura_ecra - 190, 10))
-        ecra.blit(nivel_texto, (largura_ecra - 470, 8))  # Exibe o nível abaixo da vida
+        ecra.blit(nivel_texto, (largura_ecra - 470, 8))
+
+        # Atualizar a tela
         pygame.display.update()
 
 # Função para exibir a pontuação ao final
