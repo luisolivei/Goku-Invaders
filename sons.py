@@ -11,7 +11,8 @@ class Sons:
         self.musicas = {
             1: "Sons/musica_nivel.mp3",
             2: "Sons/musica_nivel2.mp3",
-            3: "Sons/musica_ultimo_nivel.mp3"
+            3: "Sons/musica_ultimo_nivel.mp3",
+            4: "Sons/musica_final.mp3"
         }
         # Sons de efeitos
         self.som_disparo = pygame.mixer.Sound("Sons/disparos.mp3")
