@@ -73,29 +73,22 @@ class Projetil2:
         ]
         return [pygame.image.load(caminho).convert_alpha() for caminho in caminhos]
 
-    def atualizar(self, delta_tempo, estado_tecla):
+    def atualizar(self, delta_tempo):
         if self.ativo:
             self.tempo_decorrido += delta_tempo
-
-            # O raio_inicio não se move até que a tecla seja liberada
-            if estado_tecla:
-                self.x += self.velocidade  # O corpo e fim do raio se movem apenas enquanto a tecla estiver pressionada
-
-            # A lógica com base no estado da tecla (se necessário)
-            if not estado_tecla:
-                self.x = self.x  # O raio_inicio permanece fixo até que a tecla seja liberada
 
             # Desativa o projetil após a duração
             if self.tempo_decorrido >= self.duracao:
                 self.ativo = False
                 self.tempo_decorrido = 0  # Reinicia o tempo decorrido para permitir uso futuro
 
+
     def desenhar(self, superficie):
         if not self.ativo:
             return
 
         # Calcula o comprimento total disponível para o raio
-        comprimento_total = largura_ecra - self.x
+        comprimento_total = largura_ecra *2
         largura_inicio = self.sprite_inicio.get_width()
         largura_fim = self.sprite_fim.get_width()
         largura_corpo = self.sprite_corpo.get_width()

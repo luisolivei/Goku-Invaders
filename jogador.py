@@ -59,13 +59,17 @@ class Jogador:
         return True  # Indica que o jogador ainda está vivo
     
     def disparar2(self):
-        if self.ataque_especial_desbloqueado and not self.projetil2:  # Verifica se o ataque especial está desbloqueado
+        if self.ataque_especial_desbloqueado:  # Verifica se o ataque especial está desbloqueado 
             self.projetil2 = Projetil2(self.pos_x + 64, self.pos_y)  # Cria um novo Projetil2
             self.definir_animacao("disparar2")  # Define a animação específica para disparar2
             self.ataque_especial_desbloqueado = False  # Desbloqueio é consumido ao disparar
+            self.kills_recent=0
+            print(f" Kills atuais incrementar: {self.kills_recent}")
 
     def incrementar_kill(self):
-        self.kills_recent += 1
-        if self.kills_recent >= 3:
-            self.ataque_especial_desbloqueado = True
-            self.kills_recent = 0
+        #if not self.ataque_especial_desbloqueado:
+            self.kills_recent += 1
+            if self.kills_recent >= 3:
+                self.ataque_especial_desbloqueado = True
+                #self.kills_recent = 0
+                print(f" Kills atuais disparar: {self.kills_recent}")

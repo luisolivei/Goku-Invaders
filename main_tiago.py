@@ -172,6 +172,11 @@ def play_game():
                 elif evento.key == pygame.K_x:
                     if jogador.ataque_especial_desbloqueado:  # Apenas executa se desbloqueado
                         jogador.disparar2()
+                        print("disparado atque especial")
+                        #jogador.kills_recent(0)
+                    else:
+                        print("ataque especial nao desbloqueado")
+
                 elif evento.key == pygame.K_ESCAPE:  # Verifica se a tecla Esc foi pressionada
                     pause_menu(ecra, fundo)  # Chama a função de pausa
                     jogador.definir_animacao("parado")  # Restaura o estado após a pausa
@@ -217,7 +222,7 @@ def play_game():
 
                     # Adiciona pontuação somente se o inimigo foi morto
                     if inimigo.vidas <= 0 and inimigo.animacao_atual == "morto":
-                        pontuacao += {1: 50, 2: 100, 3: 150}[inimigo.tipo]
+                        pontuacao += {1: 50, 2: 100, 3: 150, 4:100, 5:100}[inimigo.tipo]
                         jogador.incrementar_kill()  # Incrementa o contador de kills para desbloqueio do ataque especial
                     break
 
@@ -233,8 +238,8 @@ def play_game():
                 ):
                     inimigo.vidas -= 10
                     if inimigo.vidas <= 0:
-                        pontuacao += {1: 50, 2: 100, 3: 150}[inimigo.tipo]
-                        jogador.incrementar_kill()  # Incrementa o contador de kills caso inimigo morra
+                        pontuacao += {1: 50, 2: 100, 3: 150, 4:100, 5:100}[inimigo.tipo]
+                        #jogador.incrementar_kill()  # Incrementa o contador de kills caso inimigo morra
                         inimigos.remove(inimigo)  # Remove o inimigo morto
 
         # Atualiza e desenha cada inimigo
@@ -243,7 +248,7 @@ def play_game():
             inimigo.desenhar(ecra)
 
             if estado == "fora":  # Saiu pela esquerda
-                pontuacao -= {1: 50, 2: 100, 3: 150}[inimigo.tipo]
+                pontuacao -= {1: 50, 2: 100, 3: 150, 4:100, 5:100}[inimigo.tipo]
                 inimigos.remove(inimigo)
 
         # Verifica colisão com o jogador
@@ -256,7 +261,7 @@ def play_game():
             if inimigo.vivo and pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50).colliderect(
                 pygame.Rect(jogador.pos_x, jogador.pos_y, 50, 50)
             ):
-                dano = {1: 30, 2: 50, 3: 70}[inimigo.tipo]  # Define o dano dependendo do tipo do inimigo
+                dano = {1: 30, 2: 50, 3: 70, 4:30, 5:30}[inimigo.tipo]  # Define o dano dependendo do tipo do inimigo
                 jogador.vida -= dano  # Diminui a vida do jogador
                 sons.tocar_colisao()  # Toca som de colisão
 

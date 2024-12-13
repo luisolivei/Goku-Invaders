@@ -36,7 +36,7 @@ class Inimigo:
 
         self.vivo = True
 
-    def carregar_sprites(self, estado, tipos_ficheiro=("gif", "png"), num_maximo=6):
+    def carregar_sprites(self, estado, tipos_ficheiro=("gif", "png"), num_maximo=10):
         sprites = []
         for i in range(1, num_maximo + 1):
             for tipo in tipos_ficheiro:
