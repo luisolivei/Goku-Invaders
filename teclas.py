@@ -40,4 +40,4 @@ def mostrar_teclas(ecra):
     ecra.blit(texto_down, (70, altura_ecra - 160))
     ecra.blit(texto_space, (120, altura_ecra - 130))
 
-    pygame.display.update()
+    pygame.display.flip()
