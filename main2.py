@@ -8,8 +8,10 @@ from menu import menu
 from fadeinout import fade_in_out
 from sons import Sons
 from niveis import carregar_fundo,gerar_inimigo,mostrar_historia,mostrar_tela_final,reproduzir_video,nivel_concluido
-from teclas import mostrar_teclas
+# from teclas import mostrar_teclas
 from highscore import carregar_highscore, mostrar_highscore, salvar_highscore
+from Instrucoes import tela_instrucoes
+
 
 
 # Variáveis globais para controle do estado do jogo
@@ -158,7 +160,7 @@ def play_game():
             # No nível final, cria o inimigo final apenas uma vez
             inimigo_final = InimigoFinal(largura_ecra - 100, altura_ecra // 2)
         
-        mostrar_teclas(ecra)
+        
         
 
         # Processa eventos de entrada
@@ -367,6 +369,7 @@ def iniciar_jogo():
         # Exibe o menu inicial com título
         escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Play","Highscore", "Quit"])
         if escolha == "Play":
+            tela_instrucoes(ecra, largura_ecra, altura_ecra)
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
             play = True
             play_game()  # Inicia o jogo
