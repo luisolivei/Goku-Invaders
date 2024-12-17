@@ -370,6 +370,7 @@ def play_game():
                     # Adiciona pontuação somente se o inimigo foi morto
                     if inimigo.vidas <= 0 and inimigo.animacao_atual == "morto":
                         pontuacao += {1: 50, 2: 100, 3: 150, 4: 100, 5: 50}[inimigo.tipo]
+                        jogador.incrementar_kill()
                     break
 
         # Atualizar e desenhar o Projetil2
@@ -461,7 +462,7 @@ def play_game():
         
         
         fonte = pygame.font.Font(caminho_fonte, 40)
-        
+    
         # Carregar a imagem do ícone (coração, por exemplo)
         icone_vida = pygame.image.load('images/coracao.png')  # Substitua pelo caminho da sua imagem
         icone_vida = pygame.transform.scale(icone_vida, (40, 40))  # Ajusta o tamanho do ícone
@@ -515,7 +516,6 @@ def iniciar_jogo():
 
     # Loop principal para exibir o menu e reagir à seleção do jogador
     while True:
-        highscore = carregar_highscore()
         # Exibe o menu inicial com título
         escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Play","Highscore", "Quit"])
         if escolha == "Play":
