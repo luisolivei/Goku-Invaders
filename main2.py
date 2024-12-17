@@ -3,7 +3,7 @@ import random
 import os
 from config import largura_ecra, altura_ecra, velocidade_fundo,caminho_fonte
 from jogador import Jogador
-from inimigos import Inimigo
+from inimigos import Inimigo,InimigoFinal
 from personagens import AnimacaoParado, AnimacaoAndar, AnimacaoDisparar, AnimacaoAtingido
 from menu import menu
 from fadeinout import fade_in_out
@@ -193,6 +193,7 @@ def play_game():
     jogador.temporizador_atingido = 0  # Temporizador para controlar a animação "atingido"
 
     inimigos = []  # Lista para armazenar inimigos
+    inimigo_final = None  # Inicializa a variável no início da função  
     relogio = pygame.time.Clock()  # Inicia o relógio para controlar o FPS
     posicao_fundo_x = 0  # Posição inicial do fundo
     a_funcionar = True
@@ -250,16 +251,38 @@ def play_game():
         elif nivel == 3 and pontuacao >= 700:  # Nível 3: 3600 pontos para avançar
             nivel += 1
             pygame.time.wait(1000)
-            if nivel > 3:  # Limita o jogo ao nível 3
-                reproduzir_video("tryf.mp4", ecra)
-                mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
-                iniciar_jogo()  # Volta ao menu inicial
-                return  # Finaliza o loop principal
             fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
             nivel_concluido(ecra, nivel)
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
             mostrar_historia(ecra, nivel)
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
+
+            # Toca a música correspondente ao nível
+            sons.tocar_musica_fundo(nivel)
+
+            # Limpar inimigos e projéteis
+            inimigos.clear()
+            jogador.projeteis.clear()
+
+            jogador.disparando = False
+            jogador.definir_animacao("parado")
+
+        elif nivel == 4 and inimigo_final is None:
+            
+            if nivel > 4:
+                reproduzir_video("tryf.mp4", ecra)
+                mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
+                iniciar_jogo()  # Volta ao menu inicial
+                return  # Finaliza o loop principal
+            pygame.time.wait(1000)
+            fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
+            nivel_concluido(ecra, nivel)
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
+            mostrar_historia(ecra, nivel)
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
+            
+            # No nível final, cria o inimigo final apenas uma vez
+            inimigo_final = InimigoFinal(largura_ecra - 100, altura_ecra // 2)
 
             # Toca a música correspondente ao nível
             sons.tocar_musica_fundo(nivel)
@@ -284,6 +307,13 @@ def play_game():
                     jogador.disparar()  # Ativa o disparo
                     jogador.definir_animacao("disparar")
                     jogador.disparando = True
+                elif evento.key == pygame.K_x:
+                    if jogador.ataque_especial_desbloqueado:  # Apenas executa se desbloqueado
+                        jogador.disparar2()
+                        print("disparado ataque especial")
+                    else:
+                        print("ataque especial nao desbloqueado")
+
                 elif evento.key == pygame.K_ESCAPE:  # Verifica se a tecla Esc foi pressionada
                     pause_menu(ecra, fundo)  # Chama a função de pausa
                     jogador.definir_animacao("parado")  # Restaura o estado após a pausa
@@ -309,9 +339,23 @@ def play_game():
                 jogador.definir_animacao("andar")
 
         # Atualiza a posição do fundo para movimento contínuo
+        if nivel < 4: 
+            posicao_fundo_x -= velocidade_fundo
+            if posicao_fundo_x <= -largura_ecra:
+                posicao_fundo_x = 0
+
+        # Atualiza a posição do fundo para movimento contínuo
         posicao_fundo_x -= velocidade_fundo
         if posicao_fundo_x <= -largura_ecra:
             posicao_fundo_x = 0
+
+        # Desenha o fundo em movimento contínuo (duas camadas de fundo)
+        ecra.blit(fundo, (posicao_fundo_x, 0))  # A primeira camada do fundo
+        if nivel < 4:
+            ecra.blit(fundo, (posicao_fundo_x, 0))  # Fundo em movimento
+            ecra.blit(fundo, (posicao_fundo_x + largura_ecra, 0))
+        else:
+            ecra.blit(fundo, (0, 0))  # Fundo estático no nível 4
 
         # Desenha o fundo em movimento contínuo (duas camadas de fundo)
         ecra.blit(fundo, (posicao_fundo_x, 0))  # A primeira camada do fundo
@@ -325,17 +369,61 @@ def play_game():
 
                     # Adiciona pontuação somente se o inimigo foi morto
                     if inimigo.vidas <= 0 and inimigo.animacao_atual == "morto":
-                        pontuacao += {1: 50, 2: 100, 3: 150, 4: 50, 5: 50}[inimigo.tipo]
+                        pontuacao += {1: 50, 2: 100, 3: 150, 4: 100, 5: 50}[inimigo.tipo]
                     break
+
+        # Atualizar e desenhar o Projetil2
+        if jogador.projetil2:
+            jogador.projetil2.atualizar(delta_tempo)  # Atualiza a posição do raio
+            jogador.projetil2.desenhar(ecra)
+
+
+        # Verificar colisões do Projetil2 com inimigos
+            for inimigo in inimigos[:]:
+                raio_colisao = pygame.Rect(jogador.projetil2.x, jogador.projetil2.y, largura_ecra, 32)  # Área do raio
+                inimigo_colisao = pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50)  # Área do inimigo
+
+                if raio_colisao.colliderect(inimigo_colisao):
+                    inimigo.vidas -= 10  # Aplica dano ao inimigo
+                    if inimigo.vidas <= 0:
+                        pontuacao += {1: 50, 2: 100, 3: 150, 4:50, 5:100}[inimigo.tipo]  # Adiciona pontos
+                        inimigos.remove(inimigo)  # Remove o inimigo morto
 
         # Atualiza e desenha cada inimigo
         for inimigo in inimigos[:]:
             estado = inimigo.atualizar(delta_tempo, jogador)
             inimigo.desenhar(ecra)
 
-            if estado == "fora":  # Saiu pela esquerda
-                pontuacao -= {1: 50, 2: 100, 3: 150}[inimigo.tipo]
+            if estado == "fora":  # Saiu pela esquerda remove score 
+                pontuacao -= {1: 50, 2: 100, 3: 150, 4: 100, 5: 50}[inimigo.tipo]
                 inimigos.remove(inimigo)
+        if inimigo_final:
+            inimigo_final.atualizar(delta_tempo)
+            inimigo_final.desenhar(ecra)
+
+            for projetil in inimigo_final.projeteis[:]:
+                if pygame.Rect(projetil.x, projetil.y, 32, 32).colliderect(
+                    pygame.Rect(jogador.pos_x, jogador.pos_y, 64, 64)
+                ):
+                    jogador.vida -= 10  # Reduz a vida do jogador ao ser atingido
+                    inimigo_final.projeteis.remove(projetil)  # Remove o projétil após colisão
+                    # Verifica colisão com projéteis
+
+            for projetil in jogador.projeteis[:]:
+                if inimigo_final.verificar_colisao(projetil):
+                    jogador.projeteis.remove(projetil)
+                    sons.tocar_disparo()
+
+                    if not inimigo_final.vivo:
+                        pontuacao += 1000  # Pontuação especial para derrotar o inimigo final
+                        inimigo_final = None  # Remove o inimigo final após ser derrotado
+                        nivel += 1  # Avança para o próximo nível
+                        
+                        if nivel > 4:  # Limita o jogo ao nível 4
+                            reproduzir_video("tryf.mp4", ecra)
+                            mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
+                            iniciar_jogo()  # Volta ao menu inicial
+                            return  # Finaliza o loop principal
 
         # Verifica colisão com o jogador
         # Atualiza o temporizador da animação "atingido"
