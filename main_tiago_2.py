@@ -3,7 +3,7 @@ import random
 from config import largura_ecra, altura_ecra, velocidade_fundo,caminho_fonte
 from jogador import Jogador
 from inimigos import Inimigo,InimigoFinal
-from personagens import AnimacaoParado, AnimacaoAndar, AnimacaoDisparar, AnimacaoAtingido
+from personagens import AnimacaoParado, AnimacaoAndar, AnimacaoDisparar, AnimacaoAtingido, AnimacaoDispararEspecial
 from menu import menu
 from fadeinout import fade_in_out
 from sons import Sons
@@ -171,6 +171,13 @@ def play_game():
                     jogador.disparar()  # Ativa o disparo
                     jogador.definir_animacao("disparar")
                     jogador.disparando = True
+                elif evento.key == pygame.K_x:
+                    if jogador.ataque_especial_desbloqueado:  # Apenas executa se desbloqueado
+                        jogador.disparar2()
+                        print("disparado ataque especial")
+                    else:
+                        print("ataque especial nao desbloqueado")
+
                 elif evento.key == pygame.K_ESCAPE:  # Verifica se a tecla Esc foi pressionada
                     pause_menu(ecra, fundo)  # Chama a função de pausa
                     jogador.definir_animacao("parado")  # Restaura o estado após a pausa
@@ -218,7 +225,24 @@ def play_game():
                     # Adiciona pontuação somente se o inimigo foi morto
                     if inimigo.vidas <= 0 and inimigo.animacao_atual == "morto":
                         pontuacao += {1: 50, 2: 100, 3: 150, 4: 100, 5: 50}[inimigo.tipo]
+                        jogador.incrementar_kill()  # Incrementa o contador de kills para desbloqueio do ataque especial
                     break
+
+        # Atualizar e desenhar o Projetil2
+        if jogador.projetil2:
+            jogador.projetil2.atualizar(delta_tempo)  # Atualiza a posição do raio
+            jogador.projetil2.desenhar(ecra)
+
+            # Verificar colisões do Projetil2 com inimigos
+            for inimigo in inimigos[:]:
+                raio_colisao = pygame.Rect(jogador.projetil2.x, jogador.projetil2.y, largura_ecra, 32)  # Área do raio
+                inimigo_colisao = pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50)  # Área do inimigo
+
+                if raio_colisao.colliderect(inimigo_colisao):
+                    inimigo.vidas -= 10  # Aplica dano ao inimigo
+                    if inimigo.vidas <= 0:
+                        pontuacao += {1: 50, 2: 100, 3: 150, 4:50, 5:100}[inimigo.tipo]  # Adiciona pontos
+                        inimigos.remove(inimigo)  # Remove o inimigo morto
 
         # Atualiza e desenha cada inimigo
         for inimigo in inimigos[:]:
@@ -282,7 +306,7 @@ def play_game():
                 jogador.temporizador_atingido = 0.3  # Define a duração da animação "atingido" (0.5 segundos)
 
 
-        # Verifica colisões do jogador
+        # Verifica colisões do jogador e vida jogador
         if jogador.vida <= 0:
             if tela_game_over(ecra, fundo):
                 play_game()
@@ -306,7 +330,7 @@ def play_game():
 # Função para exibir a pontuação ao final
 def mostrar_score():
     global pontuacao
-    print(f"Sua pontuação final foi: {pontuacao}")  # Substitua por exibição gráfica, se necessário
+    print(f"A tua pontuação final foi: {pontuacao}")  # Substitua por exibição gráfica, se necessário
     pygame.time.wait(2000)  # Espera 2 segundos para simular a exibição da pontuação
 
 # Função de pausa que exibe o menu de pausa

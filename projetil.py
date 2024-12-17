@@ -58,7 +58,8 @@ class Projetil2:
         self.sprites = self.carregar_sprites()
         self.tempo_decorrido = 0
         self.ativo = True
-        self.indice_sprite = 0
+        #self.indice_sprite = 0
+        self.estado_tecla = False  # Estado da tecla X
         self.tempo_por_frame = duracao / len(self.sprites)
         self.sprite_inicio = self.sprites[0]  # Parte inicial do raio
         self.sprite_corpo = self.sprites[1]  # Parte repetível do raio
@@ -74,13 +75,18 @@ class Projetil2:
         return [pygame.image.load(caminho).convert_alpha() for caminho in caminhos]
 
     def atualizar(self, delta_tempo):
-        if self.ativo:
-            self.tempo_decorrido += delta_tempo
+        if not self.ativo:
+            return
 
-            # Desativa o projetil após a duração
-            if self.tempo_decorrido >= self.duracao:
-                self.ativo = False
-                self.tempo_decorrido = 0  # Reinicia o tempo decorrido para permitir uso futuro
+        self.tempo_decorrido += delta_tempo
+
+        # Continua o movimento até sair do ecrã
+        self.x += self.velocidade
+
+        # Desativa o raio apenas se sair do ecrã completamente
+        if self.saiu_do_ecra():
+            self.ativo = False
+            self.tempo_decorrido = 0  # Reinicia o tempo decorrido para permitir uso futuro
 
 
     def desenhar(self, superficie):

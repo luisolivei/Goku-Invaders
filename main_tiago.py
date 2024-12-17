@@ -228,18 +228,18 @@ def play_game():
 
         # Atualizar e desenhar o Projetil2
         if jogador.projetil2:
-            jogador.projetil2.atualizar(delta_tempo, tecla[pygame.K_x])  # Passa estado da tecla X
+            jogador.projetil2.atualizar(delta_tempo, tecla[pygame.K_x])  # Atualiza a posição do raio
             jogador.projetil2.desenhar(ecra)
 
-            # Colisões do Projetil2 com inimigos
+            # Verificar colisões do Projetil2 com inimigos
             for inimigo in inimigos[:]:
-                if pygame.Rect(jogador.projetil2.raio_fim_x, jogador.projetil2.y, 64, 32).colliderect(
-                    pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50)
-                ):
-                    inimigo.vidas -= 10
+                raio_rect = pygame.Rect(jogador.projetil2.x, jogador.projetil2.y, largura_ecra, 32)  # Área do raio
+                inimigo_rect = pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50)  # Área do inimigo
+
+                if raio_rect.colliderect(inimigo_rect):
+                    inimigo.vidas -= 10  # Aplica dano ao inimigo
                     if inimigo.vidas <= 0:
-                        pontuacao += {1: 50, 2: 100, 3: 150, 4:100, 5:100}[inimigo.tipo]
-                        #jogador.incrementar_kill()  # Incrementa o contador de kills caso inimigo morra
+                        pontuacao += {1: 50, 2: 100, 3: 150, 4:50, 5:70}[inimigo.tipo]  # Adiciona pontos
                         inimigos.remove(inimigo)  # Remove o inimigo morto
 
         # Atualiza e desenha cada inimigo
