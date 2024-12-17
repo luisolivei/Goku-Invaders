@@ -1,6 +1,5 @@
 import pygame
 import random
-import os
 from config import largura_ecra, altura_ecra, velocidade_fundo,caminho_fonte
 from jogador import Jogador
 from inimigos import Inimigo,InimigoFinal
@@ -9,6 +8,8 @@ from menu import menu
 from fadeinout import fade_in_out
 from sons import Sons
 from niveis import carregar_fundo,gerar_inimigo,mostrar_historia,mostrar_tela_final,reproduzir_video,nivel_concluido
+from teclas import mostrar_teclas
+from highscore import carregar_highscore, mostrar_highscore, salvar_highscore
 
 
 # Variáveis globais para controle do estado do jogo
@@ -17,105 +18,6 @@ pontuacao = 0  # Variável para a pontuação
 nivel = 1  # Variável para o nível atual
 sons = Sons()  # Inicia o som
 
-tempo_inicio_jogo = 0
-DURACAO_MOSTRAR_TECLAS = 5000  
-
-def mostrar_teclas(ecra):
-   global tempo_inicio_jogo, DURACAO_MOSTRAR_TECLAS
-   
-   if tempo_inicio_jogo == 0:
-       tempo_inicio_jogo = pygame.time.get_ticks()
-       
-   tempo_atual = pygame.time.get_ticks()
-   if tempo_atual - tempo_inicio_jogo > DURACAO_MOSTRAR_TECLAS:
-       return
-
-   icone_up = pygame.transform.scale(
-       pygame.image.load("images/Teclas/up.png").convert_alpha(), 
-       (50, 50)
-   )
-   icone_down = pygame.transform.scale(
-       pygame.image.load("images/Teclas/down.png").convert_alpha(), 
-       (50, 50)
-   )
-   icone_space = pygame.transform.scale(
-       pygame.image.load("images/Teclas/space.png").convert_alpha(), 
-       (100, 50)
-   )
-   
-   pos_up = (10, altura_ecra - 200)
-   pos_down = (10, altura_ecra - 160)
-   pos_space = (10, altura_ecra - 130)
-   
-   ecra.blit(icone_up, pos_up)
-   ecra.blit(icone_down, pos_down)
-   ecra.blit(icone_space, pos_space)
-   
-   fonte = pygame.font.Font(caminho_fonte, 24)
-   texto_up = fonte.render("Mover para cima", True, (255, 255, 255))
-   texto_down = fonte.render("Mover para baixo", True, (255, 255, 255))
-   texto_space = fonte.render("Atirar", True, (255, 255, 255))
-   
-   ecra.blit(texto_up, (70, altura_ecra - 200))
-   ecra.blit(texto_down, (70, altura_ecra - 160))
-   ecra.blit(texto_space, (120, altura_ecra - 130))
-   
-   pygame.display.update()
-
-
-def mostrar_highscore(ecra, fundo):
-    # Configuração do fundo
-    ecra.blit(fundo, (0, 0))
-    
-    try:
-        # Lê o arquivo de highscore
-        with open(arquivo_score, "r") as arquivo:
-            highscore = arquivo.read().strip()
-    except IOError:
-        highscore = "Nenhum highscore salvo."
-    
-    # Configuração do texto
-    fonte = pygame.font.Font(caminho_fonte, 48)
-    titulo = fonte.render("HIGHSCORE", True, (255, 255, 0))
-    texto_highscore = fonte.render(highscore, True, (255, 255, 0))
-    instrucoes = fonte.render("Pressione ESC para voltar", True, (200, 200, 200))
-    
-    # Centraliza o texto na tela
-    ecra.blit(titulo, (largura_ecra // 2 - titulo.get_width() // 2, altura_ecra // 4))
-    ecra.blit(texto_highscore, (largura_ecra // 2 - texto_highscore.get_width() // 2, altura_ecra // 2-80))
-    ecra.blit(instrucoes, (largura_ecra // 2 - instrucoes.get_width() // 2, altura_ecra - 100))
-    
-    #pygame.display.update()
-    
-    # Aguarda o jogador pressionar ESC para voltar ao menu
-    while True:
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-            elif evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
-                return
-        pygame.display.update()
-
-
-# Caminho para salvar o arquivo de score
-arquivo_score = "highscore.txt"
-
-def salvar_highscore(score):
-    try:
-        with open(arquivo_score, "w") as arquivo:
-            arquivo.write(str(score))
-    except IOError:
-        print("Erro ao salvar o highscore.")
-
-def carregar_highscore():
-    if os.path.exists(arquivo_score):
-        try:
-            with open(arquivo_score, "r") as arquivo:
-                return int(arquivo.read().strip())
-        except (IOError, ValueError):
-            return 0  # Se houver erro, retorna 0
-    return 0  # Se o arquivo não existir, retorna 0
 
 def tela_game_over(ecra, fundo):
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 60)
@@ -255,9 +157,9 @@ def play_game():
 
             # No nível final, cria o inimigo final apenas uma vez
             inimigo_final = InimigoFinal(largura_ecra - 100, altura_ecra // 2)
-
+        
         mostrar_teclas(ecra)
-
+        
 
         # Processa eventos de entrada
         for evento in pygame.event.get():
