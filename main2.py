@@ -21,7 +21,7 @@ tempo_inicio_jogo = 0
 DURACAO_MOSTRAR_TECLAS = 5000  
 
 def mostrar_teclas(ecra):
-   global tempo_inicio_jogo
+   global tempo_inicio_jogo, DURACAO_MOSTRAR_TECLAS
    
    if tempo_inicio_jogo == 0:
        tempo_inicio_jogo = pygame.time.get_ticks()
@@ -59,6 +59,8 @@ def mostrar_teclas(ecra):
    ecra.blit(texto_up, (70, altura_ecra - 200))
    ecra.blit(texto_down, (70, altura_ecra - 160))
    ecra.blit(texto_space, (120, altura_ecra - 130))
+   
+   pygame.display.update()
 
 
 def mostrar_highscore(ecra, fundo):
@@ -93,7 +95,7 @@ def mostrar_highscore(ecra, fundo):
                 exit()
             elif evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
                 return
-        pygame.display.flip()
+        pygame.display.update()
 
 
 # Caminho para salvar o arquivo de score
@@ -214,89 +216,45 @@ def play_game():
 
 # Verifica se o jogador atingiu o próximo nível
     # Verifica se o jogador atingiu o próximo nível
-        if nivel == 1 and pontuacao >= 300:  # Nível 1: 800 pontos para avançar
-            nivel += 1
+        def avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos):
             pygame.time.wait(1000)
             fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
             nivel_concluido(ecra, nivel)
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
             mostrar_historia(ecra, nivel)
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
-
-            # Toca a música correspondente ao nível
             sons.tocar_musica_fundo(nivel)
-
-            # Limpar inimigos e projéteis
             inimigos.clear()
             jogador.projeteis.clear()
-
             jogador.disparando = False
             jogador.definir_animacao("parado")
+            return fundo
+
+        # Lógica de níveis
+        if nivel == 1 and pontuacao >= 300:  # Nível 1: 800 pontos para avançar
+            nivel += 1
+            fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
         elif nivel == 2 and pontuacao >= 500:  # Nível 2: 2000 pontos para avançar
             nivel += 1
-            pygame.time.wait(1000)
-            fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
-            nivel_concluido(ecra, nivel)
-            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
-            mostrar_historia(ecra, nivel)
-            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
-
-            # Toca a música correspondente ao nível
-            sons.tocar_musica_fundo(nivel)
-
-            # Limpar inimigos e projéteis
-            inimigos.clear()
-            jogador.projeteis.clear()
-
-            jogador.disparando = False
-            jogador.definir_animacao("parado")
+            fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
         elif nivel == 3 and pontuacao >= 700:  # Nível 3: 3600 pontos para avançar
             nivel += 1
-            pygame.time.wait(1000)
-            fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
-            nivel_concluido(ecra, nivel)
-            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
-            mostrar_historia(ecra, nivel)
-            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
+            fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-            # Toca a música correspondente ao nível
-            sons.tocar_musica_fundo(nivel)
-
-            # Limpar inimigos e projéteis
-            inimigos.clear()
-            jogador.projeteis.clear()
-
-            jogador.disparando = False
-            jogador.definir_animacao("parado")
-
-        elif nivel == 4 and inimigo_final is None:
-            
+        elif nivel == 4 and inimigo_final is None:  # Nível 4: Final
             if nivel > 4:
                 reproduzir_video("tryf.mp4", ecra)
                 mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
                 iniciar_jogo()  # Volta ao menu inicial
                 return  # Finaliza o loop principal
-            pygame.time.wait(1000)
-            fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
-            nivel_concluido(ecra, nivel)
-            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
-            mostrar_historia(ecra, nivel)
-            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
-            
+
+            # Avançar lógica do nível final
+            fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
+
             # No nível final, cria o inimigo final apenas uma vez
             inimigo_final = InimigoFinal(largura_ecra - 100, altura_ecra // 2)
-
-            # Toca a música correspondente ao nível
-            sons.tocar_musica_fundo(nivel)
-
-            # Limpar inimigos e projéteis
-            inimigos.clear()
-            jogador.projeteis.clear()
-
-            jogador.disparando = False
-            jogador.definir_animacao("parado")
 
         mostrar_teclas(ecra)
 
@@ -465,30 +423,14 @@ def play_game():
 
         
         
-        fonte = pygame.font.Font(caminho_fonte, 40)
-    
-        # Carregar a imagem do ícone (coração, por exemplo)
-        icone_vida = pygame.image.load('images/coracao.png')  # Substitua pelo caminho da sua imagem
-        icone_vida = pygame.transform.scale(icone_vida, (40, 40))  # Ajusta o tamanho do ícone
-
-        # Renderizar o texto da vida
-        vida_texto = fonte.render(f"{jogador.vida}", True, (255, 0, 0))
-
-        # Determinar as posições na tela
-        posicao_vida = (10, 10)  # Coordenadas para o ícone
-        posicao_texto_vida = (50, 10)  # Texto ao lado do ícone (ajustar conforme o tamanho do ícone)
-
-        # Desenhar o ícone e o texto na tela
-        ecra.blit(icone_vida, posicao_vida)
-        ecra.blit(vida_texto, posicao_texto_vida)
-
-        # Renderizar os outros textos (como já estavam)
+        # Exibe a vida, pontuação e nível na tela
+        fonte = pygame.font.Font(caminho_fonte, 40)  # Define o tamanho da fonte ()
+        vida_texto = fonte.render(f"Vida: {jogador.vida}", True, (255, 0, 0))
         score_texto = fonte.render(f"Score: {pontuacao}", True, (255, 255, 0))
         nivel_texto = fonte.render(f"Nível: {nivel}", True, (255, 165, 0))
+        ecra.blit(vida_texto, (10, 10))
         ecra.blit(score_texto, (largura_ecra - 190, 10))
-        ecra.blit(nivel_texto, (largura_ecra - 470, 8))
-
-        # Atualizar a tela
+        ecra.blit(nivel_texto, (largura_ecra - 470, 8))  # Exibe o nível abaixo da vida
         pygame.display.update()
 
 # Função para exibir a pontuação ao final
