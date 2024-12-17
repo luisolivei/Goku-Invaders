@@ -17,6 +17,52 @@ pontuacao = 0  # Variável para a pontuação
 nivel = 1  # Variável para o nível atual
 sons = Sons()  # Inicia o som
 
+def mostrar_teclas(ecra):
+    # Carregar ícones das teclas
+    icone_up = pygame.image.load("images/Teclas/up.png").convert_alpha()
+    icone_up = pygame.transform.scale(icone_up, (50, 50))
+
+    icone_down = pygame.image.load("images/Teclas/down.png").convert_alpha()
+    icone_down = pygame.transform.scale(icone_down, (50, 50))
+
+    icone_space = pygame.image.load("images/Teclas/space.png").convert_alpha()
+    icone_space = pygame.transform.scale(icone_space, (100, 50))
+
+    icone_x = pygame.image.load("images/Teclas/x.png").convert_alpha()
+    icone_x = pygame.transform.scale(icone_x, (50, 50))
+
+    # Definir posições dos ícones
+    pos_up = (10, altura_ecra - 200)
+    pos_down = (10, altura_ecra - 160)
+    pos_space = (10, altura_ecra - 130)
+    pos_x = (10, altura_ecra - 80)
+
+    # Renderizar ícones na tela
+    ecra.blit(icone_up, pos_up)
+    ecra.blit(icone_down, pos_down)
+    ecra.blit(icone_space, pos_space)
+    ecra.blit(icone_x, pos_x)
+
+    # Criar texto explicativo ao lado dos ícones
+    fonte = pygame.font.Font(caminho_fonte, 24)
+    texto_up = fonte.render("Mover para cima", True, (255, 255, 255))
+    texto_down = fonte.render("Mover para baixo", True, (255, 255, 255))
+    texto_space = fonte.render("Atirar", True, (255, 255, 255))
+
+    # Atualizar texto do ataque especial com base no estado
+    # if ataque_especial_ativo:
+    #     texto_x = fonte.render("Ataque especial (ativo)", True, (0, 255, 0))  # Verde se ativo
+    # else:
+    #     texto_x = fonte.render("Ataque especial (inativo)", True, (255, 0, 0))  # Vermelho se inativo
+
+    # Renderizar textos
+    ecra.blit(texto_up, (70, altura_ecra - 200))
+    ecra.blit(texto_down, (70, altura_ecra - 160))
+    ecra.blit(texto_space, (120, altura_ecra - 130))
+    # ecra.blit(texto_x, (70, altura_ecra - 80))
+
+    # Atualizar tela
+    pygame.display.update()
 def mostrar_highscore(ecra, fundo):
     # Configuração do fundo
     ecra.blit(fundo, (0, 0))
@@ -224,6 +270,7 @@ def play_game():
             jogador.disparando = False
             jogador.definir_animacao("parado")
 
+        mostrar_teclas(ecra)
 
 
         # Processa eventos de entrada
