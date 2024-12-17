@@ -17,52 +17,49 @@ pontuacao = 0  # Variável para a pontuação
 nivel = 1  # Variável para o nível atual
 sons = Sons()  # Inicia o som
 
+tempo_inicio_jogo = 0
+DURACAO_MOSTRAR_TECLAS = 5000  
+
 def mostrar_teclas(ecra):
-    # Carregar ícones das teclas
-    icone_up = pygame.image.load("images/Teclas/up.png").convert_alpha()
-    icone_up = pygame.transform.scale(icone_up, (50, 50))
+   global tempo_inicio_jogo
+   
+   if tempo_inicio_jogo == 0:
+       tempo_inicio_jogo = pygame.time.get_ticks()
+       
+   tempo_atual = pygame.time.get_ticks()
+   if tempo_atual - tempo_inicio_jogo > DURACAO_MOSTRAR_TECLAS:
+       return
 
-    icone_down = pygame.image.load("images/Teclas/down.png").convert_alpha()
-    icone_down = pygame.transform.scale(icone_down, (50, 50))
+   icone_up = pygame.transform.scale(
+       pygame.image.load("images/Teclas/up.png").convert_alpha(), 
+       (50, 50)
+   )
+   icone_down = pygame.transform.scale(
+       pygame.image.load("images/Teclas/down.png").convert_alpha(), 
+       (50, 50)
+   )
+   icone_space = pygame.transform.scale(
+       pygame.image.load("images/Teclas/space.png").convert_alpha(), 
+       (100, 50)
+   )
+   
+   pos_up = (10, altura_ecra - 200)
+   pos_down = (10, altura_ecra - 160)
+   pos_space = (10, altura_ecra - 130)
+   
+   ecra.blit(icone_up, pos_up)
+   ecra.blit(icone_down, pos_down)
+   ecra.blit(icone_space, pos_space)
+   
+   fonte = pygame.font.Font(caminho_fonte, 24)
+   texto_up = fonte.render("Mover para cima", True, (255, 255, 255))
+   texto_down = fonte.render("Mover para baixo", True, (255, 255, 255))
+   texto_space = fonte.render("Atirar", True, (255, 255, 255))
+   
+   ecra.blit(texto_up, (70, altura_ecra - 200))
+   ecra.blit(texto_down, (70, altura_ecra - 160))
+   ecra.blit(texto_space, (120, altura_ecra - 130))
 
-    icone_space = pygame.image.load("images/Teclas/space.png").convert_alpha()
-    icone_space = pygame.transform.scale(icone_space, (100, 50))
-
-    # icone_x = pygame.image.load("images/Teclas/x.png").convert_alpha()
-    # icone_x = pygame.transform.scale(icone_x, (50, 50))
-
-    # Definir posições dos ícones
-    pos_up = (10, altura_ecra - 200)
-    pos_down = (10, altura_ecra - 160)
-    pos_space = (10, altura_ecra - 130)
-    # pos_x = (10, altura_ecra - 80)
-
-    # Renderizar ícones na tela
-    ecra.blit(icone_up, pos_up)
-    ecra.blit(icone_down, pos_down)
-    ecra.blit(icone_space, pos_space)
-    # ecra.blit(icone_x, pos_x)
-
-    # Criar texto explicativo ao lado dos ícones
-    fonte = pygame.font.Font(caminho_fonte, 24)
-    texto_up = fonte.render("Mover para cima", True, (255, 255, 255))
-    texto_down = fonte.render("Mover para baixo", True, (255, 255, 255))
-    texto_space = fonte.render("Atirar", True, (255, 255, 255))
-
-    # Atualizar texto do ataque especial com base no estado
-    # if ataque_especial_ativo:
-    #     texto_x = fonte.render("Ataque especial (ativo)", True, (0, 255, 0))  # Verde se ativo
-    # else:
-    #     texto_x = fonte.render("Ataque especial (inativo)", True, (255, 0, 0))  # Vermelho se inativo
-
-    # Renderizar textos
-    ecra.blit(texto_up, (70, altura_ecra - 200))
-    ecra.blit(texto_down, (70, altura_ecra - 160))
-    ecra.blit(texto_space, (120, altura_ecra - 130))
-    # ecra.blit(texto_x, (70, altura_ecra - 80))
-
-    # Atualizar tela
-    pygame.display.update()
 
 def mostrar_highscore(ecra, fundo):
     # Configuração do fundo
@@ -86,7 +83,7 @@ def mostrar_highscore(ecra, fundo):
     ecra.blit(texto_highscore, (largura_ecra // 2 - texto_highscore.get_width() // 2, altura_ecra // 2-80))
     ecra.blit(instrucoes, (largura_ecra // 2 - instrucoes.get_width() // 2, altura_ecra - 100))
     
-    pygame.display.update()
+    #pygame.display.update()
     
     # Aguarda o jogador pressionar ESC para voltar ao menu
     while True:
@@ -96,6 +93,7 @@ def mostrar_highscore(ecra, fundo):
                 exit()
             elif evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
                 return
+        pygame.display.flip()
 
 
 # Caminho para salvar o arquivo de score
@@ -172,7 +170,8 @@ def tela_game_over(ecra, fundo):
 # Função principal do jogo
 
 def play_game():
-    global play, pontuacao, nivel
+    global play, pontuacao, nivel, tempo_inicio_jogo
+    tempo_inicio_jogo = 0
     pontuacao = 0  # Reseta a pontuação ao iniciar um novo jogo
     nivel = 1  # Reseta o nível ao iniciar
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do jogo
@@ -201,6 +200,11 @@ def play_game():
     # Loop principal do jogo
     while a_funcionar:
         delta_tempo = relogio.tick(60) / 1000  # Calcula o tempo entre frames, 60hz
+        fps = relogio.get_fps()
+
+        # Imprimir o FPS no terminal
+        print(f"FPS: {fps:.2f}", end="\r")  # A impressão com '\r' sobrescreve a linha no terminal
+
 
         # Gera inimigos aleatórios periodicamente
         # Aumenta a probabilidade com o nível, mas limita o número de inimigos
