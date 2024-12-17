@@ -28,20 +28,20 @@ def mostrar_teclas(ecra):
     icone_space = pygame.image.load("images/Teclas/space.png").convert_alpha()
     icone_space = pygame.transform.scale(icone_space, (100, 50))
 
-    icone_x = pygame.image.load("images/Teclas/x.png").convert_alpha()
-    icone_x = pygame.transform.scale(icone_x, (50, 50))
+    # icone_x = pygame.image.load("images/Teclas/x.png").convert_alpha()
+    # icone_x = pygame.transform.scale(icone_x, (50, 50))
 
     # Definir posições dos ícones
     pos_up = (10, altura_ecra - 200)
     pos_down = (10, altura_ecra - 160)
     pos_space = (10, altura_ecra - 130)
-    pos_x = (10, altura_ecra - 80)
+    # pos_x = (10, altura_ecra - 80)
 
     # Renderizar ícones na tela
     ecra.blit(icone_up, pos_up)
     ecra.blit(icone_down, pos_down)
     ecra.blit(icone_space, pos_space)
-    ecra.blit(icone_x, pos_x)
+    # ecra.blit(icone_x, pos_x)
 
     # Criar texto explicativo ao lado dos ícones
     fonte = pygame.font.Font(caminho_fonte, 24)
@@ -63,6 +63,7 @@ def mostrar_teclas(ecra):
 
     # Atualizar tela
     pygame.display.update()
+
 def mostrar_highscore(ecra, fundo):
     # Configuração do fundo
     ecra.blit(fundo, (0, 0))
