@@ -13,7 +13,7 @@ def carregar_fundo(nivel):
     elif nivel == 2:
         fundo = pygame.image.load("images/bg2.png").convert_alpha()  # Fundo do nível 2
     elif nivel == 3:
-        fundo = pygame.image.load("images/bg.png").convert_alpha()  # Fundo do nível 3
+        fundo = pygame.image.load("images/bg4.png").convert_alpha()  # Fundo do nível 3
     elif nivel == 4:
         fundo = pygame.image.load("images/bg.png").convert_alpha()
     else:
@@ -83,8 +83,8 @@ def mostrar_historia(ecra, nivel):
         imagem_historia = pygame.image.load("images/historia1.png").convert_alpha()
         texto_historia = "Raptamos a Kika!!! Conseguiras resgata-la?"
     elif nivel == 3:
-        imagem_historia = pygame.image.load("images/historia2.jpg").convert_alpha()
-        texto_historia = "Percorri o universo e nao a encontrei!! Sera Agora?"
+        imagem_historia = pygame.image.load("images/historia3.jpg").convert_alpha()
+        texto_historia = "Ninguem conseguira me deter!!!"
     elif nivel == 4:
         imagem_historia = pygame.image.load("images/historia2.jpg").convert_alpha()
         texto_historia = "Percorri o universo e nao a encontrei!! Sera Agora?" 
@@ -180,7 +180,7 @@ def mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte):
 
     # Posição inicial dos créditos
     y_inicial = altura_ecra
-    velocidade = 0.5  # Velocidade do movimento (em pixels por frame)
+    velocidade = 0.8  # Velocidade do movimento (em pixels por frame)
 
     # Loop para animar o texto
     rodando = True

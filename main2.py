@@ -3,7 +3,7 @@ import random
 from config import largura_ecra, altura_ecra, velocidade_fundo,caminho_fonte
 from jogador import Jogador
 from inimigos import Inimigo,InimigoFinal
-from personagens import AnimacaoParado, AnimacaoAndar, AnimacaoDisparar, AnimacaoAtingido
+from personagens import AnimacaoParado, AnimacaoAndar, AnimacaoDisparar, AnimacaoAtingido, AnimacaoDispararEspecial
 from menu import menu
 from fadeinout import fade_in_out
 from sons import Sons
