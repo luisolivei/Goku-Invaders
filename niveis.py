@@ -182,7 +182,24 @@ def mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte):
     y_inicial = altura_ecra
     velocidade = 0.8  # Velocidade do movimento (em pixels por frame)
 
-    # Loop para animar o texto
+    # Exibe "Resgataste a Kika" por 5 segundos
+    tempo_inicial = pygame.time.get_ticks()  # Tempo inicial em milissegundos
+    while pygame.time.get_ticks() - tempo_inicial < 5000:  # 5000 ms = 5 segundos
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                return  # Sai da função se o jogador fechar a janela
+
+        # Limpa a tela
+        ecra.fill(fundo_cor)
+
+        # Desenha apenas o título
+        ecra.blit(titulo, (largura_ecra // 2 - titulo.get_width() // 2, altura_ecra // 2 - titulo.get_height() // 2))
+
+        # Atualiza a tela
+        pygame.display.flip()
+        pygame.time.Clock().tick(60)  # Limita a 60 FPS
+
+    # Loop para animar o texto dos créditos
     rodando = True
     clock = pygame.time.Clock()
     while rodando:
@@ -210,11 +227,10 @@ def mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte):
 
         # Atualiza a tela
         pygame.display.flip()
-        clock.tick(60)  # Limita a 60 frames por segundo
+        clock.tick(60) # Limita a 60 frames por segundo
 
     # Pausa no final antes de sair
-    pygame.time.wait(2000)
-    pygame.time.wait(10000)  # Aguarda 5 segundos antes de voltar ao menu
+    pygame.time.wait(8000)  # Aguarda 5 segundos antes de voltar ao menu
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
 
 def nivel_concluido(ecra, nivel):

@@ -92,6 +92,7 @@ def play_game():
     jogador.adicionar_animacao("andar", AnimacaoAndar())
     jogador.adicionar_animacao("disparar", AnimacaoDisparar())
     jogador.adicionar_animacao("atingido", AnimacaoAtingido())
+    jogador.adicionar_animacao("disparar2",AnimacaoDispararEspecial())
     jogador.definir_animacao("parado")  # Necessária para iniciar a animação
     jogador.vida = 100
     jogador.disparando = False  # Adiciona estado para controlar o disparo
