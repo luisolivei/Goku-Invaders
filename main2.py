@@ -141,11 +141,11 @@ def play_game():
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 2 and pontuacao >= 500:  # Nível 2: 2000 pontos para avançar
+        elif nivel == 2 and pontuacao >= 800:  # Nível 2: 2000 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 3 and pontuacao >= 700:  # Nível 3: 3600 pontos para avançar
+        elif nivel == 3 and pontuacao >= 1300:  # Nível 3: 3600 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
@@ -179,6 +179,7 @@ def play_game():
                 play = False  # Define play como False para retornar ao menu
             elif evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_SPACE and not jogador.disparando:
+                    jogador.disparar()
                     jogador.definir_animacao("disparar")
                     jogador.disparando = True
                 elif evento.key == pygame.K_x:
@@ -294,11 +295,11 @@ def play_game():
                         inimigo_final = None  # Remove o inimigo final após ser derrotado
                         nivel += 1  # Avança para o próximo nível
                         
-                        # if nivel > 4:  # Limita o jogo ao nível 4
-                        #     reproduzir_video("tryf.mp4", ecra)
-                        #     mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte)  # Exibe a tela de "Jogo Completo"
-                        #     iniciar_jogo()  # Volta ao menu inicial
-                        #     return  # Finaliza o loop principal
+                        if nivel > 4:  # Limita o jogo ao nível 4
+                            reproduzir_video("tryf.mp4", ecra)
+                            mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte)  # Exibe a tela de "Jogo Completo"
+                            iniciar_jogo()  # Volta ao menu inicial
+                            return  # Finaliza o loop principal
 
         # Verifica colisão com o jogador
         # Atualiza o temporizador da animação "atingido"
