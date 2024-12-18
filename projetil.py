@@ -49,7 +49,7 @@ class Projetil:
 
 #em desenvolvimento, nao implementado, testar em main_tiago
 class Projetil2:
-    def __init__(self, x, y, duracao=2, velocidade=6):
+    def __init__(self, x, y, duracao=4, velocidade=6):
         self.x = x
         self.y = y
         self.raio_fim_x = x + 64  # Exemplo de como definir raio_fim_x
@@ -101,7 +101,7 @@ class Projetil2:
             return
 
         # Calcula o comprimento total disponível para o raio
-        comprimento_total = largura_ecra *2
+        comprimento_total = largura_ecra + 100
         largura_inicio = self.sprite_inicio.get_width()
         largura_fim = self.sprite_fim.get_width()
         largura_corpo = self.sprite_corpo.get_width()
@@ -125,3 +125,8 @@ class Projetil2:
     def saiu_do_ecra(self):
         # Verifica se a parte final do projétil saiu do ecrã
         return self.x > largura_ecra
+    
+    def verificar_colisao(self, alvo):
+        raio_colisao = pygame.Rect(self.x, self.y, largura_ecra, 32)  # Define o raio do Projetil2
+        alvo_colisao = pygame.Rect(alvo.x, alvo.y, alvo.largura, alvo.altura)  # Define o retângulo do inimgo
+        return raio_colisao.colliderect(alvo_colisao)

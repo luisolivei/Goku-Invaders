@@ -13,3 +13,4 @@ __pycache__/menu.cpython-312.pyc
 __pycache__/jogador.cpython-312.pyc
 __pycache__/config.cpython-312.pyc
 *.pyc
+highscore.txt

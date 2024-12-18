@@ -131,36 +131,41 @@ def play_game():
             sons.tocar_musica_fundo(nivel)
             inimigos.clear()
             jogador.projeteis.clear()
+            jogador.projetil2 = None
             jogador.disparando = False
             jogador.definir_animacao("parado")
             return fundo
 
         # Lógica de níveis
-        if nivel == 1 and pontuacao >= 300:  # Nível 1: 800 pontos para avançar
+        if nivel == 1 and pontuacao >= 100:  # Nível 1: 800 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 2 and pontuacao >= 600:  # Nível 2: 2000 pontos para avançar
+        elif nivel == 2 and pontuacao >= 300:  # Nível 2: 2000 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 3 and pontuacao >= 1000:  # Nível 3: 3600 pontos para avançar
+        elif nivel == 3 and pontuacao >= 500:  # Nível 3: 3600 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
         elif nivel == 4 and inimigo_final is None:  # Nível 4: Final
-            if nivel > 4:
-                reproduzir_video("tryf.mp4", ecra)
-                mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
-                iniciar_jogo()  # Volta ao menu inicial
-                return  # Finaliza o loop principal
+                # No nível final, cria o inimigo final apenas uma vez
+            inimigo_final = InimigoFinal(largura_ecra - 100, altura_ecra // 2)
 
             # Avançar lógica do nível final
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
             # No nível final, cria o inimigo final apenas uma vez
             inimigo_final = InimigoFinal(largura_ecra - 100, altura_ecra // 2)
+        
+        elif nivel > 4:
+            reproduzir_video("tryf.mp4", ecra)
+            mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte)  # Exibe a tela de "Jogo Completo"
+            iniciar_jogo()  # Volta ao menu inicial
+            return  # Finaliza o loop principal
 
+        
         # Processa eventos de entrada
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -174,8 +179,7 @@ def play_game():
                 elif evento.key == pygame.K_x:
                     if jogador.ataque_especial_desbloqueado:  # Apenas executa se desbloqueado
                         jogador.disparar2()
-                        jogador.definir_animacao("disparar2")
-                        print("disparado ataque especial")
+                        print("disparado ataque especial")   
                     else:
                         print("ataque especial nao desbloqueado")
 
@@ -191,6 +195,8 @@ def play_game():
                         jogador.definir_animacao("andar")
                     else:
                         jogador.definir_animacao("parado")
+                elif evento.key == pygame.K_x:  # Verifica se a tecla X foi levantada
+                    jogador.definir_animacao("parado")  # Define a animação como parado
 
         # Verifica as teclas pressionadas para movimento vertical
         tecla = pygame.key.get_pressed()
@@ -208,15 +214,6 @@ def play_game():
             posicao_fundo_x -= velocidade_fundo
             if posicao_fundo_x <= -largura_ecra:
                 posicao_fundo_x = 0
-
-        # Atualiza a posição do fundo para movimento contínuo
-        posicao_fundo_x -= velocidade_fundo
-        if posicao_fundo_x <= -largura_ecra:
-            posicao_fundo_x = 0
-
-        # Desenha o fundo em movimento contínuo (duas camadas de fundo)
-        ecra.blit(fundo, (posicao_fundo_x, 0))  # A primeira camada do fundo
-        if nivel < 4:
             ecra.blit(fundo, (posicao_fundo_x, 0))  # Fundo em movimento
             ecra.blit(fundo, (posicao_fundo_x + largura_ecra, 0))
         else:
@@ -240,11 +237,25 @@ def play_game():
 
         # Atualizar e desenhar o Projetil2
         if jogador.projetil2:
-            jogador.projetil2.atualizar(delta_tempo)  # Atualiza a posição do raio
-            jogador.projetil2.desenhar(ecra)
+            jogador.projetil2.atualizar(delta_tempo)  # Atualiza a posição do projetil2
+            jogador.projetil2.desenhar(ecra)  # Desenha o projetil2 na tela
 
+            # Verifica colisão do projetil2 com o inimigo_final
+            if jogador.projetil2 and jogador.projetil2.ativo:
+                raio_colisao = pygame.Rect(jogador.projetil2.x, jogador.projetil2.y, largura_ecra, 32)  # Área do projetil2
+                if inimigo_final and inimigo_final.vivo and raio_colisao.colliderect(
+                    pygame.Rect(inimigo_final.x, inimigo_final.y, 64, 64)
+                ):
+                    inimigo_final.vidas -= 10
+                    print(f"Dano ao inimigo final! Vidas restantes: {inimigo_final.vidas}")
+                    if inimigo_final.vidas <= 0:
+                        pontuacao += 1000
+                        inimigo_final.vivo = False
+                        inimigo_final = None
+                        nivel += 1 
 
         # Verificar colisões do Projetil2 com inimigos
+        if jogador.projetil2 and jogador.projetil2.ativo:
             for inimigo in inimigos[:]:
                 raio_colisao = pygame.Rect(jogador.projetil2.x, jogador.projetil2.y, largura_ecra, 32)  # Área do raio
                 inimigo_colisao = pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50)  # Área do inimigo
@@ -263,7 +274,8 @@ def play_game():
             if estado == "fora":  # Saiu pela esquerda remove score 
                 pontuacao -= {1: 50, 2: 100, 3: 150, 4: 100, 5: 50}[inimigo.tipo]
                 inimigos.remove(inimigo)
-        if inimigo_final:
+                
+        if inimigo_final: #iniciar o inimigo final
             inimigo_final.atualizar(delta_tempo)
             inimigo_final.desenhar(ecra)
 
@@ -279,18 +291,13 @@ def play_game():
                 if inimigo_final.verificar_colisao(projetil):
                     jogador.projeteis.remove(projetil)
                     sons.tocar_disparo()
+                    print(f"Dano ao inimigo final! Vidas restantes: {inimigo_final.vidas}")
 
                     if not inimigo_final.vivo:
                         pontuacao += 1000  # Pontuação especial para derrotar o inimigo final
                         inimigo_final = None  # Remove o inimigo final após ser derrotado
-                        nivel += 1  # Avança para o próximo nível
-                        
-                        if nivel > 4:  # Limita o jogo ao nível 4
-                            reproduzir_video("tryf.mp4", ecra)
-                            mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
-                            iniciar_jogo()  # Volta ao menu inicial
-                            return  # Finaliza o loop principal
-
+                        nivel += 1  # Avança para o próximo nível( neste caso fim do jogo)
+                    
         # Verifica colisão com o jogador
         # Atualiza o temporizador da animação "atingido"
         if jogador.temporizador_atingido > 0:
@@ -329,6 +336,13 @@ def play_game():
         # Exibe a vida, pontuação e nível na tela
         fonte = pygame.font.Font(caminho_fonte, 40)  # Define o tamanho da fonte ()
         vida_texto = fonte.render(f"Vida: {jogador.vida}", True, (255, 0, 0))
+        #vida_texto = fonte.render(f"❤️ {jogador.vida}", True, (255, 0, 0))
+        score_texto = fonte.render(f"Score: {pontuacao}", True, (255, 255, 0))
+        nivel_texto = fonte.render(f"Nível: {nivel}", True, (255, 165, 0))
+        aviso_x = fonte.render(f"Kamehameah tecla X!!", True, (255, 0, 0))
+        if jogador.ataque_especial_desbloqueado==True:
+            texto_largura = aviso_x.get_width()
+            ecra.blit(aviso_x, ((largura_ecra - texto_largura) // 2, 50))
         score_texto = fonte.render(f"Score: {pontuacao}", True, (255, 255, 0))
         nivel_texto = fonte.render(f"Nível: {nivel}", True, (255, 165, 0))
         ecra.blit(vida_texto, (10, 10))

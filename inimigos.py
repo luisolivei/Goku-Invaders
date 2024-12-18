@@ -121,7 +121,7 @@ class InimigoFinal:
         self.x = x
         self.y = y
         self.velocidade = 3
-        self.vidas = 10
+        self.vidas = 20
         self.vivo = True
         self.projeteis = []  # Lista para armazenar projéteis do inimigo
         self.tempo_desde_ultimo_disparo = 0  # Controle do tempo entre disparos
