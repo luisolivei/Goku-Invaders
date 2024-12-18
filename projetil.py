@@ -49,7 +49,7 @@ class Projetil:
 
 #em desenvolvimento, nao implementado, testar em main_tiago
 class Projetil2:
-    def __init__(self, x, y, duracao=5, velocidade=6):
+    def __init__(self, x, y, duracao=2, velocidade=6):
         self.x = x
         self.y = y
         self.raio_fim_x = x + 64  # Exemplo de como definir raio_fim_x
@@ -67,13 +67,20 @@ class Projetil2:
 
     def carregar_sprites(self):
         # Adapta caminhos conforme os ficheiros do raio (início, corpo, fim)
+        cor_fundo = (144, 176, 216) 
         caminhos = [
             "images/projectil2/raio_inicio.gif",  # Parte inicial do raio
             "images/projectil2/raio_corpo.gif",   # Parte repetível do raio
             "images/projectil2/raio_fim.gif"      # Parte final do raio
         ]
-        return [pygame.image.load(caminho).convert_alpha() for caminho in caminhos]
-
+        
+        sprites = []
+        for caminho in caminhos:
+            sprite = pygame.image.load(caminho).convert()  # Carrega com fundo opaco
+            sprite.set_colorkey(cor_fundo)  # Define a cor a ser tratada como transparente
+            sprites.append(sprite)
+        return sprites
+    
     def atualizar(self, delta_tempo):
         if not self.ativo:
             return
