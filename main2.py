@@ -131,6 +131,7 @@ def play_game():
             sons.tocar_musica_fundo(nivel)
             inimigos.clear()
             jogador.projeteis.clear()
+            jogador.projetil2 = None
             jogador.disparando = False
             jogador.definir_animacao("parado")
             return fundo
@@ -148,19 +149,25 @@ def play_game():
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 4 and inimigo_final is None:  # Nível 4: Final
+        elif nivel == 4 and inimigo_final is None:
             if nivel > 4:
                 reproduzir_video("tryf.mp4", ecra)
-                mostrar_tela_final(ecra,altura_ecra,largura_ecra,caminho_fonte)  # Exibe a tela de "Jogo Completo"
-                iniciar_jogo()  # Volta ao menu inicial
-                return  # Finaliza o loop principal
+                mostrar_tela_final(ecra, altura_ecra, largura_ecra, caminho_fonte)
+                iniciar_jogo()
+                return
 
-            # Avançar lógica do nível final
-            fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
+            if not inimigo_final:  # Verifica se o inimigo final já foi criado
+                fundo = carregar_fundo(nivel)  # Carrega apenas o fundo, sem mostrar história
+                fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
+                sons.tocar_musica_fundo(nivel)
+                inimigos.clear()
+                jogador.projeteis.clear()
+                jogador.projetil2 = None
+                jogador.disparando = False
+                jogador.definir_animacao("parado")
 
-            # No nível final, cria o inimigo final apenas uma vez
+            # Criação do inimigo final
             inimigo_final = InimigoFinal(largura_ecra - 100, altura_ecra // 2)
-        
         
         
 
