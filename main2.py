@@ -336,14 +336,25 @@ def play_game():
 
         
         
-        # Exibe a vida, pontuação e nível na tela
-        fonte = pygame.font.Font(caminho_fonte, 40)  # Define o tamanho da fonte ()
-        vida_texto = fonte.render(f"Vida: {jogador.vida}", True, (255, 0, 0))
+        # Carregar a imagem do coração no início
+        caminho_coracao = "Images/coracao.png"  # Substitua pelo caminho correto
+        imagem_coracao = pygame.image.load(caminho_coracao)
+        imagem_coracao = pygame.transform.scale(imagem_coracao, (40, 40))  # Redimensiona, se necessário
+
+            # Exibe a vida, pontuação e nível na tela
+        fonte = pygame.font.Font(caminho_fonte, 40)  # Define o tamanho da fonte
+        vida_texto = fonte.render(f"{jogador.vida}", True, (255, 0, 0))
         score_texto = fonte.render(f"Score: {pontuacao}", True, (255, 255, 0))
         nivel_texto = fonte.render(f"Nível: {nivel}", True, (255, 165, 0))
-        ecra.blit(vida_texto, (10, 10))
+
+        # Exibe o coração e a vida na tela
+        ecra.blit(imagem_coracao, (10, 10))  # Desenha o coração na posição desejada
+        ecra.blit(vida_texto, (60, 10))  # Desenha o texto de vida ao lado do coração
+
+        # Exibe pontuação e nível
         ecra.blit(score_texto, (largura_ecra - 190, 10))
         ecra.blit(nivel_texto, (largura_ecra - 470, 8))  # Exibe o nível abaixo da vida
+
         pygame.display.update()
 
 # Função para exibir a pontuação ao final
