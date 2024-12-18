@@ -136,7 +136,7 @@ def play_game():
             return fundo
 
         # Lógica de níveis
-        if nivel == 1 and pontuacao >= 300:  # Nível 1: 800 pontos para avançar
+        if nivel == 1 and pontuacao >= 600:  # Nível 1: 800 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
@@ -177,6 +177,7 @@ def play_game():
                 elif evento.key == pygame.K_x:
                     if jogador.ataque_especial_desbloqueado:  # Apenas executa se desbloqueado
                         jogador.disparar2()
+                        sons.tocar_disparo2()
                         print("disparado ataque especial")
                     else:
                         print("ataque especial nao desbloqueado")
@@ -244,7 +245,6 @@ def play_game():
         if jogador.projetil2:
             jogador.projetil2.atualizar(delta_tempo)  # Atualiza a posição do raio
             jogador.projetil2.desenhar(ecra)
-
 
         # Verificar colisões do Projetil2 com inimigos
             for inimigo in inimigos[:]:
