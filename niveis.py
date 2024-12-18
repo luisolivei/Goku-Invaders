@@ -149,39 +149,71 @@ def mostrar_historia(ecra, nivel):
                     continuar = True
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
 
-def mostrar_tela_final(ecra,):
-    
-    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
+def mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte):
+    # Cor de fundo preto
+    fundo_cor = (0, 0, 0)
+    texto_cor = (255, 255, 255)
 
+    # Preenchendo a tela com fundo preto
+    ecra.fill(fundo_cor)
 
-    # Define o fundo da tela final
-    fundo_final = pygame.image.load("images/try2.jpg").convert_alpha()  # Imagem de fundo final
-    fundo_final = pygame.transform.scale(fundo_final, (largura_ecra, altura_ecra))  # Redimensiona suavemente
-    ecra.blit(fundo_final, (0, 0))
-
-    # Exibe o texto "Jogo Completo"
+    # Fonte para o título e os créditos
     fonte_titulo = pygame.font.Font(caminho_fonte, 64)
-    titulo = fonte_titulo.render("Resgataste a Kika", True, (0, 0, 0))  # Texto amarelo
-    ecra.blit(titulo, (largura_ecra // 2 - titulo.get_width()  // 2, altura_ecra // 3-100))
-
-    # Exibe os créditos
     fonte_creditos = pygame.font.Font(caminho_fonte, 40)
+
+    # Texto do título
+    titulo = fonte_titulo.render("Resgataste a Kika", True, texto_cor)
+
+    # Lista de créditos
     creditos = [
         "Obrigado por jogar!",
         "Jogo Criado por:",
         "Tiago Bastos",
-        "Luis Oliveira ",
-        "Carina Gameiro", 
+        "Luis Oliveira",
+        "Carina Gameiro",
         "Aleff Almeida",
         "Guilherme Borges",
-        
     ]
-    for i, linha in enumerate(creditos):
-        texto_creditos = fonte_creditos.render(linha, True, (255, 255, 0, 200) )  # Texto amarelo
-        ecra.blit(texto_creditos, (largura_ecra // 2 - texto_creditos.get_width() // 2, altura_ecra // 2 + i * 40))
 
-    # Atualiza a tela e espera alguns segundos
-    pygame.display.update()
+    # Renderiza cada linha dos créditos
+    textos_creditos = [fonte_creditos.render(linha, True, texto_cor) for linha in creditos]
+
+    # Posição inicial dos créditos
+    y_inicial = altura_ecra
+    velocidade = 0.5  # Velocidade do movimento (em pixels por frame)
+
+    # Loop para animar o texto
+    rodando = True
+    clock = pygame.time.Clock()
+    while rodando:
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                rodando = False
+
+        # Limpa a tela
+        ecra.fill(fundo_cor)
+
+        # Desenha o título fixo
+        ecra.blit(titulo, (largura_ecra // 2 - titulo.get_width() // 2, altura_ecra // 3 - 100))
+
+        # Desenha os créditos que sobem
+        for i, texto in enumerate(textos_creditos):
+            pos_y = y_inicial + i * 50  # Espaçamento entre as linhas
+            ecra.blit(texto, (largura_ecra // 2 - texto.get_width() // 2, pos_y))
+
+        # Atualiza a posição dos créditos
+        y_inicial -= velocidade
+
+        # Sai do loop quando os créditos saírem da tela
+        if y_inicial + len(textos_creditos) * 50 < 0:
+            rodando = False
+
+        # Atualiza a tela
+        pygame.display.flip()
+        clock.tick(60)  # Limita a 60 frames por segundo
+
+    # Pausa no final antes de sair
+    pygame.time.wait(2000)
     pygame.time.wait(10000)  # Aguarda 5 segundos antes de voltar ao menu
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
 

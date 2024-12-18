@@ -150,7 +150,7 @@ def play_game():
         elif nivel == 4 and inimigo_final is None:  # Nível 4: Final
             if nivel > 4:
                 reproduzir_video("tryf.mp4", ecra)
-                mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
+                mostrar_tela_final(ecra,altura_ecra,largura_ecra,caminho_fonte)  # Exibe a tela de "Jogo Completo"
                 iniciar_jogo()  # Volta ao menu inicial
                 return  # Finaliza o loop principal
 
@@ -288,7 +288,7 @@ def play_game():
                         
                         if nivel > 4:  # Limita o jogo ao nível 4
                             reproduzir_video("tryf.mp4", ecra)
-                            mostrar_tela_final(ecra)  # Exibe a tela de "Jogo Completo"
+                            mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte)  # Exibe a tela de "Jogo Completo"
                             iniciar_jogo()  # Volta ao menu inicial
                             return  # Finaliza o loop principal
 
