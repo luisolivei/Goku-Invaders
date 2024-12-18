@@ -8,11 +8,8 @@ from menu import menu
 from fadeinout import fade_in_out
 from sons import Sons
 from niveis import carregar_fundo,gerar_inimigo,mostrar_historia,mostrar_tela_final,reproduzir_video,nivel_concluido
-# from teclas import mostrar_teclas
 from highscore import carregar_highscore, mostrar_highscore, salvar_highscore
 from Instrucoes import tela_instrucoes
-
-
 
 # Variáveis globais para controle do estado do jogo
 play = False
@@ -96,7 +93,7 @@ def play_game():
     jogador.definir_animacao("parado")  # Necessária para iniciar a animação
     jogador.vida = 100
     jogador.disparando = False  # Adiciona estado para controlar o disparo
-    jogador.temporizador_atingido = 0  # Temporizador para controlar a animação "atingido"
+    jogador.temporizador = 0  # Temporizador para controlar a tempo de animaçoes com necessidade de reset para "parado"
 
     inimigos = []  # Lista para armazenar inimigos
     inimigo_final = None  # Inicializa a variável no início da função  
@@ -112,60 +109,35 @@ def play_game():
         # Imprimir o FPS no terminal para debug
         print(f"FPS: {fps:.2f}", end="\r")  # A impressão com '\r' sobrescreve a linha no terminal
 
-
         # Gera inimigos aleatórios periodicamente
         # Aumenta a probabilidade com o nível, mas limita o número de inimigos
         probabilidade_inimigos = max(1, 150 + nivel * 20)  # Reduz a chance de gerar inimigos com o aumento de nível
         if random.randint(1, probabilidade_inimigos) == 1:
             inimigos.append(gerar_inimigo(nivel))
 
-# Verifica se o jogador atingiu o próximo nível
-    # Verifica se o jogador atingiu o próximo nível
-        def avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos):
-            pygame.time.wait(1000)
-            fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
-            nivel_concluido(ecra, nivel)
-            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
-            mostrar_historia(ecra, nivel)
-            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
-            sons.tocar_musica_fundo(nivel)
-            inimigos.clear()
-            jogador.projeteis.clear()
-            jogador.projetil2 = None
-            jogador.disparando = False
-            jogador.definir_animacao("parado")
-            return fundo
-
         # Lógica de níveis
-        if nivel == 1 and pontuacao >= 100:  # Nível 1: 800 pontos para avançar
+        if nivel == 1 and pontuacao >= 500:  # Nível 1: 800 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 2 and pontuacao >= 300:  # Nível 2: 2000 pontos para avançar
+        elif nivel == 2 and pontuacao >= 1200:  # Nível 2: 2000 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 3 and pontuacao >= 500:  # Nível 3: 3600 pontos para avançar
+        elif nivel == 3 and pontuacao >= 2000:  # Nível 3: 3600 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
         elif nivel == 4 and inimigo_final is None:  # Nível 4: Final
                 # No nível final, cria o inimigo final apenas uma vez
-            inimigo_final = InimigoFinal(largura_ecra - 100, altura_ecra // 2)
-
-            # Avançar lógica do nível final
-            fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
-
-            # No nível final, cria o inimigo final apenas uma vez
-            inimigo_final = InimigoFinal(largura_ecra - 100, altura_ecra // 2)
+            inimigo_final = InimigoFinal(largura_ecra - 100, altura_ecra // 2, altura_ecra) 
         
         elif nivel > 4:
             reproduzir_video("tryf.mp4", ecra)
             mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte)  # Exibe a tela de "Jogo Completo"
             iniciar_jogo()  # Volta ao menu inicial
             return  # Finaliza o loop principal
-
-        
+   
         # Processa eventos de entrada
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -179,9 +151,11 @@ def play_game():
                 elif evento.key == pygame.K_x:
                     if jogador.ataque_especial_desbloqueado:  # Apenas executa se desbloqueado
                         jogador.disparar2()
+                        sons.tocar_disparo2()
+                        jogador.temporizador = 1  # Define a duração da animação
                         print("disparado ataque especial")   
                     else:
-                        print("ataque especial nao desbloqueado")
+                        print(f"ataque especial nao desbloqueado, {jogador.kills_recent}/3")
 
                 elif evento.key == pygame.K_ESCAPE:  # Verifica se a tecla Esc foi pressionada
                     pause_menu(ecra, fundo)  # Chama a função de pausa
@@ -242,29 +216,29 @@ def play_game():
 
             # Verifica colisão do projetil2 com o inimigo_final
             if jogador.projetil2 and jogador.projetil2.ativo:
-                raio_colisao = pygame.Rect(jogador.projetil2.x, jogador.projetil2.y, largura_ecra, 32)  # Área do projetil2
-                if inimigo_final and inimigo_final.vivo and raio_colisao.colliderect(
-                    pygame.Rect(inimigo_final.x, inimigo_final.y, 64, 64)
-                ):
-                    inimigo_final.vidas -= 10
-                    print(f"Dano ao inimigo final! Vidas restantes: {inimigo_final.vidas}")
-                    if inimigo_final.vidas <= 0:
-                        pontuacao += 1000
-                        inimigo_final.vivo = False
-                        inimigo_final = None
-                        nivel += 1 
+                if inimigo_final:  # Verifica se o inimigo final foi criado
+                    raio_colisao = pygame.Rect(jogador.projetil2.x, jogador.projetil2.y, largura_ecra, 30)  # Área do projetil2
+                    if raio_colisao.colliderect(pygame.Rect(inimigo_final.x, inimigo_final.y, 140, 100)):
+                        inimigo_final.vidas -= 1
+                        print(f"Dano ao inimigo final! Vidas restantes: {inimigo_final.vidas}")
+                        if inimigo_final.vidas <= 0:
+                            pontuacao += 1000
+                            inimigo_final.vivo = False
+                            inimigo_final = None
+                            nivel += 1
 
         # Verificar colisões do Projetil2 com inimigos
         if jogador.projetil2 and jogador.projetil2.ativo:
             for inimigo in inimigos[:]:
-                raio_colisao = pygame.Rect(jogador.projetil2.x, jogador.projetil2.y, largura_ecra, 32)  # Área do raio
-                inimigo_colisao = pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50)  # Área do inimigo
+                raio_colisao = pygame.Rect(jogador.projetil2.x, jogador.projetil2.y, largura_ecra, 30)  # Área do raio
+                inimigo_colisao = pygame.Rect(inimigo.pos_x, inimigo.pos_y, 90, 70)  # Área do inimigo
 
                 if raio_colisao.colliderect(inimigo_colisao):
-                    inimigo.vidas -= 10  # Aplica dano ao inimigo
+                    inimigo.vidas -= 1  # Aplica dano ao inimigo
                     if inimigo.vidas <= 0:
                         pontuacao += {1: 50, 2: 100, 3: 150, 4:50, 5:100}[inimigo.tipo]  # Adiciona pontos
-                        inimigos.remove(inimigo)  # Remove o inimigo morto
+                        inimigo.animacao_atual = "morto"  # Define a animação de morte para o inimigo
+                        #inimigos.remove(inimigo)  # Remove o inimigo morto
 
         # Atualiza e desenha cada inimigo
         for inimigo in inimigos[:]:
@@ -280,10 +254,13 @@ def play_game():
             inimigo_final.desenhar(ecra)
 
             for projetil in inimigo_final.projeteis[:]:
-                if pygame.Rect(projetil.x, projetil.y, 32, 32).colliderect(
+                if pygame.Rect(projetil.x, projetil.y, 32, 32).colliderect( #se jogador atingido por projectil inimigo
                     pygame.Rect(jogador.pos_x, jogador.pos_y, 64, 64)
                 ):
                     jogador.vida -= 10  # Reduz a vida do jogador ao ser atingido
+                    sons.tocar_colisao()
+                    jogador.definir_animacao("atingido") 
+                    jogador.temporizador = 0.3  # Define a duração da animação "atingido" passa a "parado"
                     inimigo_final.projeteis.remove(projetil)  # Remove o projétil após colisão
                     # Verifica colisão com projéteis
 
@@ -295,15 +272,17 @@ def play_game():
 
                     if not inimigo_final.vivo:
                         pontuacao += 1000  # Pontuação especial para derrotar o inimigo final
-                        inimigo_final = None  # Remove o inimigo final após ser derrotado
+                        #inimigo_final = None  # Remove o inimigo final após ser derrotado
                         nivel += 1  # Avança para o próximo nível( neste caso fim do jogo)
                     
-        # Verifica colisão com o jogador
+        
         # Atualiza o temporizador da animação "atingido"
-        if jogador.temporizador_atingido > 0:
-            jogador.temporizador_atingido -= delta_tempo
-            if jogador.temporizador_atingido <= 0:
+        if jogador.temporizador > 0:
+            jogador.temporizador -= delta_tempo
+            if jogador.temporizador <= 0:
                 jogador.definir_animacao("parado")  # Retorna para a animação padrão
+
+        # Verifica colisão com o jogador
         for inimigo in inimigos[:]:
             if inimigo.vivo and pygame.Rect(inimigo.pos_x, inimigo.pos_y, 50, 50).colliderect(
                 pygame.Rect(jogador.pos_x, jogador.pos_y, 50, 50)
@@ -317,8 +296,7 @@ def play_game():
                 
                 # Ativa a animação "atingido" no jogador
                 jogador.definir_animacao("atingido")
-                jogador.temporizador_atingido = 0.3  # Define a duração da animação "atingido" (0.5 segundos)
-
+                jogador.temporizador = 0.3  # Define a duração da animação "atingido" 
 
         # Verifica colisões do jogador
         if jogador.vida <= 0:
@@ -331,12 +309,14 @@ def play_game():
         jogador.atualizar(delta_tempo)
         jogador.desenhar(ecra)
 
-        
-        
+        # Carregar a imagem do coração no início
+        caminho_coracao = "Images/coracao.png"  # Substitua pelo caminho correto
+        imagem_coracao = pygame.image.load(caminho_coracao)
+        imagem_coracao = pygame.transform.scale(imagem_coracao, (40, 40))  # Redimensiona, se necessário
+
         # Exibe a vida, pontuação e nível na tela
         fonte = pygame.font.Font(caminho_fonte, 40)  # Define o tamanho da fonte ()
-        vida_texto = fonte.render(f"Vida: {jogador.vida}", True, (255, 0, 0))
-        #vida_texto = fonte.render(f"❤️ {jogador.vida}", True, (255, 0, 0))
+        vida_texto = fonte.render(f"{jogador.vida}", True, (255, 0, 0))
         score_texto = fonte.render(f"Score: {pontuacao}", True, (255, 255, 0))
         nivel_texto = fonte.render(f"Nível: {nivel}", True, (255, 165, 0))
         aviso_x = fonte.render(f"Kamehameah tecla X!!", True, (255, 0, 0))
@@ -345,7 +325,8 @@ def play_game():
             ecra.blit(aviso_x, ((largura_ecra - texto_largura) // 2, 50))
         score_texto = fonte.render(f"Score: {pontuacao}", True, (255, 255, 0))
         nivel_texto = fonte.render(f"Nível: {nivel}", True, (255, 165, 0))
-        ecra.blit(vida_texto, (10, 10))
+        ecra.blit(imagem_coracao, (10, 10))  # Desenha o coração na posição desejada
+        ecra.blit(vida_texto, (60, 10))
         ecra.blit(score_texto, (largura_ecra - 190, 10))
         ecra.blit(nivel_texto, (largura_ecra - 470, 8))  # Exibe o nível abaixo da vida
         pygame.display.update()
@@ -395,6 +376,22 @@ def iniciar_jogo():
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
             pygame.quit()
             break
+
+# Verifica se o jogador atingiu o próximo nível
+def avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos): 
+    pygame.time.wait(1000)
+    fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
+    nivel_concluido(ecra, nivel)
+    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
+    mostrar_historia(ecra, nivel)
+    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
+    sons.tocar_musica_fundo(nivel)
+    inimigos.clear()
+    jogador.projeteis.clear()
+    jogador.projetil2 = None
+    jogador.disparando = False
+    jogador.definir_animacao("parado")
+    return fundo
 
 # Inicializa o jogo
 iniciar_jogo()

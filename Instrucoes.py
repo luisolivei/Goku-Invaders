@@ -15,11 +15,16 @@ def tela_instrucoes(ecra, largura_ecra, altura_ecra):
         pygame.image.load("images/Teclas/space.png").convert_alpha(),
         (100, 50)
     )
+    icone_x = pygame.transform.scale(
+        pygame.image.load("images/Teclas/x.png").convert_alpha(),
+        (50, 50)
+    )
 
     # Posições dos ícones e textos
-    pos_up = (10, altura_ecra - 200)
-    pos_down = (10, altura_ecra - 160)
-    pos_space = (10, altura_ecra - 120)
+    pos_up = (10, altura_ecra - 240)
+    pos_down = (10, altura_ecra - 200)
+    pos_space = (10, altura_ecra - 160)
+    pos_x = (10, altura_ecra - 120)
 
     # Fonte e textos explicativos
     fonte = pygame.font.Font(caminho_fonte, 32)
@@ -27,6 +32,15 @@ def tela_instrucoes(ecra, largura_ecra, altura_ecra):
     texto_down = fonte.render("Mover para baixo", True, (255, 255, 255))
     texto_space = fonte.render("Atirar", True, (255, 255, 255))
     texto_iniciar = fonte.render("Pressione ENTER para começar", True, (255, 165, 0))
+    texto_x = fonte.render("Acumula 3 inimigos mortos e desbloqueia Kamehameh", True, (255, 255, 255))
+
+    # Criando sombras para os textos (cor preta, deslocada para baixo e à direita)
+    cor_sombra = (0, 0, 0)
+    texto_up_sombra = fonte.render("Mover para cima", True, cor_sombra)
+    texto_down_sombra = fonte.render("Mover para baixo", True, cor_sombra)
+    texto_space_sombra = fonte.render("Atirar", True, cor_sombra)
+    texto_iniciar_sombra = fonte.render("Pressione ENTER para começar", True, cor_sombra)
+    texto_x_sombra = fonte.render("Acumula 3 inimigos mortos e desbloqueia Kamehameh", True, cor_sombra)
 
     # Fundo da tela
     fundo = pygame.image.load("images/imagem_inicial.jpg").convert_alpha()
@@ -38,9 +52,20 @@ def tela_instrucoes(ecra, largura_ecra, altura_ecra):
         ecra.blit(icone_up, pos_up)
         ecra.blit(icone_down, pos_down)
         ecra.blit(icone_space, pos_space)
-        ecra.blit(texto_up, (70, altura_ecra - 200))
-        ecra.blit(texto_down, (70, altura_ecra - 160))
-        ecra.blit(texto_space, (120, altura_ecra - 120))
+        ecra.blit(icone_x, pos_x)
+
+        # Desenhando a sombra dos textos ligeiramente deslocada
+        ecra.blit(texto_up_sombra, (70 + 2, altura_ecra - 230 + 2))
+        ecra.blit(texto_down_sombra, (70 + 2, altura_ecra - 190 + 2))
+        ecra.blit(texto_space_sombra, (120 + 2, altura_ecra - 150 + 2))
+        ecra.blit(texto_x_sombra, (70 + 2, altura_ecra - 110 + 2))
+        ecra.blit(texto_iniciar_sombra, (largura_ecra // 2 - texto_iniciar.get_width() // 2 + 2, altura_ecra - 60 + 2))
+
+        # Desenhando o texto real
+        ecra.blit(texto_up, (70, altura_ecra - 230))
+        ecra.blit(texto_down, (70, altura_ecra - 190))
+        ecra.blit(texto_space, (120, altura_ecra - 150))
+        ecra.blit(texto_x, (70, altura_ecra - 110))
         ecra.blit(texto_iniciar, (largura_ecra // 2 - texto_iniciar.get_width() // 2, altura_ecra - 60))
 
         pygame.display.flip()  # Atualiza a tela

@@ -22,22 +22,30 @@ def mostrar_teclas(ecra):
         pygame.image.load("images/Teclas/space.png").convert_alpha(),
         (100, 50)
     )
+    icone_x = pygame.transform.scale(
+        pygame.image.load("images/Teclas/x.png").convert_alpha(),
+        (50, 50)
+    )
 
     pos_up = (10, altura_ecra - 200)
     pos_down = (10, altura_ecra - 160)
     pos_space = (10, altura_ecra - 130)
+    pos_x = (10, altura_ecra - 100)
 
     ecra.blit(icone_up, pos_up)
     ecra.blit(icone_down, pos_down)
     ecra.blit(icone_space, pos_space)
+    ecra.blit(icone_x, pos_x)
 
     fonte = pygame.font.Font(caminho_fonte, 24)
     texto_up = fonte.render("Mover para cima", True, (255, 255, 255))
     texto_down = fonte.render("Mover para baixo", True, (255, 255, 255))
-    texto_space = fonte.render("Atirar", True, (255, 255, 255))
+    texto_space = fonte.render("Disparar", True, (255, 255, 255))
+    texto_x = fonte.render("Acumula 3 inimigos mortos e desbloqueia Kamehameh", True, (255, 255, 255))
 
     ecra.blit(texto_up, (70, altura_ecra - 200))
     ecra.blit(texto_down, (70, altura_ecra - 160))
     ecra.blit(texto_space, (120, altura_ecra - 130))
+    ecra.blit(texto_x, (200, altura_ecra - 100))
 
     pygame.display.flip()
