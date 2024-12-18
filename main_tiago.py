@@ -224,7 +224,6 @@ def play_game():
                         if inimigo_final.vidas <= 0:
                             pontuacao += 1000
                             inimigo_final.vivo = False
-                            inimigo_final = None
                             nivel += 1
 
         # Verificar colisões do Projetil2 com inimigos
