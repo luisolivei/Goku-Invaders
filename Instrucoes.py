@@ -45,7 +45,7 @@ def tela_instrucoes(ecra, largura_ecra, altura_ecra):
     texto_x_sombra = fonte.render("Acumula 3 inimigos mortos e desbloqueia Kamehameh", True, cor_sombra)
 
     # Fundo da tela
-    fundo = pygame.image.load("imagens/imagem_inicial.jpg").convert_alpha()
+    fundo = pygame.image.load("imagens/Backgrounds/imagem_inicial.jpg").convert_alpha()
     fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))
 
     # Loop da tela de teclas
