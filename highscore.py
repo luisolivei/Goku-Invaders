@@ -14,7 +14,7 @@ def mostrar_highscore(ecra, fundo):
     
     # Configuração do texto
     fonte = pygame.font.Font(caminho_fonte, 48)
-    titulo = fonte.render("HIGHSCORE", True, (255, 255, 0))
+    titulo = fonte.render("Pontuação mais alta", True, (255, 255, 0))
     texto_highscore = fonte.render(highscore, True, (255, 255, 0))
     instrucoes = fonte.render("Pressione ESC para voltar", True, (200, 200, 200))
     

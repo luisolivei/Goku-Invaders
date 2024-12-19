@@ -240,3 +240,19 @@ def nivel_concluido(ecra, nivel):
     ecra.blit(texto, (largura_ecra // 2 - texto.get_width() // 2, altura_ecra // 2))
     pygame.display.update()
     pygame.time.wait(2000)
+
+# Executa logica para transiçao de nivel e limpeza de ecra
+def avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos): 
+    pygame.time.wait(1000)
+    fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
+    nivel_concluido(ecra, nivel)
+    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
+    mostrar_historia(ecra, nivel)
+    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
+    sons.tocar_musica_fundo(nivel)
+    inimigos.clear()
+    jogador.projeteis.clear()
+    jogador.projetil2 = None
+    jogador.disparando = False
+    jogador.definir_animacao("parado")
+    return fundo

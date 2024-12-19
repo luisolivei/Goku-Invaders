@@ -1,4 +1,7 @@
 import pygame
+from config import largura_ecra, altura_ecra
+from highscore import carregar_highscore,salvar_highscore
+from fadeinout import fade_in_out
 
 def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensagem=None, exibir_titulo=True):
     pygame.font.init()
@@ -100,3 +103,71 @@ def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensa
                     return "quit"  # Permite sair do menu com ESC
 
         pygame.display.update()
+
+# Função de pausa que exibe o menu de pausa
+def pause_menu(ecra, fundo):
+    global play
+    while True:
+        # Exibe o menu com título (ou sem título, dependendo da escolha)
+        escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Continuar", "Sair"], exibir_titulo=True)
+        if escolha == "Continuar":
+            return  # Apenas retorna, mantendo o estado do jogo
+        elif escolha == "Sair":
+            pygame.quit()
+            exit()
+
+
+def tela_game_over(ecra, fundo):
+    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 60)
+    global pontuacao
+    highscore = carregar_highscore()
+    novo_recorde = False  # Variável para rastrear se o highscore foi batido
+
+    # Atualiza o highscore, se necessário
+    if pontuacao > highscore:
+        highscore = pontuacao
+        salvar_highscore(highscore)
+        novo_recorde = True  # Marca que o jogador bateu o recorde
+
+    mensagem = "GAME OVER"
+    submensagem = f"Score: {pontuacao} | Highscore: {highscore}"
+    if novo_recorde:
+        submensagem + f" Parabéns! Novo recorde!"
+    opcoes = ["Reiniciar", "Sair"]
+
+    try:
+        # Carregar a imagem de Game Over
+        imagem_game_over = pygame.image.load("images/11.png").convert_alpha()
+        imagem_game_over = pygame.transform.scale(imagem_game_over, (largura_ecra, altura_ecra))
+    except pygame.error as e:
+        print(f"Erro ao carregar imagem: {e}")
+        return
+
+    # Exibe a imagem de fundo
+    ecra.blit(imagem_game_over, (0, 0))
+
+    # Exibe a mensagem de Game Over no centro da tela
+    fonte_titulo = pygame.font.Font(None, 64)
+    texto_mensagem = fonte_titulo.render(mensagem, True, (255, 165, 0))
+    ecra.blit(texto_mensagem, (largura_ecra // 2 - texto_mensagem.get_width() // 2, altura_ecra // 3))
+
+    # Exibe a pontuação final
+    fonte_pontuacao = pygame.font.Font(None, 48)
+    texto_pontuacao = fonte_pontuacao.render(submensagem, True, (255, 255, 0))
+    ecra.blit(texto_pontuacao, (largura_ecra // 2 - texto_pontuacao.get_width() // 2, altura_ecra // 2))
+
+    # Chama o menu sem o título
+    escolha = menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem, submensagem, exibir_titulo=False)
+
+    fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
+    pygame.display.update()
+
+    if escolha == "Reiniciar":
+        pontuacao = 0
+        return True
+    elif escolha == "Sair":
+        pygame.quit()
+        exit()
+    
+
+
