@@ -84,7 +84,7 @@ def play_game():
         
         elif nivel > 4:
             sons.tocar_musica_fundo(nivel)
-            reproduzir_video("tryf.mp4", ecra)
+            reproduzir_video("imagens/tryf.mp4", ecra)
             mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte)  # Exibe a tela de "Jogo Completo"
             iniciar_jogo()  # Volta ao menu inicial
             return  # Finaliza o loop principal
