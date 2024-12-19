@@ -12,7 +12,8 @@ class Sons:
             1: "Sons/musica_nivel.mp3",
             2: "Sons/musica_nivel2.mp3",
             3: "Sons/musica_ultimo_nivel.mp3",
-            4: "Sons/musica_final.mp3"
+            4: "Sons/musica_final.mp3",
+            5: "Sons/creditos.mp3"
         }
         # Sons de efeitos
         self.som_disparo = pygame.mixer.Sound("Sons/disparos.mp3")
@@ -48,6 +49,6 @@ class Sons:
     def tocar_colisao(self):
         self.som_colisao.play()
         
- 
     def tocar_game_over(self):
         self.som_game_over.play()
+    
