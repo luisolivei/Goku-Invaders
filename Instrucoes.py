@@ -6,19 +6,19 @@ from config import caminho_fonte
 def tela_instrucoes(ecra, largura_ecra, altura_ecra):
     # Carregar os ícones das teclas
     icone_up = pygame.transform.scale(
-        pygame.image.load("images/Teclas/up.png").convert_alpha(),
+        pygame.image.load("imagens/Teclas/up.png").convert_alpha(),
         (50, 50)
     )
     icone_down = pygame.transform.scale(
-        pygame.image.load("images/Teclas/down.png").convert_alpha(),
+        pygame.image.load("imagens/Teclas/down.png").convert_alpha(),
         (50, 50)
     )
     icone_space = pygame.transform.scale(
-        pygame.image.load("images/Teclas/space.png").convert_alpha(),
+        pygame.image.load("imagens/Teclas/space.png").convert_alpha(),
         (100, 50)
     )
     icone_x = pygame.transform.scale(
-        pygame.image.load("images/Teclas/x.png").convert_alpha(),
+        pygame.image.load("imagens/Teclas/x.png").convert_alpha(),
         (50, 50)
     )
 
@@ -45,7 +45,7 @@ def tela_instrucoes(ecra, largura_ecra, altura_ecra):
     texto_x_sombra = fonte.render("Acumula 3 inimigos mortos e desbloqueia Kamehameh", True, cor_sombra)
 
     # Fundo da tela
-    fundo = pygame.image.load("images/imagem_inicial.jpg").convert_alpha()
+    fundo = pygame.image.load("imagens/imagem_inicial.jpg").convert_alpha()
     fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))
 
     # Loop da tela de teclas

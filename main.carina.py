@@ -38,7 +38,7 @@ def tela_game_over(ecra, fundo):
 
     try:
         # Carregar a imagem de Game Over
-        imagem_game_over = pygame.image.load("images/11.png").convert_alpha()
+        imagem_game_over = pygame.image.load("imagens/11.png").convert_alpha()
         imagem_game_over = pygame.transform.scale(imagem_game_over, (largura_ecra, altura_ecra))
     except pygame.error as e:
         print(f"Erro ao carregar imagem: {e}")
@@ -354,7 +354,7 @@ def iniciar_jogo():
     global play
     
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do menu
-    fundo = pygame.image.load("images/imagem_inicial.jpg").convert_alpha()  # Carrega a imagem de fundo
+    fundo = pygame.image.load("imagens/imagem_inicial.jpg").convert_alpha()  # Carrega a imagem de fundo
     fundo = pygame.transform.smoothscale(fundo, (largura_ecra, altura_ecra))  # Redimensiona suavemente
     sons.tocar_musica_menu()
 

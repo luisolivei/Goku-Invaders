@@ -286,7 +286,7 @@ def iniciar_jogo():
     global play
     
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do menu
-    fundo = pygame.image.load("images/imagem_inicial.jpg").convert_alpha()  # Carrega a imagem de fundo
+    fundo = pygame.image.load("imagens/imagem_inicial.jpg").convert_alpha()  # Carrega a imagem de fundo
     fundo = pygame.transform.smoothscale(fundo, (largura_ecra, altura_ecra))  # Redimensiona suavemente
     sons.tocar_musica_menu()
 

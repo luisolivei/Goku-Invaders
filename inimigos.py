@@ -42,7 +42,7 @@ class Inimigo:
         sprites = []
         for i in range(1, num_maximo + 1):
             for tipo in tipos_ficheiro:
-                caminho = f"images/Inimigos/inimigo_{self.tipo}/inimigo_{self.tipo}_{estado}_{i}.{tipo}"
+                caminho = f"imagens/Inimigos/inimigo_{self.tipo}/inimigo_{self.tipo}_{estado}_{i}.{tipo}"
                 try:
                     sprite = pygame.image.load(caminho).convert_alpha()
                     sprite = self.remover_cores_fundo(sprite)
@@ -140,7 +140,7 @@ class InimigoFinal:
     def carregar_sprites(self):
         sprites = []
         for i in range(1, 6):
-            sprite = pygame.image.load(f"images/inimigos/inimigo_final/final_{i}.png").convert_alpha()
+            sprite = pygame.image.load(f"imagens/inimigos/inimigo_final/final_{i}.png").convert_alpha()
             sprite = self.remover_cores_fundo(sprite, self.cores_fundo)  # Passa cores_fundo explicitamente
             sprites.append(sprite)
         return sprites

@@ -9,7 +9,7 @@ class Projetil:
         self.x = x
         self.y = y
         self.velocidade = velocidade
-        self.imagem = pygame.image.load("images/chama_disparos.gif").convert_alpha()
+        self.imagem = pygame.image.load("imagens/chama_disparos.gif").convert_alpha()
         self.imagem = pygame.transform.scale(self.imagem, (20, 20))  # Ajusta o tamanho da imagem
         self.cores_fundo = cores_fundo
         self.remover_cores_fundo()
@@ -70,9 +70,9 @@ class Projetil2:
         # Adapta caminhos conforme os ficheiros do raio (início, corpo, fim)
         cor_fundo = (144, 176, 216) 
         caminhos = [
-            "images/projectil2/raio_inicio.gif",  # Parte inicial do raio
-            "images/projectil2/raio_corpo.gif",   # Parte repetível do raio
-            "images/projectil2/raio_fim.gif"      # Parte final do raio
+            "imagens/projectil2/raio_inicio.gif",  # Parte inicial do raio
+            "imagens/projectil2/raio_corpo.gif",   # Parte repetível do raio
+            "imagens/projectil2/raio_fim.gif"      # Parte final do raio
         ]
         
         sprites = []

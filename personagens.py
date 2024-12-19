@@ -39,7 +39,7 @@ class Personagem:
 class AnimacaoParado(Personagem):
     def __init__(self):
         caminhos_sprites = [
-            "images/goku/parado/parado_1.gif",
+            "imagens/goku/parado/parado_1.gif",
         ]
         super().__init__(caminhos_sprites)
 
@@ -47,7 +47,7 @@ class AnimacaoParado(Personagem):
 class AnimacaoAndar(Personagem):
     def __init__(self):
         caminhos_sprites = [
-            "images/goku/parado/parado_1.gif",
+            "imagens/goku/parado/parado_1.gif",
         ]
         super().__init__(caminhos_sprites)
 
@@ -55,11 +55,11 @@ class AnimacaoAndar(Personagem):
 class AnimacaoDisparar(Personagem):
     def __init__(self):
         caminhos_sprites = [
-            "images/goku/disparar/disparar_1.gif",
-            "images/goku/disparar/disparar_2.gif",
-            "images/goku/disparar/disparar_3.gif",
-            "images/goku/disparar/disparar_4.gif",
-            "images/goku/disparar/disparar_5.gif",
+            "imagens/goku/disparar/disparar_1.gif",
+            "imagens/goku/disparar/disparar_2.gif",
+            "imagens/goku/disparar/disparar_3.gif",
+            "imagens/goku/disparar/disparar_4.gif",
+            "imagens/goku/disparar/disparar_5.gif",
         ]
         super().__init__(caminhos_sprites)
 
@@ -67,13 +67,13 @@ class AnimacaoDisparar(Personagem):
 class AnimacaoAtingido(Personagem):
     def __init__(self):
         caminhos_sprites = [
-            "images/goku/atingido/atingido_6.gif",
+            "imagens/goku/atingido/atingido_6.gif",
         ]
         super().__init__(caminhos_sprites)
 
 class AnimacaoDispararEspecial(Personagem):
     def __init__(self):
         caminhos_sprites = [
-            f"images/projectil2/animacao_disparar2_{i}.gif" for i in range(1, 13)
+            f"imagens/projectil2/animacao_disparar2_{i}.gif" for i in range(1, 13)
         ]
         super().__init__(caminhos_sprites)

@@ -11,15 +11,15 @@ from fadeinout import fade_in_out
 # Função para carregar o fundo de acordo com o nível
 def carregar_fundo(nivel):
     if nivel == 1:
-        fundo = pygame.image.load("images/bg3.png").convert_alpha()  # Fundo do nível 1
+        fundo = pygame.image.load("imagens/bg3.png").convert_alpha()  # Fundo do nível 1
     elif nivel == 2:
-        fundo = pygame.image.load("images/bg2.png").convert_alpha()  # Fundo do nível 2
+        fundo = pygame.image.load("imagens/bg2.png").convert_alpha()  # Fundo do nível 2
     elif nivel == 3:
-        fundo = pygame.image.load("images/bg4.png").convert_alpha()  # Fundo do nível 3
+        fundo = pygame.image.load("imagens/bg4.png").convert_alpha()  # Fundo do nível 3
     elif nivel == 4:
-        fundo = pygame.image.load("images/bg.png").convert_alpha()
+        fundo = pygame.image.load("imagens/bg.png").convert_alpha()
     else:
-        fundo = pygame.image.load("images/bg.png").convert_alpha()  # Fundo padrão
+        fundo = pygame.image.load("imagens/bg.png").convert_alpha()  # Fundo padrão
 
     return pygame.transform.scale(fundo, (largura_ecra, altura_ecra))
 
@@ -79,16 +79,16 @@ def mostrar_historia(ecra, nivel):
     
     # Carregar a imagem da história baseada no nível
     if nivel == 1: #########################verificar este segmento não aparece
-        imagem_historia = pygame.image.load("images/historia1.png").convert_alpha()
+        imagem_historia = pygame.image.load("imagens/historia1.png").convert_alpha()
         texto_historia = "Raptamos a Kika!!! Conseguiras resgata-la?"
     elif nivel == 2:
-        imagem_historia = pygame.image.load("images/historia1.png").convert_alpha()
+        imagem_historia = pygame.image.load("imagens/historia1.png").convert_alpha()
         texto_historia = "Raptamos a Kika!!! Conseguiras resgata-la?"
     elif nivel == 3:
-        imagem_historia = pygame.image.load("images/historia3.jpg").convert_alpha()
+        imagem_historia = pygame.image.load("imagens/historia3.jpg").convert_alpha()
         texto_historia = "Ninguém me conseguira deter!!!"
     elif nivel == 4:
-        imagem_historia = pygame.image.load("images/historia2.jpg").convert_alpha()
+        imagem_historia = pygame.image.load("imagens/historia2.jpg").convert_alpha()
         texto_historia = "Percorri o universo e não a encontrei!! Sera Agora?" 
 
     elif nivel > 4:  # História final

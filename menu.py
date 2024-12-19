@@ -139,7 +139,7 @@ def tela_game_over(ecra, fundo):
 
     try:
         # Carregar a imagem de Game Over
-        imagem_game_over = pygame.image.load("images/11.png").convert_alpha()
+        imagem_game_over = pygame.image.load("imagens/11.png").convert_alpha()
         imagem_game_over = pygame.transform.scale(imagem_game_over, (largura_ecra, altura_ecra))
     except pygame.error as e:
         print(f"Erro ao carregar imagem: {e}")
