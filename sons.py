@@ -1,3 +1,5 @@
+#sons.py gere sequencias sons
+
 import pygame
  
 # Inicia o mixer

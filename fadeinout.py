@@ -1,3 +1,5 @@
+#fadeinout.py serve para suavizar tranziçoes de ecras
+
 import pygame
 
 def fade_in_out(ecra, cor, largura, altura, tempo):

@@ -1,4 +1,5 @@
-# projetil.py
+# projetil.py contém classes projectil
+
 import pygame
 from config import largura_ecra
 

@@ -1,6 +1,9 @@
+#highscore.py guarda funçoes relacionadas com pontuaçoes altas
+
 import pygame
 import os
 from config import largura_ecra, altura_ecra, caminho_fonte
+
 def mostrar_highscore(ecra, fundo):
     # Configuração do fundo
     ecra.blit(fundo, (0, 0))

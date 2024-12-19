@@ -1,3 +1,5 @@
+#menu.py tudo o que esteja relacionado com menus dentro da sequência de jogo
+
 import pygame
 from config import largura_ecra, altura_ecra
 from highscore import carregar_highscore,salvar_highscore

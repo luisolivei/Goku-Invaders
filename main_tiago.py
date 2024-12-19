@@ -1,8 +1,10 @@
+#main.py é ficheiro principal do jogo
+
 import pygame
 import random
 from config import largura_ecra, altura_ecra, velocidade_fundo,caminho_fonte
 from jogador import Jogador
-from inimigos import Inimigo,InimigoFinal
+from inimigos import InimigoFinal
 from personagens import AnimacaoParado, AnimacaoAndar, AnimacaoDisparar, AnimacaoAtingido, AnimacaoDispararEspecial
 from menu import menu, pause_menu, tela_game_over
 from fadeinout import fade_in_out

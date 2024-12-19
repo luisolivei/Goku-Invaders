@@ -1,5 +1,5 @@
 # jogador.py
-import pygame
+
 from projetil import Projetil, Projetil2
 
 class Jogador:

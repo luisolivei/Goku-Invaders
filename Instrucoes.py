@@ -1,7 +1,9 @@
+#Instrucoes.py ecra de instruçoes antes de iniciar propriamente o jogo
+
 import pygame
-from config import largura_ecra, altura_ecra, caminho_fonte
+from config import caminho_fonte
+
 def tela_instrucoes(ecra, largura_ecra, altura_ecra):
-    """Exibe as teclas antes de iniciar o jogo."""
     # Carregar os ícones das teclas
     icone_up = pygame.transform.scale(
         pygame.image.load("images/Teclas/up.png").convert_alpha(),

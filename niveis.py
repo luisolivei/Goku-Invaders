@@ -1,3 +1,5 @@
+#niveis.py tem tudo relacionado com variaveis e funçoes que alternam entre niveis
+
 import pygame
 import cv2
 import numpy as np

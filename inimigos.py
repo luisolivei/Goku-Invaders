@@ -1,3 +1,5 @@
+#inimigos.py
+
 import pygame
 from config import largura_ecra, altura_ecra
 from projetil import Projetil, Projetil2

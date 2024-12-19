@@ -1,4 +1,5 @@
-# personagens.py
+# personagens.py contém classes e subclasses aninhadas do personagem principal
+
 import pygame
 from config import velocidade_animacao
 
