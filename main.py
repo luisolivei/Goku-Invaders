@@ -20,6 +20,8 @@ nivel = 1  # Variável para o nível atual
 sons = Sons()  # Inicia o som
 
 def tela_game_over(ecra, fundo):
+    sons.parar_musica_fundo()
+    sons.tocar_game_over()
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 60)
     global pontuacao
     highscore = carregar_highscore()
@@ -84,6 +86,7 @@ def play_game():
     fundo = carregar_fundo(nivel)  # Carrega o fundo de acordo com o nível
     fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))  # Ajusta o fundo ao tamanho da tela
     sons.tocar_musica_fundo(nivel)
+    musica_on = True
 
     # Inicializa o jogador e define animações
     jogador = Jogador(100, altura_ecra / 2 - 64 / 2)
@@ -163,6 +166,15 @@ def play_game():
                 elif evento.key == pygame.K_ESCAPE:  # Verifica se a tecla Esc foi pressionada
                     pause_menu(ecra, fundo)  # Chama a função de pausa
                     jogador.definir_animacao("parado")  # Restaura o estado após a pausa
+
+                elif evento.key == pygame.K_m:  # Verifica se a tecla "M" foi pressionada
+                    if musica_on:
+                        sons.parar_musica_fundo()  # Chama a função que para a música
+                        musica_on = False    # Atualiza o estado
+                    else:
+                        sons.tocar_musica_fundo(nivel)  # Chama a função para tocar a música
+                        musica_on = True     # Atualiza o estado
+
             elif evento.type == pygame.KEYUP:
                 if evento.key == pygame.K_SPACE:
                     jogador.disparando = False  # Libera o estado de disparo
