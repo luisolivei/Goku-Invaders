@@ -86,7 +86,8 @@ def play_game():
     fundo = carregar_fundo(nivel)  # Carrega o fundo de acordo com o nível
     fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))  # Ajusta o fundo ao tamanho da tela
     sons.tocar_musica_fundo(nivel)
-    musica_on = True
+    musica_on = True #funciona dentro do loop, com tecla M para parar som nos niveis
+    
 
     # Inicializa o jogador e define animações
     jogador = Jogador(100, altura_ecra / 2 - 64 / 2)
@@ -167,13 +168,14 @@ def play_game():
                     pause_menu(ecra, fundo)  # Chama a função de pausa
                     jogador.definir_animacao("parado")  # Restaura o estado após a pausa
 
-                elif evento.key == pygame.K_m:  # Verifica se a tecla "M" foi pressionada
+                #parar musica fudno durante os niveis, existe somente por motivos de testar. não funciona como mute 
+                elif evento.key == pygame.K_m: 
                     if musica_on:
-                        sons.parar_musica_fundo()  # Chama a função que para a música
-                        musica_on = False    # Atualiza o estado
+                        sons.parar_musica_fundo() 
+                        musica_on = False    
                     else:
-                        sons.tocar_musica_fundo(nivel)  # Chama a função para tocar a música
-                        musica_on = True     # Atualiza o estado
+                        sons.tocar_musica_fundo(nivel)  
+                        musica_on = True     
 
             elif evento.type == pygame.KEYUP:
                 if evento.key == pygame.K_SPACE:
