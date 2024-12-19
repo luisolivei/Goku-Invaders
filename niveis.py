@@ -76,7 +76,7 @@ def mostrar_historia(ecra, nivel):
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
     
     # Carregar a imagem da história baseada no nível
-    if nivel == 1:
+    if nivel == 1: #########################verificar este segmento não aparece
         imagem_historia = pygame.image.load("images/historia1.png").convert_alpha()
         texto_historia = "Raptamos a Kika!!! Conseguiras resgata-la?"
     elif nivel == 2:
@@ -84,10 +84,10 @@ def mostrar_historia(ecra, nivel):
         texto_historia = "Raptamos a Kika!!! Conseguiras resgata-la?"
     elif nivel == 3:
         imagem_historia = pygame.image.load("images/historia3.jpg").convert_alpha()
-        texto_historia = "Ninguem conseguira me deter!!!"
+        texto_historia = "Ninguém me conseguira deter!!!"
     elif nivel == 4:
         imagem_historia = pygame.image.load("images/historia2.jpg").convert_alpha()
-        texto_historia = "Percorri o universo e nao a encontrei!! Sera Agora?" 
+        texto_historia = "Percorri o universo e não a encontrei!! Sera Agora?" 
 
     elif nivel > 4:  # História final
         reproduzir_video("tryf.mp4", ecra)

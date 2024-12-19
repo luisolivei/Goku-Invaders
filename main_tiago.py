@@ -79,6 +79,7 @@ def play_game():
     nivel = 1  # Reseta o nível ao iniciar
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do jogo
     pygame.display.set_caption("Goku Invaders")
+    mostrar_historia(ecra, nivel)
     fundo = carregar_fundo(nivel)  # Carrega o fundo de acordo com o nível
     fundo = pygame.transform.scale(fundo, (largura_ecra, altura_ecra))  # Ajusta o fundo ao tamanho da tela
     sons.tocar_musica_fundo(nivel)
@@ -133,6 +134,7 @@ def play_game():
             inimigo_final = InimigoFinal(largura_ecra - 100, altura_ecra // 2, altura_ecra) 
         
         elif nivel > 4:
+            sons.tocar_musica_fundo(nivel)
             reproduzir_video("tryf.mp4", ecra)
             mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte)  # Exibe a tela de "Jogo Completo"
             iniciar_jogo()  # Volta ao menu inicial
@@ -333,7 +335,7 @@ def play_game():
 # Função para exibir a pontuação ao final
 def mostrar_score():
     global pontuacao
-    print(f"Sua pontuação final foi: {pontuacao}")  # Substitua por exibição gráfica, se necessário
+    print(f"A pontuação mais alta foi: {pontuacao}")  # Substitua por exibição gráfica, se necessário
     pygame.time.wait(2000)  # Espera 2 segundos para simular a exibição da pontuação
 
 # Função de pausa que exibe o menu de pausa
@@ -341,10 +343,10 @@ def pause_menu(ecra, fundo):
     global play
     while True:
         # Exibe o menu com título (ou sem título, dependendo da escolha)
-        escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Continuar", "Quit"], exibir_titulo=True)
+        escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Continuar", "Sair"], exibir_titulo=True)
         if escolha == "Continuar":
             return  # Apenas retorna, mantendo o estado do jogo
-        elif escolha == "Quit":
+        elif escolha == "Sair":
             pygame.quit()
             exit()
 
@@ -360,8 +362,8 @@ def iniciar_jogo():
     # Loop principal para exibir o menu e reagir à seleção do jogador
     while True:
         # Exibe o menu inicial com título
-        escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Play","Highscore", "Quit"])
-        if escolha == "Play":
+        escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Jogar","Highscore", "Sair"])
+        if escolha == "Jogar":
             tela_instrucoes(ecra, largura_ecra, altura_ecra)
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
             play = True
@@ -371,7 +373,7 @@ def iniciar_jogo():
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
             mostrar_highscore(ecra,fundo)
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
-        elif escolha == "Quit":
+        elif escolha == "Sair":
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
             pygame.quit()
             break
