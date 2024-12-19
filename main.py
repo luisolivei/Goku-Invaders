@@ -84,7 +84,7 @@ def play_game():
         
         elif nivel > 4:
             sons.tocar_musica_fundo(nivel)
-            reproduzir_video("tryf.mp4", ecra)
+            reproduzir_video("imagens/tryf.mp4", ecra)
             mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte)  # Exibe a tela de "Jogo Completo"
             iniciar_jogo()  # Volta ao menu inicial
             return  # Finaliza o loop principal
@@ -260,7 +260,7 @@ def play_game():
         jogador.desenhar(ecra)
 
         # Carregar a imagem do coração no início
-        caminho_coracao = "Images/coracao.png"  # Substitua pelo caminho correto
+        caminho_coracao = "imagens/coracao.png"  # Substitua pelo caminho correto
         imagem_coracao = pygame.image.load(caminho_coracao)
         imagem_coracao = pygame.transform.scale(imagem_coracao, (40, 40))  # Redimensiona, se necessário
 
