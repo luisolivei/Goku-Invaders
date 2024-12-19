@@ -82,8 +82,8 @@ def mostrar_historia(ecra, nivel):
         imagem_historia = pygame.image.load("imagens/historia1.png").convert_alpha()
         texto_historia = "Raptamos a Kika!!! Conseguiras resgata-la?"
     elif nivel == 2:
-        imagem_historia = pygame.image.load("imagens/historia1.png").convert_alpha()
-        texto_historia = "Raptamos a Kika!!! Conseguiras resgata-la?"
+        imagem_historia = pygame.image.load("imagens/historia2_1.png").convert_alpha()
+        texto_historia = "Tens a certeza que estas a dar o teu melhor???"
     elif nivel == 3:
         imagem_historia = pygame.image.load("imagens/historia3.jpg").convert_alpha()
         texto_historia = "Ninguém me conseguira deter!!!"
