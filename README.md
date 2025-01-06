@@ -10,7 +10,7 @@ Um jogo inspirado no clássico Space Invaders. Controle o goku  para derrotar on
 
 - **Linguagem:** [Python]
 - **Bibliotecas/Frameworks:** 
-  - [Pygame] (se for em Python)
+  - [Pygame]
   
   - [Outras ferramentas]
 - **Assets:** Imagens e sons foram criados ou obtidos de repositórios livres de direitos autorais.
@@ -62,14 +62,6 @@ Um jogo inspirado no clássico Space Invaders. Controle o goku  para derrotar on
 
 ---
 
-## 📝 Planejamento Futuro
-
-- Adicionar níveis de dificuldade.
-- Implementar power-ups para a nave.
-- Melhorar gráficos e animações.
-- Adicionar placar global com integração online.
-
----
 
 
 ## 📜 Licença
