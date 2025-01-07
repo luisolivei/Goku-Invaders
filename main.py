@@ -81,6 +81,7 @@ def play_game():
     tempo_inicio_jogo = 0 # Variável para rastrear o tempo de inicio do jogo
     pontuacao = 0  # Reseta a pontuação ao iniciar um novo jogo
     nivel = 1  # Reseta o nível ao iniciar
+    highscore = carregar_highscore() # Le o highscore do arquivo
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do jogo
     pygame.display.set_caption("Goku Invaders")
     mostrar_historia(ecra, nivel)
@@ -123,15 +124,15 @@ def play_game():
             inimigos.append(gerar_inimigo(nivel))
 
         # Lógica de níveis
-        if nivel == 1 and pontuacao >= 800:  # Nível 1: 800 pontos para avançar
+        if nivel == 1 and pontuacao >= 300:  # Nível 1: 800 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 2 and pontuacao >= 2000:  # Nível 2: 2000 pontos para avançar
+        elif nivel == 2 and pontuacao >= 700:  # Nível 2: 2000 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 3 and pontuacao >= 3600:  # Nível 3: 3600 pontos para avançar
+        elif nivel == 3 and pontuacao >= 1000:  # Nível 3: 3600 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
@@ -241,6 +242,11 @@ def play_game():
                         print(f"Dano ao inimigo final! Vidas restantes: {inimigo_final.vidas}")
                         if inimigo_final.vidas <= 0:
                             pontuacao += 1000
+                            if pontuacao > highscore: # Atualiza o highscore, se necessário
+                                print("Novo highscore")
+                                highscore = pontuacao
+                                salvar_highscore(highscore)
+
                             inimigo_final.vivo = False
                             nivel += 1
 
@@ -292,8 +298,13 @@ def play_game():
 
                     if not inimigo_final.vivo:
                         pontuacao += 1000  # Pontuação especial para derrotar o inimigo final
-                        #inimigo_final = None  # Remove o inimigo final após ser derrotado
+                        if pontuacao > highscore:# Atualiza o highscore, se necessário
+                            print("Novo highscore")
+                            highscore = pontuacao
+                            salvar_highscore(highscore)
                         nivel += 1  # Avança para o próximo nível( neste caso fim do jogo)
+                            
+
                     
         
         # Atualiza o temporizador da animação "atingido"
