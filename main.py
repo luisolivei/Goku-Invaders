@@ -123,15 +123,15 @@ def play_game():
             inimigos.append(gerar_inimigo(nivel))
 
         # Lógica de níveis
-        if nivel == 1 and pontuacao >= 800:  # Nível 1: 800 pontos para avançar
+        if nivel == 1 and pontuacao >= 8000:  # Nível 1: 800 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 2 and pontuacao >= 2000:  # Nível 2: 2000 pontos para avançar
+        elif nivel == 2 and pontuacao >= 16000:  # Nível 2: 2000 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 3 and pontuacao >= 3600:  # Nível 3: 3600 pontos para avançar
+        elif nivel == 3 and pontuacao >= 34000:  # Nível 3: 3600 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
