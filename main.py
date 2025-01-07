@@ -123,15 +123,15 @@ def play_game():
             inimigos.append(gerar_inimigo(nivel))
 
         # Lógica de níveis
-        if nivel == 1 and pontuacao >= 8000:  # Nível 1: 800 pontos para avançar
+        if nivel == 1 and pontuacao >= 800:  # Nível 1: 800 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 2 and pontuacao >= 16000:  # Nível 2: 2000 pontos para avançar
+        elif nivel == 2 and pontuacao >= 2000:  # Nível 2: 2000 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 3 and pontuacao >= 34000:  # Nível 3: 3600 pontos para avançar
+        elif nivel == 3 and pontuacao >= 3600:  # Nível 3: 3600 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
@@ -247,6 +247,9 @@ def play_game():
         # Verificar colisões do Projetil2 com inimigos
         if jogador.projetil2 and jogador.projetil2.ativo:
             for inimigo in inimigos[:]:
+                if inimigo.animacao_atual == "morto": # Ignora colisao com inimigos mortos
+                    continue
+
                 raio_colisao = pygame.Rect(jogador.projetil2.x, jogador.projetil2.y, largura_ecra, 30)  # Área do raio
                 inimigo_colisao = pygame.Rect(inimigo.pos_x, inimigo.pos_y, 90, 70)  # Área do inimigo
 
