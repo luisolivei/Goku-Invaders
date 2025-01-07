@@ -6,19 +6,19 @@ from config import caminho_fonte
 def tela_instrucoes(ecra, largura_ecra, altura_ecra):
     # Carregar os ícones das teclas
     icone_up = pygame.transform.scale(
-        pygame.image.load("imagens/Teclas/up.png").convert_alpha(),
+        pygame.image.load("imagens/icons/Teclas/up.png").convert_alpha(),
         (50, 50)
     )
     icone_down = pygame.transform.scale(
-        pygame.image.load("imagens/Teclas/down.png").convert_alpha(),
+        pygame.image.load("imagens/icons/Teclas/down.png").convert_alpha(),
         (50, 50)
     )
     icone_space = pygame.transform.scale(
-        pygame.image.load("imagens/Teclas/space.png").convert_alpha(),
+        pygame.image.load("imagens/icons/Teclas/space.png").convert_alpha(),
         (100, 50)
     )
     icone_x = pygame.transform.scale(
-        pygame.image.load("imagens/Teclas/x.png").convert_alpha(),
+        pygame.image.load("imagens/icons/Teclas/x.png").convert_alpha(),
         (50, 50)
     )
 
