@@ -1,4 +1,4 @@
-# Goku Invaders
+# Goku-Invaders
 
 ## 🎮 Sobre o Jogo
 
@@ -70,19 +70,19 @@ O jogo criado é uma versão modificada do clássico “Space Invaders”.<br> N
 ## 📚 Funcionalidades
 
 **Personagem Principal**:
-Controle do Goku em movimento vertical para enfrentar inimigos.
+Controle o Goku em movimento vertical para enfrentar inimigos.
 Ataque especial desbloqueado após eliminar três inimigos consecutivos.
 
 **Sistema de Inimigos**:
 Vários tipos de inimigos, com movimentos e padrões de ataque específicos.
-Chefe final com mecânicas únicas, incluindo ataques múltiplos e movimentação dinâmica.
+Inimigo final com mecânicas únicas, incluindo ataques múltiplos e movimentação dinâmica.
 
 **Progressão por Níveis**:
 A dificuldade aumenta com níveis progressivos.
 Mudanças no fundo e inimigos para maior variedade visual e de gameplay.
 
 **Sistema de Pontuação**:
-Registro e exibição de pontuações altas (highscores).
+Registro e exibição de pontuação mais alta (highscores).
 Pontuação acumulada ao derrotar inimigos e progredir.
 
 **Gestão de Vidas e Colisões**:
@@ -95,7 +95,7 @@ Controle de volume para músicas e efeitos sonoros individualmente.
 
 **Menus e Navegação**:
 Tela inicial com opções para começar o jogo, visualizar highscores ou sair.
-Menu de pausa com opções para continuar, sair ou checar pontuações.
+Menu de pausa com opções para continuar, sair ou mostrar pontuações.
 Tela de instruções para ajudar novos jogadores.
 
 **Transições e Animações**:
@@ -114,6 +114,7 @@ Animações fluidas para o personagem e inimigos.
   Carina Gameiro,<br>
   Aleff Almeida,<br>
   Guilherme Borges**
+  
 ---
 
 ## 📜 Licença
