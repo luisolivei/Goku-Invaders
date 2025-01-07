@@ -63,7 +63,7 @@ O jogo criado é uma versão modificada do clássico “Space Invaders”.<br> N
 
 ## 🖼️ Capturas de Tela
 
-![Gameplay](https://via.placeholder.com/800x400?text=Imagem+de+Gameplay)
+![Descrição da Imagem](imagens/tela.png)
 
 ---
 
