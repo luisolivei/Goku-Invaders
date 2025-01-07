@@ -2,7 +2,7 @@
 
 ## 🎮 Sobre o Jogo
 
-O jogo criado é uma versão modificada do clássico “Space Invaders”.<br> Na nossa versão o jogador irá controlar o “Goku” que se desloca verticalmente com o objetivo de destruir os inimigos para salvar a sua amada “Kika”. <br>Atira projéteis para destruir uma frota de inimigos. Com progressão por níveis, historia entre niveis e um sistema de pontuação.   
+O jogo criado é uma versão modificada do clássico “Space Invaders”.<br> Na nossa versão o jogador irá controlar o “Goku” que se desloca verticalmente com o objetivo de destruir os inimigos para salvar a sua amada “Kika”.<br>Atira projéteis para destruir os inimigos.<br>O jogo conta com progressão por níveis, historia entre níveis e um sistema de pontuação.   
 ---
 
 ## 🛠️ Tecnologias Utilizadas
