@@ -30,11 +30,11 @@ def tela_instrucoes(ecra, largura_ecra, altura_ecra):
 
     # Fonte e textos explicativos
     fonte = pygame.font.Font(caminho_fonte, 32)
-    texto_up = fonte.render("Mover para cima", True, (255, 255, 255))
-    texto_down = fonte.render("Mover para baixo", True, (255, 255, 255))
-    texto_space = fonte.render("Atirar", True, (255, 255, 255))
-    texto_iniciar = fonte.render("Pressione ENTER para começar", True, (255, 165, 0))
-    texto_x = fonte.render("Acumula 3 inimigos mortos e desbloqueia Kamehameh", True, (255, 255, 255))
+    texto_up = fonte.render("Mover para cima", True, (255, 255, 255)) # Branco
+    texto_down = fonte.render("Mover para baixo", True, (255, 255, 255)) # Branco
+    texto_space = fonte.render("Atirar", True, (255, 255, 255)) # Branco
+    texto_iniciar = fonte.render("Pressione ENTER para começar", True, (255, 165, 0)) # Laranja
+    texto_x = fonte.render("Acumula 3 inimigos mortos e desbloqueia Kamehameh", True, (255, 255, 255)) # Branco
 
     # Criando sombras para os textos (cor preta, deslocada para baixo e à direita)
     cor_sombra = (0, 0, 0)

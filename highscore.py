@@ -16,10 +16,10 @@ def mostrar_highscore(ecra, fundo):
         highscore = "Nenhum highscore salvo."
     
     # Configuração do texto
-    fonte = pygame.font.Font(caminho_fonte, 48)
-    titulo = fonte.render("Pontuação mais alta", True, (255, 255, 0))
-    texto_highscore = fonte.render(highscore, True, (255, 255, 0))
-    instrucoes = fonte.render("Pressione ESC para voltar", True, (200, 200, 200))
+    fonte = pygame.font.Font(caminho_fonte, 48)  # Fonte para o título
+    titulo = fonte.render("Pontuação mais alta", True, (255, 255, 0))  # Amarelo
+    texto_highscore = fonte.render(highscore, True, (255, 255, 0))  # Amarelo
+    instrucoes = fonte.render("Pressione ESC para voltar", True, (200, 200, 200))  # Cinza
     
     # Centraliza o texto na tela
     ecra.blit(titulo, (largura_ecra // 2 - titulo.get_width() // 2, altura_ecra // 4))
@@ -34,26 +34,26 @@ def mostrar_highscore(ecra, fundo):
             if evento.type == pygame.QUIT:
                 pygame.quit()
                 exit()
-            elif evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE:
+            elif evento.type == pygame.KEYDOWN and evento.key == pygame.K_ESCAPE: # Verifica se o jogador pressionou ESC
                 return
         pygame.display.update()
 
 
-# Caminho para salvar o arquivo de score
+# Caminho para guardar o arquivo de score
 arquivo_score = "highscore.txt"
 
-def salvar_highscore(score):
+def salvar_highscore(score): # Guarda o highscore em um arquivo
     try:
-        with open(arquivo_score, "w") as arquivo:
-            arquivo.write(str(score))
+        with open(arquivo_score, "w") as arquivo: # Abre o arquivo para escrita
+            arquivo.write(str(score)) # Escreve o score no arquivo
     except IOError:
         print("Erro ao salvar o highscore.")
 
-def carregar_highscore():
+def carregar_highscore(): # Le o highscore do arquivo
     if os.path.exists(arquivo_score):
         try:
-            with open(arquivo_score, "r") as arquivo:
-                return int(arquivo.read().strip())
+            with open(arquivo_score, "r") as arquivo: # Abre o arquivo para leitura
+                return int(arquivo.read().strip()) # Le o score do arquivo
         except (IOError, ValueError):
-            return 0  # Se houver erro, retorna 0
+            return 0  
     return 0  # Se o arquivo não existir, retorna 0

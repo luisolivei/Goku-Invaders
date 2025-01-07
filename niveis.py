@@ -26,34 +26,33 @@ def carregar_fundo(nivel):
 
 def gerar_inimigo(nivel):
     if nivel == 1:
-        tipo = random.choice([5, 4])  # Apenas inimigos do tipo 1 e 2 no nível 1
+        tipo = random.choice([5, 4])  # Apenas inimigos do tipo 5 e 4 no nível 1
     elif nivel == 2:
         tipo = random.choice([2, 3])  # Apenas inimigos do tipo 2 e 3 no nível 2
     elif nivel == 3:
-        tipo = random.choice([1, 2, 3])  # Apenas inimigos do tipo 3 no nível 3
+        tipo = random.choice([1, 2, 3])  # Inimigos do tipo 1, 2 e 3 no nível 3
     else:
         tipo = random.choice([1, 2, 3, 4, 5])  # Para níveis superiores, inclui todos os tipos
     
     pos_y = random.randint(50, altura_ecra - 50)  # Posição vertical aleatória
     return Inimigo(tipo, pos_y)
 
-
+# Função para reproduzir o vídeo
 def reproduzir_video(video_path, ecra):
     # Carrega o vídeo com OpenCV
     cap = cv2.VideoCapture(video_path)
 
-    if not cap.isOpened():
+    if not cap.isOpened(): 
         print("Erro ao abrir o vídeo!")
         return
-
-    clock = pygame.time.Clock()
+    clock = pygame.time.Clock()  # Inicializa o relógio
     while True:
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
+        for evento in pygame.event.get(): 
+            if evento.type == pygame.QUIT: 
                 pygame.quit()
                 exit()
 
-        ret, frame = cap.read()
+        ret, frame = cap.read() 
         if not ret:
             break  # Se o vídeo terminar, sai do loop
 
@@ -67,11 +66,11 @@ def reproduzir_video(video_path, ecra):
         frame = pygame.surfarray.make_surface(frame)
 
         ecra.blit(frame, (0, 0))
-        pygame.display.update()
-        pygame.time.wait(95)
+        pygame.display.update()  
+        pygame.time.wait(95)  # Delay para simular a reprodução do vídeo
         clock.tick(60)  # Limita a 30 FPS para uma reprodução suave
 
-    cap.release()
+    cap.release() 
 
 
 def mostrar_historia(ecra, nivel):
@@ -87,7 +86,7 @@ def mostrar_historia(ecra, nivel):
     elif nivel == 3:
         imagem_historia = pygame.image.load("imagens/historia/historia3.jpg").convert_alpha()
         texto_historia = "Ninguém me conseguira deter!!!"
-    elif nivel == 4:
+    elif nivel == 4: 
         imagem_historia = pygame.image.load("imagens/historia/historia4.jpg").convert_alpha()
         texto_historia = "Percorri o universo e não a encontrei!! Sera Agora?" 
 
@@ -151,10 +150,11 @@ def mostrar_historia(ecra, nivel):
                     continuar = True
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
 
+# Função para exibir a tela final
 def mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte):
     # Cor de fundo preto
-    fundo_cor = (0, 0, 0)
-    texto_cor = (255, 255, 255)
+    fundo_cor = (0, 0, 0) # Preto
+    texto_cor = (255, 255, 255) # Branco
 
     # Preenchendo a tela com fundo preto
     ecra.fill(fundo_cor)
@@ -181,7 +181,7 @@ def mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte):
     textos_creditos = [fonte_creditos.render(linha, True, texto_cor) for linha in creditos]
 
     # Posição inicial dos créditos
-    y_inicial = altura_ecra
+    y_inicial = altura_ecra 
     velocidade = 0.8  # Velocidade do movimento (em pixels por frame)
 
     # Exibe "Resgataste a Kika" por 5 segundos
@@ -228,7 +228,7 @@ def mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte):
             rodando = False
 
         # Atualiza a tela
-        pygame.display.flip()
+        pygame.display.flip() # Atualiza a tela
         clock.tick(60) # Limita a 60 frames por segundo
 
     # Pausa no final antes de sair
@@ -240,21 +240,21 @@ def nivel_concluido(ecra, nivel):
     mensagem = f"Nível {nivel-1} concluído!"
     texto = fonte.render(mensagem, True, (255, 255, 0))  # Amarelo
     ecra.blit(texto, (largura_ecra // 2 - texto.get_width() // 2, altura_ecra // 2))
-    pygame.display.update()
-    pygame.time.wait(2000)
+    pygame.display.update() 
+    pygame.time.wait(2000) # Espera 2 segundos
 
 # Executa logica para transiçao de nivel e limpeza de ecra
 def avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos): 
-    pygame.time.wait(1000)
+    pygame.time.wait(1000) # Espera 1 segundo
     fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
-    nivel_concluido(ecra, nivel)
+    nivel_concluido(ecra, nivel) # Nivel concluido
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
-    mostrar_historia(ecra, nivel)
+    mostrar_historia(ecra, nivel) # Mostra historia
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
-    sons.tocar_musica_fundo(nivel)
-    inimigos.clear()
-    jogador.projeteis.clear()
-    jogador.projetil2 = None
-    jogador.disparando = False
-    jogador.definir_animacao("parado")
-    return fundo
+    sons.tocar_musica_fundo(nivel) # Toca musica conforme o nivel
+    inimigos.clear() # Limpa inimigos
+    jogador.projeteis.clear() # Limpa projeteis ao avancar de nivel
+    jogador.projetil2 = None # Limpa Projetil2 ao avancar de nivel
+    jogador.disparando = False # Limpa disparando ao avancar de nivel
+    jogador.definir_animacao("parado") # Limpa animacao ao avancar de nivel
+    return fundo 

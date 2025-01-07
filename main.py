@@ -14,17 +14,18 @@ from highscore import mostrar_highscore, carregar_highscore, salvar_highscore
 from Instrucoes import tela_instrucoes
 
 # Variáveis globais para controle do estado do jogo
-play = False
+play = False # Variável para controlar o estado do jogo
 pontuacao = 0  # Variável para a pontuação
 nivel = 1  # Variável para o nível atual
 sons = Sons()  # Inicia o som
 
-def tela_game_over(ecra, fundo):
+# Função para exibir a tela de Game Over
+def tela_game_over(ecra, fundo): 
     sons.parar_musica_fundo()
     sons.tocar_game_over()
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 60)
-    global pontuacao
-    highscore = carregar_highscore()
+    global pontuacao # Variável global para a pontuação
+    highscore = carregar_highscore() # Le o highscore do arquivo
     novo_recorde = False  # Variável para rastrear se o highscore foi batido
 
     # Atualiza o highscore, se necessário
@@ -35,7 +36,7 @@ def tela_game_over(ecra, fundo):
 
     mensagem = "GAME OVER"
     submensagem = f"Score: {pontuacao} | Highscore: {highscore}"
-    if novo_recorde:
+    if novo_recorde: # Se o jogador bateu o recorde, adiciona a mensagem
         submensagem + f" Parabéns! Novo recorde!"
     opcoes = ["Reiniciar", "Sair"]
 
@@ -76,8 +77,8 @@ def tela_game_over(ecra, fundo):
 # Função principal do jogo
 
 def play_game():
-    global play, pontuacao, nivel, tempo_inicio_jogo
-    tempo_inicio_jogo = 0
+    global play, pontuacao, nivel, tempo_inicio_jogo # Variáveis globais
+    tempo_inicio_jogo = 0 # Variável para rastrear o tempo de inicio do jogo
     pontuacao = 0  # Reseta a pontuação ao iniciar um novo jogo
     nivel = 1  # Reseta o nível ao iniciar
     ecra = pygame.display.set_mode((largura_ecra, altura_ecra))  # Inicializa a janela do jogo
@@ -97,7 +98,7 @@ def play_game():
     jogador.adicionar_animacao("atingido", AnimacaoAtingido())
     jogador.adicionar_animacao("disparar2",AnimacaoDispararEspecial())
     jogador.definir_animacao("parado")  # Necessária para iniciar a animação
-    jogador.vida = 100
+    jogador.vida = 100 # Inicializa a vida do jogador
     jogador.disparando = False  # Adiciona estado para controlar o disparo
     jogador.temporizador = 0  # Temporizador para controlar a tempo de animaçoes com necessidade de reset para "parado"
 
@@ -105,7 +106,7 @@ def play_game():
     inimigo_final = None  # Inicializa a variável no início da função  
     relogio = pygame.time.Clock()  # Inicia o relógio para controlar o FPS
     posicao_fundo_x = 0  # Posição inicial do fundo
-    a_funcionar = True
+    a_funcionar = True  # Variável de controle do loop
 
     # Loop principal do jogo
     while a_funcionar:
@@ -144,7 +145,7 @@ def play_game():
             mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte)  # Exibe a tela de "Jogo Completo"
             iniciar_jogo()  # Volta ao menu inicial
             return  # Finaliza o loop principal
-   
+        
         # Processa eventos de entrada
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -325,10 +326,10 @@ def play_game():
         jogador.atualizar(delta_tempo)
         jogador.desenhar(ecra)
 
-        # Carregar a imagem do coração no início
-        caminho_coracao = "imagens/icons/coracao.png"  # Substitua pelo caminho correto
-        imagem_coracao = pygame.image.load(caminho_coracao)
-        imagem_coracao = pygame.transform.scale(imagem_coracao, (40, 40))  # Redimensiona, se necessário
+        # Carregar a imagem do icone coração no início
+        caminho_coracao = "imagens/icons/coracao.png"  # Caminho da imagem do coração
+        imagem_coracao = pygame.image.load(caminho_coracao)  # Carrega a imagem
+        imagem_coracao = pygame.transform.scale(imagem_coracao, (40, 40))  # Redimensiona a imagem
 
         # Exibe a vida, pontuação e nível na tela
         fonte = pygame.font.Font(caminho_fonte, 40)  # Define o tamanho da fonte ()
@@ -342,9 +343,9 @@ def play_game():
         score_texto = fonte.render(f"Score: {pontuacao}", True, (255, 255, 0))
         nivel_texto = fonte.render(f"Nível: {nivel}", True, (255, 165, 0))
         ecra.blit(imagem_coracao, (10, 10))  # Desenha o coração na posição desejada
-        ecra.blit(vida_texto, (60, 10))
-        ecra.blit(score_texto, (largura_ecra - 190, 10))
-        ecra.blit(nivel_texto, (largura_ecra - 470, 8))  # Exibe o nível abaixo da vida
+        ecra.blit(vida_texto, (60, 10))  # Exibe a vida na posição desejada
+        ecra.blit(score_texto, (largura_ecra - 190, 10))  # Exibe a pontuação abaixo da vida
+        ecra.blit(nivel_texto, (largura_ecra - 470, 8))  # Exibe o nível abaixo da pontuação
         pygame.display.update()
 
 # Configuração inicial do menu
@@ -359,21 +360,21 @@ def iniciar_jogo():
     # Loop principal para exibir o menu e reagir à seleção do jogador
     while True:
         # Exibe o menu inicial com título
-        escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Jogar","Highscore", "Sair"])
-        if escolha == "Jogar":
-            tela_instrucoes(ecra, largura_ecra, altura_ecra)
-            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
-            play = True
+        escolha = menu(ecra, largura_ecra, altura_ecra, fundo, ["Jogar","Highscore", "Sair"]) # Exibe o menu
+        if escolha == "Jogar": # Se o jogador escolher "Jogar"
+            tela_instrucoes(ecra, largura_ecra, altura_ecra) # Exibe as instruções
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20) # Faz a transição de fade
+            play = True # Define o estado do jogo como "jogando"
             play_game()  # Inicia o jogo
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20) # Faz a transição de fade
+        elif escolha == "Highscore": # Se o jogador escolher "Highscore"
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
-        elif escolha == "Highscore":
+            mostrar_highscore(ecra,fundo) # Exibe o highscore
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
-            mostrar_highscore(ecra,fundo)
+        elif escolha == "Sair": # Se o jogador escolher "Sair"
             fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
-        elif escolha == "Sair":
-            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
-            pygame.quit()
+            pygame.quit() # Fecha o jogo
             break
 
 # Inicializa o jogo, entra no menu incial
-iniciar_jogo()
+iniciar_jogo() 
