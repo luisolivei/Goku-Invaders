@@ -17,13 +17,13 @@ def carregar_fundo(nivel):
     elif nivel == 3:
         fundo = pygame.image.load("imagens/Backgrounds/bg3.png").convert_alpha()  # Fundo do nível 3
     elif nivel == 4:
-        fundo = pygame.image.load("imagens/Backgrounds/bg4.png").convert_alpha()
+        fundo = pygame.image.load("imagens/Backgrounds/bg4.png").convert_alpha()  # Fundo do nível 4
     else:
-        fundo = pygame.image.load("imagens/Backgrounds/bg4.png").convert_alpha()  # Fundo padrão
+        fundo = pygame.image.load("imagens/Backgrounds/bg4.png").convert_alpha()  # Caso não seja um nível valido
 
     return pygame.transform.scale(fundo, (largura_ecra, altura_ecra))
 
-
+# Função para gerar inimigos de acordo com o nível
 def gerar_inimigo(nivel):
     if nivel == 1:
         tipo = random.choice([5, 4])  # Apenas inimigos do tipo 5 e 4 no nível 1
@@ -72,7 +72,7 @@ def reproduzir_video(video_path, ecra):
 
     cap.release() 
 
-
+# Função para mostrar a historia
 def mostrar_historia(ecra, nivel):
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
     
@@ -153,8 +153,8 @@ def mostrar_historia(ecra, nivel):
 # Função para exibir a tela final
 def mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte):
     # Cor de fundo preto
-    fundo_cor = (0, 0, 0) # Preto
-    texto_cor = (255, 255, 255) # Branco
+    fundo_cor = (0, 0, 0)  # Preto
+    texto_cor = (255, 255, 255)  # Branco
 
     # Preenchendo a tela com fundo preto
     ecra.fill(fundo_cor)
@@ -181,12 +181,14 @@ def mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte):
     textos_creditos = [fonte_creditos.render(linha, True, texto_cor) for linha in creditos]
 
     # Posição inicial dos créditos
-    y_inicial = altura_ecra 
+    y_inicial = altura_ecra
     velocidade = 0.8  # Velocidade do movimento (em pixels por frame)
 
-    # Exibe "Resgataste a Kika" por 5 segundos
+    # Exibe "Resgataste a Kika" por 4 segundos
     tempo_inicial = pygame.time.get_ticks()  # Tempo inicial em milissegundos
-    while pygame.time.get_ticks() - tempo_inicial < 5000:  # 5000 ms = 5 segundos
+    mostrar_titulo = True
+
+    while mostrar_titulo:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 return  # Sai da função se o jogador fechar a janela
@@ -194,8 +196,12 @@ def mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte):
         # Limpa a tela
         ecra.fill(fundo_cor)
 
-        # Desenha apenas o título
-        ecra.blit(titulo, (largura_ecra // 2 - titulo.get_width() // 2, altura_ecra // 2 - titulo.get_height() // 2))
+        # Verifica se já passaram 4 segundos
+        if pygame.time.get_ticks() - tempo_inicial >= 4000:  # 4000 ms = 4 segundos
+            mostrar_titulo = False
+        else:
+            # Desenha apenas o título
+            ecra.blit(titulo, (largura_ecra // 2 - titulo.get_width() // 2, altura_ecra // 2 - titulo.get_height() // 2))
 
         # Atualiza a tela
         pygame.display.flip()
@@ -212,9 +218,6 @@ def mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte):
         # Limpa a tela
         ecra.fill(fundo_cor)
 
-        # Desenha o título fixo
-        ecra.blit(titulo, (largura_ecra // 2 - titulo.get_width() // 2, altura_ecra // 3 - 100))
-
         # Desenha os créditos que sobem
         for i, texto in enumerate(textos_creditos):
             pos_y = y_inicial + i * 50  # Espaçamento entre as linhas
@@ -228,13 +231,15 @@ def mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte):
             rodando = False
 
         # Atualiza a tela
-        pygame.display.flip() # Atualiza a tela
-        clock.tick(60) # Limita a 60 frames por segundo
+        pygame.display.flip()  # Atualiza a tela
+        clock.tick(60)  # Limita a 60 frames por segundo
 
     # Pausa no final antes de sair
-    pygame.time.wait(8000)  # Aguarda 5 segundos antes de voltar ao menu
+    pygame.time.wait(3000)  # Aguarda 3 segundos antes de voltar ao menu
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
 
+
+# Função para exibir a mensagem de nível concluído
 def nivel_concluido(ecra, nivel):
     fonte = pygame.font.Font(caminho_fonte, 64)
     mensagem = f"Nível {nivel-1} concluído!"
@@ -243,7 +248,7 @@ def nivel_concluido(ecra, nivel):
     pygame.display.update() 
     pygame.time.wait(2000) # Espera 2 segundos
 
-# Executa logica para transiçao de nivel e limpeza de ecra
+#  Funcao que executa logica para transiçao de nivel e limpeza de ecra
 def avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos): 
     pygame.time.wait(1000) # Espera 1 segundo
     fundo = carregar_fundo(nivel)  # Muda o fundo conforme o nível
