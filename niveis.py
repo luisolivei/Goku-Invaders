@@ -235,7 +235,7 @@ def mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte):
         clock.tick(60)  # Limita a 60 frames por segundo
 
     # Pausa no final antes de sair
-    pygame.time.wait(2000)  # Aguarda 2 segundos antes de voltar ao menu
+    pygame.time.wait(3000)  # Aguarda 3 segundos antes de voltar ao menu
     fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 20)
 
 
