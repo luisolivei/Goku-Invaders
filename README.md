@@ -15,7 +15,6 @@ O jogo criado é uma versão modificada do clássico “Space Invaders”.<br> N
   - [random]
   - [os]
   
-  - [Outras ferramentas]
 - **Assets:** Imagens e sons foram criados ou obtidos de repositórios livres de direitos autorais.
   
 ---
@@ -107,18 +106,19 @@ Animações fluidas para o personagem e inimigos.
 ---
 
 
+## 🛡️ Créditos
+
+- **Desenvolvedores**:<br>
+  **Tiago Bastos<br>
+  Luís Oliveira,<br>
+  Carina Gameiro,<br>
+  Aleff Almeida,<br>
+  Guilherme Borges**
+---
 
 ## 📜 Licença
 
 Este projeto está licenciado sob a [MIT License](LICENSE). Sinta-se à vontade para usar, modificar e distribuir!
-
----
-
-## 🛡️ Créditos
-
-- Desenvolvedor: [Seu Nome ou Usuário do GitHub]
-- Assets visuais: [Nome dos criadores ou sites de onde foram obtidos]
-- Sons: [Nome dos criadores ou sites de onde foram obtidos]
 
 ---
 
