@@ -133,7 +133,7 @@ class InimigoFinal:
         self.indice_sprite = 0  # Índice do sprite atual
         self.direcao_sprite = 1  # 1 para frente, -1 para trás
         self.tempo_animacao = 0  # Controle do tempo de animação
-        self.velocidade_animacao = 200  # Velocidade da animação (em milissegundos)
+        self.velocidade_animacao = 500  # Velocidade da animação (em milissegundos)
         self.largura = 100  # Largura do sprite do inimigo
         self.altura = 150  # Altura do sprite do inimigo
 
