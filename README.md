@@ -2,8 +2,7 @@
 
 ## 🎮 Sobre o Jogo
 
-Um jogo inspirado no clássico Space Invaders. Controle o goku  para derrotar ondas de inimigos! Este projeto foi desenvolvido como projeto final do curso de Python, recriando a nostalgia do famoso jogo arcade.
-
+O jogo criado será uma versão modificada do clássico “Space Invaders”. Na nossa versão o jogador irá controlar o “Goku” que se desloca verticalmente com o objetivo de destruir os inimigos para salvar a sua amada “Kika”. Atira projéteis para destruir uma frota de inimigos, com progressão por níveis, historia entre niveis e um sistema de pontuação..   
 ---
 
 ## 🛠️ Tecnologias Utilizadas
@@ -21,7 +20,7 @@ Um jogo inspirado no clássico Space Invaders. Controle o goku  para derrotar on
 
 1. Clone o repositório:
    ```bash
-   git clone [[https://github.com/luisolivei/Goku-Invaders]]
+   git clone [https://github.com/luisolivei/Goku-Invaders]
    ```
 
 2. Navegue até a pasta do projeto:
