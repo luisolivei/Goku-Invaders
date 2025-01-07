@@ -50,7 +50,7 @@ class Projetil:
 
 #em desenvolvimento, nao implementado, testar em main_tiago
 class Projetil2:
-    def __init__(self, x, y, duracao=4, velocidade=6):
+    def __init__(self, x, y, duracao=3, velocidade=6):
         self.x = x
         self.y = y
         self.raio_fim_x = x + 64  # Exemplo de como definir raio_fim_x
@@ -102,7 +102,7 @@ class Projetil2:
             return
 
         # Calcula o comprimento total disponível para o raio
-        comprimento_total = largura_ecra + 100
+        comprimento_total = largura_ecra 
         largura_inicio = self.sprite_inicio.get_width()
         largura_fim = self.sprite_fim.get_width()
         largura_corpo = self.sprite_corpo.get_width()
