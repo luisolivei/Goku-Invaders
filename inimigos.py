@@ -22,7 +22,7 @@ class Inimigo:
         self.velocidades_animacoes = {
             1: {"andar": 0.2, "morto": 0.1},
             2: {"andar": 0.3, "morto": 0.1},
-            3: {"andar": 0.5, "morto": 0.2},
+            3: {"andar": 0.3, "morto": 0.2},
             4: {"andar": 0.3, "morto": 0.3},
             5: {"andar": 0.3, "morto": 0.1},
         }
