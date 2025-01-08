@@ -290,6 +290,12 @@ def play_game():
         jogador.atualizar(delta_tempo)
         jogador.desenhar(ecra)
 
+        # Variável para armazenar o status da música
+        musica_status_texto = "Som: ON" if musica_on else "Som: OFF"
+
+# Fonte para o texto de status
+        fonte_status = pygame.font.Font(caminho_fonte, 30)
+        status_texto = fonte_status.render(musica_status_texto, True, (255, 255, 255))  # Texto em branco  # Ajuste o tamanho conforme necessário
         # Carregar a imagem do icone coração no início
         caminho_coracao = "imagens/icons/coracao.png"  # Caminho da imagem do coração
         imagem_coracao = pygame.image.load(caminho_coracao)  # Carrega a imagem
@@ -323,6 +329,7 @@ def play_game():
         ecra.blit(vida_texto, (60, 10))  # Exibe a vida na posição desejada
         ecra.blit(score_texto, (largura_ecra - 190, 10))  # Exibe a pontuação no canto superior direito
         ecra.blit(nivel_texto, (largura_ecra - 470, 8))  # Exibe o nível à esquerda do score
+        ecra.blit(status_texto, ( largura_ecra - 80, altura_ecra - 30))  # Posição na parte inferior da tela
         pygame.display.update()  # Atualiza a tela
 
 # Configuração inicial do menu
