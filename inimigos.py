@@ -6,7 +6,7 @@ from projetil import Projetil, Projetil2
 import random
 
 class Inimigo:
-    def __init__(self, tipo, pos_y, cores_fundo=[(132, 66, 4), (128, 0, 128), (153, 217, 234),(96, 64, 168)]):
+    def __init__(self, tipo, pos_y, cores_fundo=[(132, 66, 4), (128, 0, 128), (153, 217, 234),(96, 64, 168),(84, 109, 142),(96, 64, 168)]):
         self.tipo = tipo
         self.vidas = {1: 3, 2: 5, 3: 7, 4: 5, 5: 3}[tipo]
         self.pos_x = largura_ecra
@@ -22,7 +22,7 @@ class Inimigo:
         self.velocidades_animacoes = {
             1: {"andar": 0.2, "morto": 0.1},
             2: {"andar": 0.3, "morto": 0.1},
-            3: {"andar": 0.5, "morto": 0.1},
+            3: {"andar": 0.5, "morto": 0.2},
             4: {"andar": 0.3, "morto": 0.3},
             5: {"andar": 0.3, "morto": 0.1},
         }
