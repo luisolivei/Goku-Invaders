@@ -69,15 +69,15 @@ def play_game():
             inimigos.append(gerar_inimigo(nivel))
 
         # Lógica de níveis
-        if nivel == 1 and pontuacao >= 800:  # Nível 1: 800 pontos para avançar
+        if nivel == 1 and pontuacao >= 400:  # Nível 1: 800 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 2 and pontuacao >= 2000:  # Nível 2: 2000 pontos para avançar
+        elif nivel == 2 and pontuacao >= 600:  # Nível 2: 2000 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 3 and pontuacao >= 34000:  # Nível 3: 3600 pontos para avançar
+        elif nivel == 3 and pontuacao >= 700:  # Nível 3: 3600 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
@@ -87,7 +87,11 @@ def play_game():
         
         elif nivel > 4:
             sons.tocar_musica_fundo(nivel)
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)# Exibe o score final antes do vídeo
+            mostrar_score_final(ecra, largura_ecra, altura_ecra, pontuacao, caminho_fonte)
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
             reproduzir_video("imagens/historia/video_final.mp4", ecra)
+            fade_in_out(ecra, (0, 0, 0), largura_ecra, altura_ecra, 30)
             mostrar_tela_final(ecra, largura_ecra, altura_ecra, caminho_fonte)  # Exibe a tela de "Jogo Completo"
             iniciar_jogo()  # Volta ao menu inicial
             return  # Finaliza o loop principal
@@ -402,6 +406,33 @@ def tela_game_over(ecra, fundo):
     elif escolha == "Sair":
         pygame.quit()
         exit()
+
+def mostrar_score_final(ecra, largura_ecra, altura_ecra, pontuacao, caminho_fonte, tempo_exibicao=3000):
+    # Carrega a fonte para exibir o texto
+    fonte = pygame.font.Font(caminho_fonte, 36)
+    
+    # Cria o texto de "Pontuação Final"
+    texto_pontuacao = fonte.render(f"Pontuação Final: {pontuacao}", True, (255, 255, 255))
+    
+    # Define a posição do texto no centro da tela
+    posicao_texto = texto_pontuacao.get_rect(center=(largura_ecra // 2, altura_ecra // 2 - 50))
+    
+    # Preenche o fundo da tela com preto
+    ecra.fill((0, 0, 0))  # Fundo preto
+    
+    # Exibe o texto de pontuação final imediatamente após preencher o fundo
+    ecra.blit(texto_pontuacao, posicao_texto)
+    
+    # Atualiza a tela para mostrar a pontuação
+    pygame.display.flip()
+
+    # Aguarda o tempo especificado para exibir a pontuação final
+    pygame.time.delay(tempo_exibicao)  # Atraso de 'tempo_exibicao' milissegundos
+    
+    # Após o tempo de exibição, a tela pode ser limpa ou outro comportamento pode ser adicionado
+    # Limpa a tela após a exibição da pontuação
+    ecra.fill((0, 0, 0))  # Limpa a tela com fundo preto
+    pygame.display.flip()
 
 # Inicializa o jogo, entra no menu incial
 iniciar_jogo() 
