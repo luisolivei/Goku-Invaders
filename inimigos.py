@@ -14,7 +14,7 @@ class Inimigo:
         self.cores_fundo = cores_fundo
         self.direcao_sprite = 1
 
-        self.escalas = {1: 50, 2: 100, 3: 100, 4:100, 5:80}
+        self.escalas = {1: 50, 2: 100, 3: 80, 4:100, 5:80}
         self.escala = self.escalas.get(tipo, 100) / 100
 
         self.velocidade = 1
