@@ -89,7 +89,7 @@ def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensa
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 pygame.quit()
-                return "quit"
+                return "Sair"
             if evento.type == pygame.MOUSEBUTTONDOWN:
                 if evento.button == 1:  # Verifica se o botão esquerdo do mouse foi clicado
                     for texto, posicao in botoes.items():
@@ -99,7 +99,7 @@ def menu(ecra, largura_ecra, altura_ecra, fundo, opcoes, mensagem=None, submensa
                             return texto  # Retorna o texto do botão clicado
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_ESCAPE:
-                    return "quit"  # Permite sair do menu com ESC
+                    return "Sair"  # Permite sair do menu com ESC
 
         pygame.display.update()
 
