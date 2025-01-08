@@ -18,6 +18,8 @@ play = False # Variável para controlar o estado do jogo
 pontuacao = 0  # Variável para a pontuação
 nivel = 1  # Variável para o nível atual
 sons = Sons()  # Inicia o som
+# Variável para controlar o estado do som
+musica_on = True  # A música começa ligada
 
 # Função principal do jogo
 
@@ -77,7 +79,7 @@ def play_game():
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 3 and pontuacao >= 1100:  # Nível 3: 300 pontos para avançar
+        elif nivel == 3 and pontuacao >= 1100:  # Nível 3: 3000 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
@@ -121,13 +123,13 @@ def play_game():
                     jogador.definir_animacao("parado")  # Restaura o estado após a pausa
 
                 #parar musica fudno durante os niveis, existe somente por motivos de testar. não funciona como mute 
-                elif evento.key == pygame.K_m: # Verifica se a tecla M foi pressionada
-                    if musica_on: # Se a musica estiver ligada
-                        sons.parar_musica_fundo() # Para a musica de fundo
-                        musica_on = False # Desliga a musica    
-                    else: # Se a musica estiver desligada
-                        sons.tocar_musica_fundo(nivel) # Toca a musica de fundo de acordo com o nível  
-                        musica_on = True # Liga a musica     
+                elif evento.key == pygame.K_m:  # Verifica se a tecla M foi pressionada
+                    if sons.mutado:  # Se o som estiver mutado
+                        sons.desligar()  # Desmutar o som
+                        musica_on = True  # Ativa a música de fundo
+                    else:  # Se o som não estiver mutado
+                        sons.ligar()  # Muta o som
+                        musica_on = False  # Desliga a música de fundo  
 
             elif evento.type == pygame.KEYUP:
                 if evento.key == pygame.K_SPACE:
@@ -255,6 +257,8 @@ def play_game():
                         nivel += 1  # Avança para o próximo nível( neste caso fim do jogo)
                             
 
+                    
+        
         # Atualiza o temporizador da animação "atingido"
         if jogador.temporizador > 0:
             jogador.temporizador -= delta_tempo
@@ -288,6 +292,12 @@ def play_game():
         jogador.atualizar(delta_tempo)
         jogador.desenhar(ecra)
 
+        # Variável para armazenar o status da música
+        musica_status_texto = "Som: ON" if musica_on else "Som: OFF"
+
+# Fonte para o texto de status
+        fonte_status = pygame.font.Font(caminho_fonte, 30)
+        status_texto = fonte_status.render(musica_status_texto, True, (255, 255, 255))  # Texto em branco  # Ajuste o tamanho conforme necessário
         # Carregar a imagem do icone coração no início
         caminho_coracao = "imagens/icons/coracao.png"  # Caminho da imagem do coração
         imagem_coracao = pygame.image.load(caminho_coracao)  # Carrega a imagem
@@ -321,6 +331,7 @@ def play_game():
         ecra.blit(vida_texto, (60, 10))  # Exibe a vida na posição desejada
         ecra.blit(score_texto, (largura_ecra - 190, 10))  # Exibe a pontuação no canto superior direito
         ecra.blit(nivel_texto, (largura_ecra - 470, 8))  # Exibe o nível à esquerda do score
+        ecra.blit(status_texto, ( largura_ecra - 80, altura_ecra - 30))  # Posição na parte inferior da tela
         pygame.display.update()  # Atualiza a tela
 
 # Configuração inicial do menu
