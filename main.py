@@ -124,15 +124,15 @@ def play_game():
             inimigos.append(gerar_inimigo(nivel))
 
         # Lógica de níveis
-        if nivel == 1 and pontuacao >= 300:  # Nível 1: 800 pontos para avançar
+        if nivel == 1 and pontuacao >= 800:  # Nível 1: 800 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 2 and pontuacao >= 700:  # Nível 2: 2000 pontos para avançar
+        elif nivel == 2 and pontuacao >= 2000:  # Nível 2: 2000 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
-        elif nivel == 3 and pontuacao >= 1000:  # Nível 3: 3600 pontos para avançar
+        elif nivel == 3 and pontuacao >= 34000:  # Nível 3: 3600 pontos para avançar
             nivel += 1
             fundo = avancar_nivel(ecra, nivel, largura_ecra, altura_ecra, sons, jogador, inimigos)
 
@@ -157,7 +157,7 @@ def play_game():
                     jogador.disparar()  # Ativa o disparo
                     #jogador.definir_animacao("disparar")
                     jogador.disparando = True
-                elif evento.key == pygame.K_x:
+                elif evento.key == pygame.K_x:  # Verifica se a tecla X foi pressionada
                     if jogador.ataque_especial_desbloqueado:  # Apenas executa se desbloqueado
                         jogador.disparar2()
                         sons.tocar_disparo2()
@@ -171,13 +171,13 @@ def play_game():
                     jogador.definir_animacao("parado")  # Restaura o estado após a pausa
 
                 #parar musica fudno durante os niveis, existe somente por motivos de testar. não funciona como mute 
-                elif evento.key == pygame.K_m: 
-                    if musica_on:
-                        sons.parar_musica_fundo() 
-                        musica_on = False    
-                    else:
-                        sons.tocar_musica_fundo(nivel)  
-                        musica_on = True     
+                elif evento.key == pygame.K_m: # Verifica se a tecla M foi pressionada
+                    if musica_on: # Se a musica estiver ligada
+                        sons.parar_musica_fundo() # Para a musica de fundo
+                        musica_on = False # Desliga a musica    
+                    else: # Se a musica estiver desligada
+                        sons.tocar_musica_fundo(nivel) # Toca a musica de fundo de acordo com o nível  
+                        musica_on = True # Liga a musica     
 
             elif evento.type == pygame.KEYUP:
                 if evento.key == pygame.K_SPACE:
@@ -345,22 +345,35 @@ def play_game():
         imagem_coracao = pygame.image.load(caminho_coracao)  # Carrega a imagem
         imagem_coracao = pygame.transform.scale(imagem_coracao, (40, 40))  # Redimensiona a imagem
 
+        caminho_x = "imagens/icons/teclas/x.png"  # Caminho da imagem do botão X
+        imagem_x = pygame.image.load(caminho_x)  # Carrega a imagem
+        imagem_x = pygame.transform.scale(imagem_x, (40, 40))  # Redimensiona a imagem
+
         # Exibe a vida, pontuação e nível na tela
-        fonte = pygame.font.Font(caminho_fonte, 40)  # Define o tamanho da fonte ()
+        fonte = pygame.font.Font(caminho_fonte, 40)  # Define o tamanho da fonte
         vida_texto = fonte.render(f"{jogador.vida}", True, (255, 0, 0))
         score_texto = fonte.render(f"Score: {pontuacao}", True, (255, 255, 0))
         nivel_texto = fonte.render(f"Nível: {nivel}", True, (255, 165, 0))
-        aviso_x = fonte.render(f"Kamehameah tecla X!!", True, (255, 0, 0))
-        if jogador.ataque_especial_desbloqueado==True:
-            texto_largura = aviso_x.get_width()
-            ecra.blit(aviso_x, ((largura_ecra - texto_largura) // 2, 50))
-        score_texto = fonte.render(f"Score: {pontuacao}", True, (255, 255, 0))
-        nivel_texto = fonte.render(f"Nível: {nivel}", True, (255, 165, 0))
+        aviso_x = fonte.render(f"Kamehameah", True, (255, 165, 0))
+
+        # Verifica se o ataque especial está desbloqueado
+        if jogador.ataque_especial_desbloqueado:
+    # Calcula a posição da tecla X logo abaixo do nível
+            pos_x = largura_ecra - 520  # Alinha horizontalmente com o texto do nível
+            pos_y = 8 + nivel_texto.get_height() + 10  # 10px abaixo do texto do nível
+            ecra.blit(imagem_x, (pos_x, pos_y))  # Exibe a tecla X abaixo do nível
+
+            # Exibe o texto "Kamehameha!" ao lado direito da tecla X
+            texto_x_pos = pos_x + imagem_x.get_width() + 5  # Espaçamento de 5px à direita da imagem X
+            texto_y_pos = pos_y + (imagem_x.get_height() - aviso_x.get_height()) // 2  # Centraliza verticalmente
+            ecra.blit(aviso_x, (texto_x_pos, texto_y_pos))
+
+        # Exibe os outros elementos
         ecra.blit(imagem_coracao, (10, 10))  # Desenha o coração na posição desejada
         ecra.blit(vida_texto, (60, 10))  # Exibe a vida na posição desejada
-        ecra.blit(score_texto, (largura_ecra - 190, 10))  # Exibe a pontuação abaixo da vida
-        ecra.blit(nivel_texto, (largura_ecra - 470, 8))  # Exibe o nível abaixo da pontuação
-        pygame.display.update()
+        ecra.blit(score_texto, (largura_ecra - 190, 10))  # Exibe a pontuação no canto superior direito
+        ecra.blit(nivel_texto, (largura_ecra - 470, 8))  # Exibe o nível à esquerda do score
+        pygame.display.update()  # Atualiza a tela
 
 # Configuração inicial do menu
 def iniciar_jogo():
