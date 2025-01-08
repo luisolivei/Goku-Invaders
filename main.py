@@ -18,6 +18,8 @@ play = False # Variável para controlar o estado do jogo
 pontuacao = 0  # Variável para a pontuação
 nivel = 1  # Variável para o nível atual
 sons = Sons()  # Inicia o som
+# Variável para controlar o estado do som
+musica_on = True  # A música começa ligada
 
 # Função principal do jogo
 
@@ -121,13 +123,13 @@ def play_game():
                     jogador.definir_animacao("parado")  # Restaura o estado após a pausa
 
                 #parar musica fudno durante os niveis, existe somente por motivos de testar. não funciona como mute 
-                elif evento.key == pygame.K_m: # Verifica se a tecla M foi pressionada
-                    if musica_on: # Se a musica estiver ligada
-                        sons.parar_musica_fundo() # Para a musica de fundo
-                        musica_on = False # Desliga a musica    
-                    else: # Se a musica estiver desligada
-                        sons.tocar_musica_fundo(nivel) # Toca a musica de fundo de acordo com o nível  
-                        musica_on = True # Liga a musica     
+                elif evento.key == pygame.K_m:  # Verifica se a tecla M foi pressionada
+                    if sons.mutado:  # Se o som estiver mutado
+                        sons.desligar()  # Desmutar o som
+                        musica_on = True  # Ativa a música de fundo
+                    else:  # Se o som não estiver mutado
+                        sons.ligar()  # Muta o som
+                        musica_on = False  # Desliga a música de fundo  
 
             elif evento.type == pygame.KEYUP:
                 if evento.key == pygame.K_SPACE:
