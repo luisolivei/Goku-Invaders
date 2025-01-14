@@ -9,11 +9,12 @@ O jogo criado é uma versão modificada do clássico “Space Invaders”.<br> N
 
 - **Linguagem:** [Python]
 - **Bibliotecas/Frameworks:** 
-  - [Pygame]
-  - [cv2]
-  - [numpy]
-  - [random]
-  - [os]
+  - [Pygame] - Ferramenta para criar jogos com som, gráficos e interatividade.
+  - [open.cv] - Biblioteca para processamento de imagens e visão computacional.
+  - [numpy] - Utilizada para cálculos matemáticos com vetores e matrizes.
+  - [random] - Gera números aleatórios, útil para jogos e simulações.
+  - [os] - Permite interagir com o sistema operacional, manipulando arquivos e pastas.
+  - [PyInstaller] -  Converte scripts Python em executáveis independentes.
   
 - **Assets:** Imagens e sons foram criados ou obtidos de repositórios livres de direitos autorais.
   
@@ -43,11 +44,12 @@ O jogo criado é uma versão modificada do clássico “Space Invaders”.<br> N
    ```
 
 5. Controles:
-   - **Setas Direcionais: Esquerda/Direita** Mover Goku
+   - **Setas Direcionais: Cima/Baixo** Mover Goku
    - **Barra de Espaço:** Atirar
    - **X** Ataque especial
    - **Enter** Passar historia
    - **Esc** menu/pausa
+   - **M** Som ON/OFF
 
 ---
 ## 📚 Estrutura do repositorio
