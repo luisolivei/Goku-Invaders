@@ -19,7 +19,7 @@ O jogo criado é uma versão modificada do clássico “Space Invaders”.<br> N
 - **Assets:** Imagens e sons foram criados ou obtidos de repositórios livres de direitos autorais.
   
 ---
-
+##Donwload do jogo: <a>https://we.tl/t-lcWIJTE9Y2<a>
 ## 🚀 Como Jogar
 
 1. Clone o repositório:
