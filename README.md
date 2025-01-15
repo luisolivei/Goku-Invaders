@@ -108,7 +108,6 @@ Animações fluidas para o personagem e inimigos.
 
 ---
 
-
 ## 🛡️ Créditos
 
 - **Desenvolvedores**:<br>
@@ -126,7 +125,4 @@ Este projeto está licenciado sob a [MIT License](LICENSE). Sinta-se à vontade 
 
 ---
 
-## 🌟 Agradecimentos
-
-
-**Divirta-se jogando! 🚀👾**
+**Divirta-se a jogar! 🚀👾**
